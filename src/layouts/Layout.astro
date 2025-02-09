@@ -4,7 +4,6 @@ interface Props {
 }
 
 const { title } = Astro.props;
-import Navigation from '../components/Navigation.astro';
 ---
 
 <!doctype html>
@@ -21,7 +20,7 @@ import Navigation from '../components/Navigation.astro';
     <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
-          <a href="/" class="text-xl font-bold hover:text-purple-600 transition-colors">John Doe</a>
+          <a href="/" class="text-xl font-bold hover:text-purple-600 transition-colors">Soumyo Dey</a>
           <div class="flex space-x-8">
             <a href="/blog" class="hover:text-purple-600 transition-colors">Blog</a>
             <a href="/projects" class="hover:text-purple-600 transition-colors">Projects</a>
@@ -38,7 +37,7 @@ import Navigation from '../components/Navigation.astro';
 
     <footer class="mt-20 py-8 border-t border-gray-200 dark:border-gray-800">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600 dark:text-gray-400">
-        <p>&copy; {new Date().getFullYear()} John Doe. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Soumyo Dey. All rights reserved.</p>
       </div>
     </footer>
   </body>

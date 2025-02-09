@@ -52,60 +52,62 @@ const skills = [
 ];
 ---
 
-<Layout title="Resume | John Doe">
-  <main class="py-12">
-    <div class="flex justify-between items-center mb-8">
-      <h1 class="text-4xl font-bold">Resume</h1>
-      <a 
-        href="/JohnDoe_Resume.pdf" 
-        class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700"
-        download
-      >
-        Download PDF
-      </a>
-    </div>
-    
-    <section class="mb-12">
-      <h2 class="text-2xl font-semibold mb-6">Experience</h2>
-      <div class="space-y-8">
-        {experience.map((job) => (
-          <div class="border-l-4 border-purple-600 pl-4">
-            <h3 class="text-xl font-semibold">{job.title}</h3>
-            <p class="text-purple-600 mb-2">{job.company} | {job.period}</p>
-            <p class="text-gray-600 dark:text-gray-400 mb-3">{job.description}</p>
-            <div class="flex flex-wrap gap-2">
-              {job.technologies.map((tech) => (
-                <span class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-100 px-2 py-1 rounded text-sm">
-                  {tech}
-                </span>
-              ))}
+<Layout title="Resume | Soumyo Dey">
+  <main class="pt-20">
+    <div class="max-w-4xl mx-auto">
+      <div class="flex justify-between items-center mb-8">
+        <h1 class="text-4xl font-bold">Resume</h1>
+        <a 
+          href="/SoumyoDey_Resume.pdf" 
+          class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700"
+          download
+        >
+          Download PDF
+        </a>
+      </div>
+      
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-6">Experience</h2>
+        <div class="space-y-8">
+          {experience.map((job) => (
+            <div class="border-l-4 border-purple-600 pl-4">
+              <h3 class="text-xl font-semibold">{job.title}</h3>
+              <p class="text-purple-600 mb-2">{job.company} | {job.period}</p>
+              <p class="text-gray-600 dark:text-gray-400 mb-3">{job.description}</p>
+              <div class="flex flex-wrap gap-2">
+                {job.technologies.map((tech) => (
+                  <span class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-100 px-2 py-1 rounded text-sm">
+                    {tech}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-    </section>
-    
-    <section class="mb-12">
-      <h2 class="text-2xl font-semibold mb-6">Education</h2>
-      <div class="space-y-6">
-        {education.map((edu) => (
-          <div>
-            <h3 class="text-xl font-semibold">{edu.degree}</h3>
-            <p class="text-purple-600">{edu.school} | {edu.period}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-    
-    <section>
-      <h2 class="text-2xl font-semibold mb-6">Skills</h2>
-      <div class="flex flex-wrap gap-2">
-        {skills.map((skill) => (
-          <span class="bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full text-sm">
-            {skill}
-          </span>
-        ))}
-      </div>
-    </section>
+          ))}
+        </div>
+      </section>
+      
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-6">Education</h2>
+        <div class="space-y-6">
+          {education.map((edu) => (
+            <div>
+              <h3 class="text-xl font-semibold">{edu.degree}</h3>
+              <p class="text-purple-600">{edu.school} | {edu.period}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+      
+      <section>
+        <h2 class="text-2xl font-semibold mb-6">Skills</h2>
+        <div class="flex flex-wrap gap-2">
+          {skills.map((skill) => (
+            <span class="bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full text-sm">
+              {skill}
+            </span>
+          ))}
+        </div>
+      </section>
+    </div>
   </main>
 </Layout>

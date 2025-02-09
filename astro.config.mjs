@@ -8,7 +8,10 @@ export default defineConfig({
   output: 'static',
   markdown: {
     shikiConfig: {
-      theme: 'dracula',
+      theme: {
+        light: 'github-light',
+        dark: 'github-dark'
+      },
       wrap: true
     },
     remarkPlugins: [],
