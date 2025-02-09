@@ -1,41 +1,62 @@
 ---
 interface Props {
   title: string;
-  description?: string;
 }
 
-const { title, description = "A personal website built with Astro" } = Astro.props;
+const { title } = Astro.props;
 import Navigation from '../components/Navigation.astro';
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="description" content="Personal website and blog" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={description} />
     <title>{title}</title>
   </head>
-  <body class="bg-white dark:bg-black text-black dark:text-white min-h-screen">
-    <Navigation />
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-16">
+  <body class="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <a href="/" class="text-xl font-bold hover:text-purple-600 transition-colors">John Doe</a>
+          <div class="flex space-x-8">
+            <a href="/blog" class="hover:text-purple-600 transition-colors">Blog</a>
+            <a href="/projects" class="hover:text-purple-600 transition-colors">Projects</a>
+            <a href="/about" class="hover:text-purple-600 transition-colors">About</a>
+            <a href="/resume" class="hover:text-purple-600 transition-colors">Resume</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-16">
       <slot />
     </div>
+
+    <footer class="mt-20 py-8 border-t border-gray-200 dark:border-gray-800">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600 dark:text-gray-400">
+        <p>&copy; {new Date().getFullYear()} John Doe. All rights reserved.</p>
+      </div>
+    </footer>
   </body>
 </html>
 
 <style is:global>
   :root {
-    --accent: 124, 58, 237;
+    color-scheme: light dark;
   }
   
   html {
     font-family: system-ui, sans-serif;
+    scroll-behavior: smooth;
   }
-  
-  body {
-    margin: 0;
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
   }
 </style>

@@ -6,4 +6,12 @@ export default defineConfig({
   base: '/',
   integrations: [tailwind()],
   output: 'static',
+  markdown: {
+    shikiConfig: {
+      theme: 'dracula',
+      wrap: true
+    },
+    remarkPlugins: [],
+    rehypePlugins: []
+  }
 });
