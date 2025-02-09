@@ -21,12 +21,28 @@ const { title } = Astro.props;
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
           <a href="/" class="text-xl font-bold hover:text-purple-600 transition-colors">Soumyo Dey</a>
-          <div class="flex space-x-8">
+          
+          <div class="hidden md:flex space-x-8">
             <a href="/blog" class="hover:text-purple-600 transition-colors">Blog</a>
             <a href="/projects" class="hover:text-purple-600 transition-colors">Projects</a>
             <a href="/about" class="hover:text-purple-600 transition-colors">About</a>
             <a href="/resume" class="hover:text-purple-600 transition-colors">Resume</a>
           </div>
+
+          <button id="menu-toggle" class="md:hidden">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
+        <div class="px-4 py-2 flex flex-col space-y-4">
+          <a href="/blog" class="hover:text-purple-600 transition-colors block">Blog</a>
+          <a href="/projects" class="hover:text-purple-600 transition-colors block">Projects</a>
+          <a href="/about" class="hover:text-purple-600 transition-colors block">About</a>
+          <a href="/resume" class="hover:text-purple-600 transition-colors block">Resume</a>
         </div>
       </div>
     </nav>
@@ -40,6 +56,15 @@ const { title } = Astro.props;
         <p>&copy; {new Date().getFullYear()} Soumyo Dey. All rights reserved.</p>
       </div>
     </footer>
+
+    <script>
+      const menuToggle = document.getElementById('menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+
+      menuToggle.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+    </script>
   </body>
 </html>
 
