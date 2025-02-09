@@ -1,0 +1,47 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const posts = [
+  {
+    title: 'My Journey with Noodles',
+    slug: 'journey-with-noodles',
+    date: '2025-02-01',
+    excerpt: 'Exploring the diverse world of noodles across different cultures and countries.',
+  },
+  {
+    title: 'Remote Work and Travel',
+    slug: 'remote-work-travel',
+    date: '2025-01-15',
+    excerpt: 'How I balance working remotely while traveling the world.',
+  },
+  {
+    title: 'Street Food Adventures',
+    slug: 'street-food-adventures',
+    date: '2025-01-01',
+    excerpt: 'The best street food discoveries from my recent travels.',
+  }
+];
+---
+
+<Layout title="Blog | John Doe">
+  <main class="py-12">
+    <h1 class="text-4xl font-bold mb-8">Blog</h1>
+    
+    <div class="space-y-8">
+      {posts.map((post) => (
+        <article class="border-b border-gray-200 dark:border-gray-700 pb-8">
+          <h2 class="text-2xl font-semibold mb-2">
+            <a href={`/blog/${post.slug}`} class="hover:text-purple-600 transition-colors">
+              {post.title}
+            </a>
+          </h2>
+          <time class="text-sm text-gray-500 mb-3 block">{post.date}</time>
+          <p class="text-gray-600 dark:text-gray-400">{post.excerpt}</p>
+          <a href={`/blog/${post.slug}`} class="text-purple-600 hover:text-purple-500 mt-4 inline-block">
+            Read more →
+          </a>
+        </article>
+      ))}
+    </div>
+  </main>
+</Layout>
