@@ -7,14 +7,42 @@ export default defineConfig({
   integrations: [tailwind()],
   output: 'static',
   build: {
-    // Enable inlining of smaller assets
-    inlineStylesheets: 'auto',
-    // Minimize JS bundle size
+    inlineStylesheets: 'always',
+    assets: 'assets',
     minify: true,
-    // Split JS into smaller chunks
     splitting: true,
-    // Remove unused CSS
-    purgeCSS: true
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
+        },
+        entryFileNames: 'entry.[hash].js',
+        chunkFileNames: 'chunks/[name].[hash].js',
+        assetFileNames: 'assets/[name].[hash][extname]'
+      }
+    }
+  },
+  vite: {
+    build: {
+      cssCodeSplit: true,
+      reportCompressedSize: true,
+      assetsInlineLimit: 4096,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: [/node_modules/]
+          }
+        }
+      }
+    },
+    ssr: {
+      noExternal: ['@astrojs/tailwind']
+    },
+    optimizeDeps: {
+      exclude: ['@astrojs/image', 'sharp']
+    }
   },
   markdown: {
     shikiConfig: {

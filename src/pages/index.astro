@@ -46,18 +46,70 @@ import SocialIcons from "../components/SocialIcons.astro";
     </div>
   </main>
 
-  <div 
-    id="substack-container"
-    class="w-full h-[320px] rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-black"
-  >
-    <!-- Placeholder while iframe loads -->
-    <div 
-      id="substack-placeholder"
-      class="w-full h-full flex items-center justify-center text-gray-500 dark:text-gray-400"
+  <!-- Newsletter section with optimized loading -->
+<div 
+  id="newsletter-section"
+  class="w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-black overflow-hidden"
+>
+  <!-- Static content shown immediately -->
+  <div class="p-6 text-center">
+    <h3 class="text-xl font-semibold mb-2">Subscribe to My Newsletter</h3>
+    <p class="text-gray-600 dark:text-gray-400 mb-4">Get the latest updates directly in your inbox.</p>
+    <button
+      id="load-newsletter"
+      class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+      onclick="loadNewsletterEmbed()"
     >
+      Show Newsletter
+    </button>
+  </div>
+
+  <!-- Container for lazy-loaded iframe -->
+  <div id="substack-container" class="hidden">
+    <div class="w-full h-[320px] flex items-center justify-center text-gray-500 dark:text-gray-400">
       Loading newsletter...
     </div>
   </div>
+</div>
+
+<script is:inline>
+  function loadNewsletterEmbed() {
+    const container = document.getElementById('substack-container');
+    const button = document.getElementById('load-newsletter');
+    
+    if (container && button) {
+      // Show container
+      container.classList.remove('hidden');
+      
+      // Create and append iframe
+      const iframe = document.createElement('iframe');
+      iframe.src = 'https://stochasticmusings.substack.com/embed';
+      iframe.style.width = '100%';
+      iframe.style.height = '320px';
+      iframe.style.border = 'none';
+      iframe.classList.add('rounded-lg', 'dark:filter', 'dark:invert');
+      
+      // Replace loading message with iframe
+      container.innerHTML = '';
+      container.appendChild(iframe);
+      
+      // Hide button
+      button.parentElement.classList.add('hidden');
+    }
+  }
+
+  // Load newsletter automatically if user has previously interacted
+  if (localStorage.getItem('newsletter-interaction')) {
+    window.addEventListener('load', () => {
+      setTimeout(loadNewsletterEmbed, 1000);
+    });
+  }
+
+  // Save interaction preference
+  document.getElementById('load-newsletter')?.addEventListener('click', () => {
+    localStorage.setItem('newsletter-interaction', 'true');
+  });
+</script>
 
   <script>
     // Only load iframe when it comes into view

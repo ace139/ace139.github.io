@@ -1,0 +1,153 @@
+---
+interface Props {
+  // Define which third-party scripts to load
+  analytics?: boolean;
+  substack?: boolean;
+  socialEmbed?: boolean;
+}
+
+// Define script configuration types
+interface ScriptConfig {
+  src: string;
+  dataDomain?: string;
+  defer?: boolean;
+  async?: boolean;
+  priority: 'high' | 'medium' | 'low';
+}
+
+const { 
+  analytics = false, 
+  substack = false,
+  socialEmbed = false 
+} = Astro.props;
+
+// Define script configurations
+const scripts: Record<string, ScriptConfig> = {
+  analytics: {
+    src: 'https://plausible.io/js/script.js',
+    dataDomain: 'ace139.github.io',
+    defer: true,
+    priority: 'low'
+  },
+  substack: {
+    src: 'https://substackapi.com/widget.js',
+    async: true,
+    priority: 'medium'
+  },
+  socialEmbed: {
+    src: 'https://platform.twitter.com/widgets.js',
+    async: true,
+    priority: 'low'
+  }
+};
+
+// Group scripts by priority
+const highPriorityScripts: ScriptConfig[] = [];
+const mediumPriorityScripts: ScriptConfig[] = [];
+const lowPriorityScripts: ScriptConfig[] = [];
+
+if (analytics) {
+  lowPriorityScripts.push(scripts.analytics);
+}
+if (substack) {
+  mediumPriorityScripts.push(scripts.substack);
+}
+if (socialEmbed) {
+  lowPriorityScripts.push(scripts.socialEmbed);
+}
+---
+
+<Fragment>
+  <!-- Resource hints for third-party domains -->
+  {analytics && (
+    <link rel="preconnect" href="https://plausible.io" crossorigin />
+  )}
+  {substack && (
+    <link rel="preconnect" href="https://substackapi.com" crossorigin />
+  )}
+  {socialEmbed && (
+    <link rel="preconnect" href="https://platform.twitter.com" crossorigin />
+  )}
+
+  <!-- High priority scripts (none currently) -->
+  {highPriorityScripts.map(script => (
+    <script 
+      src={script.src} 
+      data-domain={script.dataDomain}
+      async={script.async}
+      defer={script.defer}
+    />
+  ))}
+
+  <!-- Medium priority scripts - Load after initial render -->
+  <script is:inline>
+    // Load medium priority scripts after page load
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        {mediumPriorityScripts.map(script => `
+          const script_${script.src.replace(/[^\w]/g, '_')} = document.createElement('script');
+          script_${script.src.replace(/[^\w]/g, '_')}.src = '${script.src}';
+          script_${script.src.replace(/[^\w]/g, '_')}.async = ${script.async || false};
+          script_${script.src.replace(/[^\w]/g, '_')}.defer = ${script.defer || false};
+          document.body.appendChild(script_${script.src.replace(/[^\w]/g, '_')});
+        `)}
+      }, 1000); // 1 second delay
+    });
+  </script>
+
+  <!-- Low priority scripts - Load when user becomes inactive -->
+  <script is:inline>
+    // Load low priority scripts when user becomes inactive
+    let userActive = true;
+    let lowPriorityLoaded = false;
+
+    function loadLowPriorityScripts() {
+      if (lowPriorityLoaded) return;
+      lowPriorityLoaded = true;
+
+      {lowPriorityScripts.map(script => `
+        const script_${script.src.replace(/[^\w]/g, '_')} = document.createElement('script');
+        script_${script.src.replace(/[^\w]/g, '_')}.src = '${script.src}';
+        script_${script.src.replace(/[^\w]/g, '_')}.async = ${script.async || false};
+        script_${script.src.replace(/[^\w]/g, '_')}.defer = ${script.defer || false};
+        ${script.dataDomain ? `script_${script.src.replace(/[^\w]/g, '_')}.setAttribute('data-domain', '${script.dataDomain}');` : ''}
+        document.body.appendChild(script_${script.src.replace(/[^\w]/g, '_')});
+      `)}
+    }
+
+    // Check user inactivity
+    let inactivityTimer;
+    function resetInactivityTimer() {
+      userActive = true;
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(() => {
+        userActive = false;
+        loadLowPriorityScripts();
+      }, 5000); // 5 seconds of inactivity
+    }
+
+    // Monitor user activity
+    ['mousemove', 'keydown', 'scroll', 'touchstart'].forEach(event => {
+      document.addEventListener(event, resetInactivityTimer, { passive: true });
+    });
+
+    // Fallback: Load after 10 seconds regardless of activity
+    setTimeout(loadLowPriorityScripts, 10000);
+
+    // Load when user scrolls near bottom
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          loadLowPriorityScripts();
+          observer.disconnect();
+        }
+      });
+    }, { rootMargin: '200px' });
+
+    // Observe footer or bottom of page
+    document.addEventListener('DOMContentLoaded', () => {
+      const footer = document.querySelector('footer');
+      if (footer) observer.observe(footer);
+    });
+  </script>
+</Fragment>

@@ -1,9 +1,20 @@
 ---
+import FontOptimizer from '../components/FontOptimizer.astro';
+import ScriptOptimizer from '../components/ScriptOptimizer.astro';
+
 interface Props {
   title: string;
+  analytics?: boolean;
+  substack?: boolean;
+  socialEmbed?: boolean;
 }
 
-const { title } = Astro.props;
+const { 
+  title, 
+  analytics = true, // Enable by default for production
+  substack = false, // Enable only on pages that need it
+  socialEmbed = false // Enable only on pages that need it
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -12,13 +23,49 @@ const { title } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="description" content="Personal website and blog" />
     <meta name="viewport" content="width=device-width" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- Preload theme script to prevent flash -->
+    
+    <!-- Font optimization -->
+    <FontOptimizer />
+    
+    <!-- Inline critical CSS -->
+    <style is:inline>
+      /* Add only the most critical styles here */
+      :root { 
+        color-scheme: light dark;
+        font-family: var(--font-sans);
+      }
+      body { 
+        margin: 0;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      img { max-width: 100%; height: auto; }
+    </style>
+    
+    <!-- Preload critical assets -->
     <link rel="preload" href="/scripts/theme.js" as="script" />
+    
+    <!-- Cache control -->
+    <meta http-equiv="Cache-Control" content="max-age=31536000" />
+    
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    
+    <!-- Preload LCP image if exists -->
+    <link rel="preload" as="image" href="/images/profile.webp" />
+
+    <!-- Optimize third-party scripts -->
+    <ScriptOptimizer
+      analytics={analytics}
+      substack={substack}
+      socialEmbed={socialEmbed}
+    />
   </head>
-  <body class="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+  <body class="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
     <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
