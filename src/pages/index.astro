@@ -13,11 +13,21 @@ import { socials } from "../config/socials";
           class="absolute inset-0 bg-gradient-to-r from-white to-black rounded-full"
         >
         </div>
-        <img
-          src="/whatsapp_profile.jpeg"
-          alt="Profile"
-          class="relative w-full h-full rounded-full object-cover"
-        />
+        <picture>
+          <source
+            type="image/webp"
+            srcset="/images/profile-128.webp 1x, /images/profile-256.webp 2x"
+          />
+          <img
+            src="/images/profile-128.jpg"
+            srcset="/images/profile-128.jpg 1x, /images/profile-256.jpg 2x"
+            alt="Profile"
+            class="relative w-full h-full rounded-full object-cover"
+            width="128"
+            height="128"
+            loading="eager"
+            decoding="async"
+          />
       </div>
 
       <h1 class="text-4xl font-bold mb-4">Soumyo Dey</h1>
