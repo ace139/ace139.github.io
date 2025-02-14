@@ -46,11 +46,55 @@ import SocialIcons from "../components/SocialIcons.astro";
     </div>
   </main>
 
-  <iframe
-    src="https://stochasticmusings.substack.com/embed"
-    height="320"
-    class="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-black w-full dark:filter dark:invert"
-  ></iframe>
+  <div 
+    id="substack-container"
+    class="w-full h-[320px] rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-black"
+  >
+    <!-- Placeholder while iframe loads -->
+    <div 
+      id="substack-placeholder"
+      class="w-full h-full flex items-center justify-center text-gray-500 dark:text-gray-400"
+    >
+      Loading newsletter...
+    </div>
+  </div>
+
+  <script>
+    // Only load iframe when it comes into view
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const container = document.getElementById('substack-container');
+          if (container && !container.querySelector('iframe')) {
+            const iframe = document.createElement('iframe');
+            iframe.src = 'https://stochasticmusings.substack.com/embed';
+            iframe.height = '320';
+            iframe.className = 'w-full h-full rounded-lg dark:filter dark:invert';
+            iframe.loading = 'lazy';
+            
+            // Remove placeholder and add iframe
+            const placeholder = document.getElementById('substack-placeholder');
+            if (placeholder) {
+              placeholder.remove();
+            }
+            container.appendChild(iframe);
+            
+            // Disconnect observer after loading
+            observer.disconnect();
+          }
+        }
+      });
+    }, {
+      rootMargin: '50px' // Start loading slightly before it comes into view
+    });
+
+    // Start observing the container
+    const container = document.getElementById('substack-container');
+    if (container) {
+      observer.observe(container);
+    }
+  </script>
+
 </Layout>
 
 <style>
