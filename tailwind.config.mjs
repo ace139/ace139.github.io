@@ -13,12 +13,5 @@ export default {
       },
     },
   },
-  plugins: [],
-  // Enable JIT mode for better performance
-  mode: 'jit',
-  // Purge unused styles
-  purge: {
-    enabled: true,
-    content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}']
-  }
+  plugins: []
 };
