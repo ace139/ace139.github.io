@@ -6,6 +6,10 @@ export default defineConfig({
   base: '/',
   integrations: [tailwind()],
   output: 'static',
+  build: {
+    // Enable inlining of smaller assets
+    inlineStylesheets: 'auto'
+  },
   markdown: {
     shikiConfig: {
       theme: {
@@ -14,7 +18,9 @@ export default defineConfig({
       },
       wrap: true
     },
+    // Only include plugins we actually use
     remarkPlugins: [],
     rehypePlugins: []
-  }
+  },
+  compressHTML: true
 });
