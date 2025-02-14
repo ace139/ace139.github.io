@@ -1,13 +1,17 @@
 # Personal Portfolio Website
 
-A modern, responsive personal portfolio website built with Astro 5, TailwindCSS, and TypeScript. Features dark mode support, dynamic social media links, and a clean, minimalist design.
+A modern, responsive personal portfolio website built with Astro 5, TailwindCSS, and TypeScript. Features dark mode support, dynamic social media links, and a clean, minimalist design with optimized performance.
 
 ## 🌟 Features
 
 - 🎨 **Responsive Design**: Mobile-first approach with a clean, modern interface
 - 🌓 **Dark/Light Mode**: System-preference detection with manual toggle option
 - 🔗 **Dynamic Social Links**: Centralized configuration for easy management
-- ⚡ **Performance Focused**: Built with Astro for optimal loading speeds
+- ⚡ **Performance Optimized**: 
+  - Optimized image loading with WebP support
+  - Inline SVG icons for faster loading
+  - Minimal JavaScript footprint
+  - Code splitting and lazy loading
 - 🎯 **Accessibility**: Screen reader support and semantic HTML
 - 🛠 **Type Safety**: TypeScript integration for better development experience
 
@@ -36,18 +40,28 @@ graph TD
 ```
 /
 ├── public/
-│   └── favicon.svg
+│   ├── images/
+│   │   └── [optimized images]
+│   └── scripts/
+│       └── theme.js
 ├── src/
 │   ├── layouts/
-│   │   └── Layout.astro (Base layout with navigation and theme toggle)
+│   │   └── Layout.astro
 │   ├── pages/
-│   │   └── index.astro (Homepage with profile and social links)
+│   │   ├── index.astro
+│   │   └── resume.astro
+│   ├── components/
+│   │   ├── Icons.astro
+│   │   └── SocialIcons.astro
 │   ├── config/
-│   │   └── socials.ts (Social media configuration)
-│   └── styles/
-│       └── global.css (Global styles)
-├── astro.config.mjs (Astro configuration)
-├── tailwind.config.mjs (Tailwind CSS configuration)
+│   │   ├── socials.ts
+│   │   └── icons.ts
+│   └── scripts/
+│       └── theme.js
+├── scripts/
+│   └── optimize-images.js
+├── astro.config.mjs
+├── tailwind.config.mjs
 ├── package.json
 └── README.md
 ```
@@ -72,7 +86,6 @@ graph TD
      {
        platform: 'github',
        url: 'https://github.com/yourusername',
-       icon: 'fab fa-github',
        label: 'GitHub'
      },
      // Add more social links...
@@ -89,25 +102,42 @@ graph TD
 ### Layout (Layout.astro)
 - Base template for all pages
 - Implements navigation and theme toggle
-- Handles dark mode functionality
+- Handles dark mode functionality with optimized JavaScript
 - Responsive design implementation
 
 ### Homepage (index.astro)
-- Main landing page
-- Profile section
-- Dynamic social media links rendering
+- Main landing page with optimized image loading
+- Profile section with WebP image support
+- Dynamic social media links with SVG icons
 - Responsive layout adjustments
+
+### Icons System (Icons.astro)
+- Optimized SVG icons instead of external icon libraries
+- Zero external dependencies for icons
+- TypeScript-powered type safety for icon names
+- Customizable through CSS classes
+- Accessible and performant
 
 ### Social Media Configuration (socials.ts)
 - TypeScript interface for social media entries
 - Centralized configuration for all social links
+- SVG icon integration
 - Easy to extend and modify
 
 ### Theme Management
+- Optimized theme switching with minimal JavaScript
 - System preference detection
 - Manual theme toggle
 - Persistent theme selection using localStorage
-- Tailwind dark mode integration
+- Prevents flash of incorrect theme
+
+### Image Optimization (optimize-images.js)
+- WebP format support with JPEG fallback
+- Multiple sizes for responsive images (1x and 2x)
+- Proper width and height attributes to prevent layout shifts
+- Lazy loading for off-screen images
+- Sharp-powered image processing
+- Automated optimization script
 
 ## 🎨 Customization
 
@@ -118,10 +148,23 @@ graph TD
    {
      platform: 'newplatform',
      url: 'https://newplatform.com/username',
-     icon: 'fab fa-newplatform',
      label: 'Platform Name'
    }
    ```
+
+### Adding Custom Icons
+1. Open `src/config/icons.ts`
+2. Add your SVG path:
+   ```typescript
+   export const Icons = {
+     NewIcon: `<path d="..." />`,
+   };
+   ```
+
+### Using Icons
+```astro
+<Icons name="NewIcon" class="w-6 h-6" />
+```
 
 ### Modifying Theme Colors
 1. Open `tailwind.config.mjs`
@@ -144,19 +187,44 @@ graph TD
 | `npm run dev`            | Starts local dev server at `localhost:4321`      |
 | `npm run build`          | Build your production site to `./dist/`          |
 | `npm run preview`        | Preview your build locally before deploying      |
+| `node scripts/optimize-images.js` | Optimize and convert images             |
 
 ## 🔧 Technical Details
+
+### Performance Optimizations
+- **Images**: 
+  - WebP format with JPEG fallbacks
+  - Responsive sizes (1x and 2x)
+  - Proper width/height attributes
+  - Lazy loading implementation
+- **JavaScript**: 
+  - Minimal usage
+  - Code splitting
+  - Async loading where possible
+  - Optimized theme switching
+- **Icons**: 
+  - Inline SVGs instead of icon fonts
+  - No external icon libraries
+  - CSS-based styling
+- **CSS**: 
+  - Purged unused styles
+  - Minimal Tailwind imports
+  - Efficient dark mode implementation
+- **Caching**: 
+  - Proper cache headers for static assets
+  - Local storage for user preferences
 
 ### Dependencies
 - **Astro**: Static site generator
 - **TailwindCSS**: Utility-first CSS framework
-- **TypeScript**: Type safety and better developer experience
-- **Font Awesome**: Icon library
+- **TypeScript**: Type safety
+- **Sharp**: Image optimization
 
 ### Browser Support
 - Modern browsers (Chrome, Firefox, Safari, Edge)
 - Responsive design works on all screen sizes
 - Progressive enhancement approach
+- Fallbacks for older browsers
 
 ## 📚 Resources
 
