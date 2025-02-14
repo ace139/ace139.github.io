@@ -7,39 +7,27 @@ interface Social {
 
 export const socials: Social[] = [
   {
-    platform: 'email',
-    url: 'mailto:your.email@example.com',
-    icon: 'fas fa-envelope',
-    label: 'Email'
-  },
-  {
-    platform: 'github',
-    url: 'https://github.com/yourusername',
-    icon: 'fab fa-github',
-    label: 'GitHub'
+    platform: 'X',
+    url: 'https://x.com/heySoumyo',
+    icon: 'fab fa-x-twitter',
+    label: 'X'
   },
   {
     platform: 'linkedin',
-    url: 'https://linkedin.com/in/yourusername',
+    url: 'https://linkedin.com/in/soumyo-dey',
     icon: 'fab fa-linkedin',
     label: 'LinkedIn'
   },
   {
-    platform: 'twitter',
-    url: 'https://twitter.com/yourusername',
-    icon: 'fab fa-x-twitter',
-    label: 'Twitter'
+    platform: 'github',
+    url: 'https://github.com/ace139',
+    icon: 'fab fa-github',
+    label: 'GitHub'
   },
   {
-    platform: 'medium',
-    url: 'https://medium.com/@yourusername',
-    icon: 'fab fa-medium',
-    label: 'Medium'
+    platform: 'email',
+    url: 'mailto:heysoumyo@gmail.com',
+    icon: 'fas fa-envelope',
+    label: 'Email'
   },
-  {
-    platform: 'substack',
-    url: 'https://yourusername.substack.com',
-    icon: 'fas fa-newspaper',
-    label: 'Substack'
-  }
 ];
