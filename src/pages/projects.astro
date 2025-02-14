@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import Tags from '../components/Tags.astro';
 
 const projects = await getCollection('projects');
 projects.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
@@ -23,12 +24,8 @@ projects.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).
           <h2 class="text-2xl font-semibold mb-3">{project.data.title}</h2>
           <p class="text-gray-600 dark:text-gray-400 mb-4">{project.data.description}</p>
           
-          <div class="flex flex-wrap gap-2 mb-4">
-            {project.data.tags?.map((tag: string) => (
-              <span class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-100 px-2 py-1 rounded text-sm">
-                {tag}
-              </span>
-            ))}
+          <div class="mb-4">
+            {project.data.tags && <Tags tags={project.data.tags} />}
           </div>
           
           <div class="flex gap-4">

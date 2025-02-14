@@ -1,5 +1,6 @@
 ---
 import Layout from './Layout.astro';
+import Tags from '../components/Tags.astro';
 
 const { frontmatter } = Astro.props;
 ---
@@ -19,12 +20,8 @@ const { frontmatter } = Astro.props;
         {frontmatter.description}
       </p>
       
-      <div class="flex flex-wrap gap-2 mb-6">
-        {frontmatter.tags?.map((tag: string) => (
-          <span class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-100 px-2 py-1 rounded text-sm">
-            {tag}
-          </span>
-        ))}
+      <div class="mb-6">
+        {frontmatter.tags && <Tags tags={frontmatter.tags} />}
       </div>
 
       <div class="flex gap-4 mb-8">

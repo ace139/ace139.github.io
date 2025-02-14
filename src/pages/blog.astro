@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import Tags from '../components/Tags.astro';
 
 const posts = await getCollection('blog');
 posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
@@ -26,12 +27,8 @@ posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).get
             })}
           </time>
           {post.data.tags && (
-            <div class="flex flex-wrap gap-2 mb-4">
-              {post.data.tags.map((tag: string) => (
-                <span class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-100 px-2 py-1 rounded text-sm">
-                  {tag}
-                </span>
-              ))}
+            <div class="mb-4">
+              <Tags tags={post.data.tags} />
             </div>
           )}
           <a href={`/blog/${post.slug}`} class="text-purple-600 hover:text-purple-500 mt-4 inline-block">
