@@ -99,6 +99,31 @@ graph TD
 
 ## 🛠 Core Components
 
+### Performance Components
+
+#### ResponsiveImage.astro
+- Optimized image loading component
+- Blur placeholder generation
+- WebP format support
+- Responsive image handling
+- Lazy loading implementation
+
+#### FontOptimizer.astro
+- Font loading optimization
+- Variable font support
+- Loading state management
+- Font fallback handling
+- Performance monitoring
+
+#### ScriptOptimizer.astro
+- Third-party script management
+- Priority-based loading
+- Resource hint implementation
+- Performance budgeting
+- User interaction tracking
+
+### Core Layout Components
+
 ### Layout (Layout.astro)
 - Base template for all pages
 - Implements navigation and theme toggle
@@ -138,6 +163,35 @@ graph TD
 - Lazy loading for off-screen images
 - Sharp-powered image processing
 - Automated optimization script
+
+## 🔧 Performance Tools
+
+### Build Tools
+```bash
+# Optimize images
+node scripts/optimize-images.js
+
+# Analyze bundle
+npm run analyze
+
+# Build with optimizations
+npm run build
+```
+
+### Performance Monitoring
+- Integrated with Core Web Vitals
+- Real User Monitoring (RUM)
+- Performance budget tracking
+- Third-party impact monitoring
+
+### Debug Tools
+```bash
+# View optimization metrics
+npm run analyze
+
+# Check bundle sizes
+npm run build -- --debug
+```
 
 ## 🎨 Customization
 
@@ -189,6 +243,18 @@ graph TD
 | `npm run preview`        | Preview your build locally before deploying      |
 | `node scripts/optimize-images.js` | Optimize and convert images             |
 
+## 📊 Performance Metrics
+
+### Core Web Vitals
+- **LCP (Largest Contentful Paint)**: < 2.5s
+- **FID (First Input Delay)**: < 100ms
+- **CLS (Cumulative Layout Shift)**: < 0.1
+
+### Additional Metrics
+- **TTFB**: Optimized server response
+- **FCP**: Fast first content paint
+- **TTI**: Quick time to interactive
+
 ## 🔧 Technical Details
 
 ### Performance Optimizations
@@ -215,10 +281,63 @@ graph TD
   - Local storage for user preferences
 
 ### Dependencies
+
+#### Core Dependencies
+```json
+{
+  "@astrojs/tailwind": "^5.1.0",
+  "astro": "^4.0.0",
+  "sharp": "^0.33.5",
+  "date-fns": "^4.1.0"
+}
+```
+
+#### Development Dependencies
+```json
+{
+  "tailwindcss": "^3.4.0",
+  "typescript": "^5.0.0",
+  "@types/node": "^20.0.0"
+}
+```
+
+### Performance Features
 - **Astro**: Static site generator
 - **TailwindCSS**: Utility-first CSS framework
 - **TypeScript**: Type safety
 - **Sharp**: Image optimization
+
+### Optimization Configuration
+
+#### Astro Config
+```javascript
+// astro.config.mjs
+export default defineConfig({
+  // ... other config
+  build: {
+    inlineStylesheets: 'always',
+    assets: 'assets',
+    minify: true,
+    splitting: true
+  },
+  vite: {
+    build: {
+      cssCodeSplit: true,
+      reportCompressedSize: true
+    }
+  }
+});
+```
+
+#### Image Optimization
+```javascript
+// scripts/optimize-images.js
+module.exports = {
+  quality: 80,
+  formats: ['webp', 'avif'],
+  sizes: [640, 768, 1024, 1280]
+};
+```
 
 ### Browser Support
 - Modern browsers (Chrome, Firefox, Safari, Edge)
