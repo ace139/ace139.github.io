@@ -8,7 +8,13 @@ export default defineConfig({
   output: 'static',
   build: {
     // Enable inlining of smaller assets
-    inlineStylesheets: 'auto'
+    inlineStylesheets: 'auto',
+    // Minimize JS bundle size
+    minify: true,
+    // Split JS into smaller chunks
+    splitting: true,
+    // Remove unused CSS
+    purgeCSS: true
   },
   markdown: {
     shikiConfig: {

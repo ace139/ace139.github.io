@@ -13,7 +13,8 @@ const { title } = Astro.props;
     <meta name="description" content="Personal website and blog" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <!-- Preload theme script to prevent flash -->
+    <link rel="preload" href="/scripts/theme.js" as="script" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
@@ -69,59 +70,12 @@ const { title } = Astro.props;
     </footer>
 
     <script>
-      const menuToggle = document.getElementById('menu-toggle');
-      const mobileMenu = document.getElementById('mobile-menu');
-      const themeToggle = document.getElementById('theme-toggle');
-      const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
-      const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
-
-      if (menuToggle && mobileMenu) { 
-        menuToggle.addEventListener('click', () => {
-          mobileMenu.classList.toggle('hidden');
-        });
-      }
-
-      // Function to set the theme
-      function setTheme(isDark) {
-        if (isDark) {
-          document.documentElement.classList.add('dark');
-          themeToggleLightIcon.classList.remove('hidden');
-          themeToggleDarkIcon.classList.add('hidden');
-        } else {
-          document.documentElement.classList.remove('dark');
-          themeToggleLightIcon.classList.add('hidden');
-          themeToggleDarkIcon.classList.remove('hidden');
-        }
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-      }
-
-      // Initialize theme
-      const userTheme = localStorage.getItem('theme');
-      const systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      
-      if (userTheme === 'dark') {
-        setTheme(true);
-      } else if (userTheme === 'light') {
-        setTheme(false);
-      } else {
-        setTheme(systemDarkMode);
-      }
-
-      // Toggle theme on button click
-      if (themeToggle) {
-        themeToggle.addEventListener('click', () => {
-          const isDark = document.documentElement.classList.contains('dark');
-          setTheme(!isDark);
-        });
-      }
-
-      // Listen for system theme changes
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-        if (!localStorage.getItem('theme')) {
-          setTheme(e.matches);
-        }
+      // Simple mobile menu toggle
+      document.getElementById('menu-toggle')?.addEventListener('click', () => {
+        document.getElementById('mobile-menu')?.classList.toggle('hidden');
       });
     </script>
+    <script src="/scripts/theme.js" defer></script>
   </body>
 </html>
 
