@@ -1,0 +1,17 @@
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" /><?xml version="1.0" encoding="UTF-8"?>
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background circle -->
+    <circle cx="128" cy="128" r="120" fill="#000000"/>
+    
+    <!-- Letters "SM" in modern, minimal style -->
+    <path d="M80 90 L80 166 L100 166 L100 128 L120 148 L140 128 L140 166 L160 166 L160 90 L140 90 L120 120 L100 90 Z" 
+          fill="#FFFFFF"/>
+    
+    <!-- Responsive design - this will look good at all sizes -->
+    <style>
+        @media (prefers-color-scheme: dark) {
+            circle { fill: #FFFFFF; }
+            path { fill: #000000; }
+        }
+    </style>
+</svg>

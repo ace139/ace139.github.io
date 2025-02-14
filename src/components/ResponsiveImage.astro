@@ -1,0 +1,82 @@
+---
+import { getImage } from 'astro:assets';
+
+interface Props {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  class?: string;
+  loading?: "lazy" | "eager";
+  sizes?: string;
+  quality?: number;
+}
+
+const {
+  src,
+  alt,
+  width,
+  height,
+  class: className = "",
+  loading = "lazy",
+  sizes = "(min-width: 1024px) 1024px, 100vw",
+  quality = 80,
+} = Astro.props;
+
+// Generate optimized image
+const optimizedImage = await getImage({
+  src,
+  width,
+  height,
+  format: 'webp',
+  quality
+});
+
+// Generate responsive widths
+const breakpoints = [640, 768, 1024, 1280];
+const aspectRatio = width && height ? width / height : undefined;
+---
+
+<div 
+  class={`relative overflow-hidden ${className}`}
+  style={aspectRatio ? `aspect-ratio: ${aspectRatio}` : undefined}
+>
+  <div class="w-full h-full">
+    <img
+      src={optimizedImage.src}
+      alt={alt}
+      width={width}
+      height={height}
+      loading={loading}
+      decoding="async"
+      class={`w-full h-full object-cover transition-opacity duration-300 ${
+        loading === "lazy" ? "opacity-0" : "opacity-100"
+      }`}
+    />
+  </div>
+</div>
+
+<style>
+  /* Progressive loading animation */
+  img {
+    transition: opacity 0.3s ease-in-out;
+  }
+</style>
+
+<script>
+  // Handle lazy loading transition
+  document.addEventListener('DOMContentLoaded', () => {
+    const images = document.querySelectorAll('img[loading="lazy"]');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          img.classList.remove('opacity-0');
+          observer.unobserve(img);
+        }
+      });
+    });
+
+    images.forEach(img => observer.observe(img));
+  });
+</script>
