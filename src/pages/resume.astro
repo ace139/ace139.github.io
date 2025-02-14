@@ -3,52 +3,96 @@ import Layout from '../layouts/Layout.astro';
 
 const experience = [
   {
-    title: 'Senior Full Stack Developer',
-    company: 'TechCorp Inc.',
-    period: '2023 - Present',
-    description: 'Leading development of cloud-based solutions, mentoring junior developers, and implementing best practices.',
-    technologies: ['React', 'Node.js', 'AWS', 'TypeScript']
+    title: 'Senior Product Manager',
+    company: 'Ather Energy',
+    location: 'Bengaluru, Karnataka, India',
+    period: 'Nov 2023 - Present',
+    description: '[Add detailed description]',
+    skills: ['Data Science', 'Leadership', 'Product Management', 'Communication', 'Product Development', 'Software as a Service (SaaS)', 'Workload Prioritization', 'Go-to-Market Strategy', 'Artificial Intelligence (AI)', 'Software Development', 'Data Engineering', 'Product Road Mapping']
   },
   {
-    title: 'Full Stack Developer',
-    company: 'StartupX',
-    period: '2021 - 2023',
-    description: 'Developed and maintained multiple web applications, improved performance, and implemented new features.',
-    technologies: ['Vue.js', 'Python', 'Docker', 'PostgreSQL']
+    title: 'Product Manager',
+    company: 'Ather Energy',
+    location: 'Bengaluru, Karnataka, India',
+    period: 'Dec 2021 - Nov 2023',
+    description: '[Add detailed description]',
+    skills: ['Data Science', 'Machine Learning', 'Product Management', 'Communication', 'Product Development', 'Software as a Service (SaaS)', 'Workload Prioritization', 'Go-to-Market Strategy', 'Deep Learning', 'Software Development', 'Product Road Mapping']
   },
   {
-    title: 'Frontend Developer',
-    company: 'WebDev Agency',
-    period: '2019 - 2021',
-    description: 'Created responsive web applications and implemented UI/UX designs.',
-    technologies: ['React', 'JavaScript', 'SASS', 'Redux']
+    title: 'Co-Founder & Chief Product Officer',
+    company: 'Krayen Inc.',
+    location: 'Bengaluru, Karnataka, India (Remote)',
+    period: 'Jan 2021 - Dec 2021',
+    description: '[Add detailed description]',
+    skills: ['Data Science', 'Product Management', 'Communication', 'Product Development', 'Software as a Service (SaaS)', 'Workload Prioritization', 'Go-to-Market Strategy', 'Software Development', 'Product Road Mapping', 'Entrepreneurship', 'Analytics']
+  },
+  {
+    title: 'Senior Data Scientist',
+    company: 'Convergytics Solutions',
+    location: 'Bengaluru Area, India',
+    period: 'Oct 2019 - Dec 2020',
+    description: '[Add detailed description]',
+    skills: ['Computer Science', 'Data Science']
+  },
+  {
+    title: 'Data Scientist',
+    company: 'Convergytics Solutions',
+    location: 'Bengaluru Area, India',
+    period: 'Oct 2017 - Oct 2019',
+    description: '[Add detailed description]',
+    skills: ['Computer Science']
+  },
+  {
+    title: 'Product Manager',
+    company: 'Blik.ai',
+    location: 'Bengaluru, Karnataka, India',
+    period: 'Apr 2019 - Dec 2020',
+    description: '[Add detailed description]',
+    skills: ['Communication', 'Product Development', 'Software as a Service (SaaS)', 'Workload Prioritization', 'Go-to-Market Strategy', 'Product Road Mapping', 'Computer Science']
+  },
+  {
+    title: 'Data Scientist Intern',
+    company: 'SC Network',
+    location: 'Bengaluru',
+    period: 'Mar 2017 - May 2017',
+    description: '[Add detailed description]',
+    skills: ['Computer Science']
+  },
+  {
+    title: 'Research And Development Intern',
+    company: 'National Institute of Technology Durgapur',
+    location: 'Durgapur Area, India',
+    period: 'Dec 2015 - Jan 2017',
+    description: 'I am involved with a research group in the Department of CSE, NIT Durgapur primarily as a Data Analyst. Our target is to develop an Air Quality Monitoring System for the City cost effectively. We have built mobile Air Quality Monitoring Units using Low Cost sensors and deployed throughout the city.',
+    skills: ['Computer Science']
   }
 ];
 
 const education = [
   {
-    degree: 'Master of Science in Computer Science',
-    school: 'Tech University',
-    period: '2017 - 2019'
-  },
-  {
-    degree: 'Bachelor of Science in Software Engineering',
-    school: 'State University',
+    degree: 'Bachelor of Technology in Computer Science and Engineering',
+    school: 'Dr. B.C.Roy Engineering College, Durgapur',
     period: '2013 - 2017'
   }
 ];
 
 const skills = [
-  'JavaScript/TypeScript',
-  'React/Vue.js',
-  'Node.js',
-  'Python',
-  'AWS',
-  'Docker',
-  'PostgreSQL/MongoDB',
-  'Git',
-  'CI/CD',
-  'Agile Methodologies'
+  'Data Science',
+  'Product Management',
+  'Machine Learning',
+  'Communication',
+  'Product Development',
+  'Software as a Service (SaaS)',
+  'Workload Prioritization',
+  'Go-to-Market Strategy',
+  'Artificial Intelligence',
+  'Software Development',
+  'Data Engineering',
+  'Product Road Mapping',
+  'Deep Learning',
+  'Entrepreneurship',
+  'Analytics',
+  'Computer Science'
 ];
 ---
 
@@ -75,9 +119,9 @@ const skills = [
               <p class="text-purple-600 mb-2">{job.company} | {job.period}</p>
               <p class="text-gray-600 dark:text-gray-400 mb-3">{job.description}</p>
               <div class="flex flex-wrap gap-2">
-                {job.technologies.map((tech) => (
+                {job.skills.map((skill) => (
                   <span class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-100 px-2 py-1 rounded text-sm">
-                    {tech}
+                    {skill}
                   </span>
                 ))}
               </div>
