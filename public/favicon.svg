@@ -3,9 +3,9 @@
     <!-- Background circle -->
     <circle cx="128" cy="128" r="120" fill="#000000"/>
     
-    <!-- Letters "SM" in modern, minimal style -->
-    <path d="M80 90 L80 166 L100 166 L100 128 L120 148 L140 128 L140 166 L160 166 L160 90 L140 90 L120 120 L100 90 Z" 
-          fill="#FFFFFF"/>
+    <!-- Letter "S" in modern, minimal style -->
+    <path d="M90 90 C90 90 160 90 160 110 C160 130 90 130 90 150 C90 170 160 170 160 150" 
+          fill="#FFFFFF" stroke="#FFFFFF" stroke-width="20" stroke-linecap="round"/>
     
     <!-- Responsive design - this will look good at all sizes -->
     <style>
