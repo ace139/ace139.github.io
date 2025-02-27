@@ -45,7 +45,7 @@ const headersContent = `# Cache static assets
 /images/profile-128.webp
   Cache-Control: public, max-age=2592000
 /scripts/theme.js
-  Cache-Control: public, max-age=604800, must-revalidate
+  Cache-Control: public, max-age=31536000, immutable
 
 # CORS headers for all font files
 /fonts/*
@@ -88,9 +88,9 @@ const headersContent = `# Cache static assets
 
 # Cache JS and CSS
 /*.js
-  Cache-Control: public, max-age=86400, must-revalidate
+  Cache-Control: public, max-age=2592000, must-revalidate
 /*.css
-  Cache-Control: public, max-age=86400, must-revalidate
+  Cache-Control: public, max-age=2592000, must-revalidate
 
 # HTML - short cache time
 /*.html
