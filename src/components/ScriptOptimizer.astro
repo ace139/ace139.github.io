@@ -98,78 +98,104 @@ if (socialEmbed) {
   </div>
 
   <!-- Medium priority scripts - Load after initial render -->
-  <script is:inline>
+  <script is:inline define:vars={{ mediumPriorityScripts }}>
     // Cookie consent handling
-    function showCookieConsentBanner() {
-      const banner = document.getElementById('cookie-consent-banner');
-      if (banner) {
-        banner.classList.remove('hidden');
-        setTimeout(() => {
-          banner.classList.remove('translate-y-full');
-        }, 100);
+    (function() {
+      function showCookieConsentBanner() {
+        const banner = document.getElementById('cookie-consent-banner');
+        if (banner) {
+          banner.classList.remove('hidden');
+          setTimeout(() => {
+            banner.classList.remove('translate-y-full');
+          }, 100);
+        }
       }
-    }
 
-    function hideCookieConsentBanner() {
-      const banner = document.getElementById('cookie-consent-banner');
-      if (banner) {
-        banner.classList.add('translate-y-full');
-        setTimeout(() => {
-          banner.classList.add('hidden');
-        }, 300);
+      function hideCookieConsentBanner() {
+        const banner = document.getElementById('cookie-consent-banner');
+        if (banner) {
+          banner.classList.add('translate-y-full');
+          setTimeout(() => {
+            banner.classList.add('hidden');
+          }, 300);
+        }
       }
-    }
 
-    // Check for existing consent
-    const cookieConsent = localStorage.getItem('cookie-consent');
-    if (cookieConsent === null) {
-      // Show banner only if consent hasn't been given or rejected
-      document.addEventListener('DOMContentLoaded', showCookieConsentBanner);
-    }
-
-    // Set up event listeners for the consent buttons
-    document.addEventListener('DOMContentLoaded', () => {
-      const acceptButton = document.getElementById('cookie-consent-accept');
-      const rejectButton = document.getElementById('cookie-consent-reject');
-      
-      if (acceptButton) {
-        acceptButton.addEventListener('click', () => {
-          localStorage.setItem('cookie-consent', 'accepted');
-          hideCookieConsentBanner();
-          // Load consent-requiring scripts
-          loadConsentRequiringScripts();
-        });
+      // Check for existing consent
+      try {
+        const cookieConsent = localStorage.getItem('cookie-consent');
+        if (cookieConsent === null) {
+          // Show banner only if consent hasn't been given or rejected
+          document.addEventListener('DOMContentLoaded', showCookieConsentBanner);
+        }
+      } catch (e) {
+        console.warn('Error accessing localStorage:', e);
       }
-      
-      if (rejectButton) {
-        rejectButton.addEventListener('click', () => {
-          localStorage.setItem('cookie-consent', 'rejected');
-          hideCookieConsentBanner();
-        });
-      }
-    });
 
-    // Function to load scripts that require consent
-    function loadConsentRequiringScripts() {
-      // This will be called if consent is given
-      // The actual loading will be handled by the priority-based loaders
-    }
+      // Set up event listeners for the consent buttons
+      document.addEventListener('DOMContentLoaded', () => {
+        const acceptButton = document.getElementById('cookie-consent-accept');
+        const rejectButton = document.getElementById('cookie-consent-reject');
+        
+        if (acceptButton) {
+          acceptButton.addEventListener('click', () => {
+            try {
+              localStorage.setItem('cookie-consent', 'accepted');
+            } catch (e) {
+              console.warn('Error setting localStorage:', e);
+            }
+            hideCookieConsentBanner();
+            // Load consent-requiring scripts
+            loadConsentRequiringScripts();
+          });
+        }
+        
+        if (rejectButton) {
+          rejectButton.addEventListener('click', () => {
+            try {
+              localStorage.setItem('cookie-consent', 'rejected');
+            } catch (e) {
+              console.warn('Error setting localStorage:', e);
+            }
+            hideCookieConsentBanner();
+          });
+        }
+      });
+
+      // Function to load scripts that require consent
+      function loadConsentRequiringScripts() {
+        // This will be called if consent is given
+        // The actual loading will be handled by the priority-based loaders
+      }
+    })();
 
     // Load medium priority scripts after page load
     window.addEventListener('load', () => {
       setTimeout(() => {
-        const mediumPriorityScriptsArray = mediumPriorityScripts.map(script => ({
-          src: script.src,
-          async: script.async || false,
-          defer: script.defer || false,
-          dataDomain: script.dataDomain ? script.dataDomain : null,
-          requiresCookieConsent: script.requiresCookieConsent || false
-        }));
+        // Create an array of script configurations
+        // This avoids TypeScript issues with the previous approach
+        const mediumPriorityScriptsArray = [];
+        
+        // Use the mediumPriorityScripts variable passed from Astro component
+        for (const script of mediumPriorityScripts) {
+          mediumPriorityScriptsArray.push({
+            src: script.src,
+            async: script.async || false,
+            defer: script.defer || false,
+            dataDomain: script.dataDomain || null,
+            requiresCookieConsent: script.requiresCookieConsent || false
+          });
+        }
         
         mediumPriorityScriptsArray.forEach(script => {
           // Skip scripts that require consent if consent not given
-          if (script.requiresCookieConsent && localStorage.getItem('cookie-consent') !== 'accepted') {
-            return;
+          try {
+            if (script.requiresCookieConsent && localStorage.getItem('cookie-consent') !== 'accepted') {
+              return;
+            }
+          } catch (e) {
+            console.warn('Error accessing localStorage:', e);
+            return; // Skip if we can't check consent
           }
           
           const scriptEl = document.createElement('script');
@@ -186,74 +212,88 @@ if (socialEmbed) {
   </script>
 
   <!-- Low priority scripts - Load when user becomes inactive -->
-  <script is:inline>
+  <script is:inline define:vars={{ lowPriorityScripts }}>
     // Load low priority scripts when user becomes inactive
-    let userActive = true;
-    let lowPriorityLoaded = false;
-    
-    // Define low priority scripts array
-    const lowPriorityScriptsArray = lowPriorityScripts.map(script => ({
-      src: script.src,
-      async: script.async || false,
-      defer: script.defer || false,
-      dataDomain: script.dataDomain ? script.dataDomain : null,
-      requiresCookieConsent: script.requiresCookieConsent || false
-    }));
+    (function() {
+      let userActive = true;
+      let lowPriorityLoaded = false;
+      
+      // Define low priority scripts array
+      const lowPriorityScriptsArray = [];
+      
+      // Use the lowPriorityScripts variable passed from Astro component
+      for (const script of lowPriorityScripts) {
+        lowPriorityScriptsArray.push({
+          src: script.src,
+          async: script.async || false,
+          defer: script.defer || false,
+          dataDomain: script.dataDomain || null,
+          requiresCookieConsent: script.requiresCookieConsent || false
+        });
+      }
 
-    function loadLowPriorityScripts() {
-      if (lowPriorityLoaded) return;
-      lowPriorityLoaded = true;
+      function loadLowPriorityScripts() {
+        if (lowPriorityLoaded) return;
+        lowPriorityLoaded = true;
 
-      lowPriorityScriptsArray.forEach(script => {
-        // Skip scripts that require consent if consent not given
-        if (script.requiresCookieConsent && localStorage.getItem('cookie-consent') !== 'accepted') {
-          return;
-        }
-        
-        const scriptEl = document.createElement('script');
-        scriptEl.src = script.src;
-        scriptEl.async = script.async;
-        scriptEl.defer = script.defer;
-        if (script.dataDomain) {
-          scriptEl.setAttribute('data-domain', script.dataDomain);
-        }
-        document.body.appendChild(scriptEl);
-      });
-    }
+        lowPriorityScriptsArray.forEach(script => {
+          // Skip scripts that require consent if consent not given
+          try {
+            if (script.requiresCookieConsent && localStorage.getItem('cookie-consent') !== 'accepted') {
+              return;
+            }
+          } catch (e) {
+            console.warn('Error accessing localStorage:', e);
+            return; // Skip if we can't check consent
+          }
+          
+          const scriptEl = document.createElement('script');
+          scriptEl.src = script.src;
+          scriptEl.async = script.async;
+          scriptEl.defer = script.defer;
+          if (script.dataDomain) {
+            scriptEl.setAttribute('data-domain', script.dataDomain);
+          }
+          document.body.appendChild(scriptEl);
+        });
+      }
 
-    // Check user inactivity
-    let inactivityTimer;
-    function resetInactivityTimer() {
-      userActive = true;
-      clearTimeout(inactivityTimer);
-      inactivityTimer = setTimeout(() => {
-        userActive = false;
-        loadLowPriorityScripts();
-      }, 5000); // 5 seconds of inactivity
-    }
-
-    // Monitor user activity
-    ['mousemove', 'keydown', 'scroll', 'touchstart'].forEach(event => {
-      document.addEventListener(event, resetInactivityTimer, { passive: true });
-    });
-
-    // Fallback: Load after 10 seconds regardless of activity
-    setTimeout(loadLowPriorityScripts, 10000);
-
-    // Load when user scrolls near bottom
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
+      // Check user inactivity
+      let inactivityTimer;
+      function resetInactivityTimer() {
+        userActive = true;
+        clearTimeout(inactivityTimer);
+        inactivityTimer = setTimeout(() => {
+          userActive = false;
           loadLowPriorityScripts();
-          observer.disconnect();
-        }
-      });
-    }, { rootMargin: '200px' });
+        }, 5000); // 5 seconds of inactivity
+      }
 
-    // Observe footer or bottom of page
-    document.addEventListener('DOMContentLoaded', () => {
-      const footer = document.querySelector('footer');
-      if (footer) observer.observe(footer);
-    });
+      // Monitor user activity
+      ['mousemove', 'keydown', 'scroll', 'touchstart'].forEach(event => {
+        document.addEventListener(event, resetInactivityTimer, { passive: true });
+      });
+
+      // Fallback: Load after 10 seconds regardless of activity
+      setTimeout(loadLowPriorityScripts, 10000);
+
+      // Load when user scrolls near bottom
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              loadLowPriorityScripts();
+              observer.disconnect();
+            }
+          });
+        }, { rootMargin: '200px' });
+
+        // Observe footer or bottom of page
+        document.addEventListener('DOMContentLoaded', () => {
+          const footer = document.querySelector('footer');
+          if (footer) observer.observe(footer);
+        });
+      }
+    })();
   </script>
 </Fragment>

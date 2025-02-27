@@ -47,36 +47,44 @@
     }
   </style>
 
-  <script is:inline>
-    // Font loading detection
-    if ('fonts' in document) {
-      Promise.all([
-        document.fonts.load('1em Inter'),
-        document.fonts.load('700 Inter'),
-      ])
-      .then(() => {
-        document.documentElement.classList.add('fonts-loaded');
-        document.documentElement.classList.remove('fonts-loading');
-        localStorage.fontsLoaded = true;
-      })
-      .catch(error => {
-        // Fallback if font loading fails
-        console.warn('Font loading failed, using system fonts:', error);
-        document.documentElement.classList.remove('fonts-loading');
-        document.documentElement.classList.add('fonts-loaded', 'fonts-fallback');
-      });
-    } else {
-      // Browsers without font loading API
-      document.documentElement.classList.remove('fonts-loading');
-      document.documentElement.classList.add('fonts-loaded', 'fonts-fallback');
-    }
-
-    // Check for stored font loading status
-    if (localStorage.fontsLoaded) {
-      document.documentElement.classList.add('fonts-loaded');
-      document.documentElement.classList.remove('fonts-loading');
-    } else {
-      document.documentElement.classList.add('fonts-loading');
-    }
+  <script is:inline type="module">
+    // Font loading detection - this will only run in the browser
+    (function() {
+      try {
+        // Check if fonts are already loaded from a previous visit
+        if (localStorage.fontsLoaded) {
+          document.documentElement.classList.add('fonts-loaded');
+        } else {
+          document.documentElement.classList.add('fonts-loading');
+          
+          // Font loading detection
+          if ('fonts' in document) {
+            Promise.all([
+              document.fonts.load('1em Inter'),
+              document.fonts.load('700 Inter'),
+            ])
+            .then(() => {
+              document.documentElement.classList.add('fonts-loaded');
+              document.documentElement.classList.remove('fonts-loading');
+              localStorage.fontsLoaded = true;
+            })
+            .catch(error => {
+              // Fallback if font loading fails
+              console.warn('Font loading failed, using system fonts:', error);
+              document.documentElement.classList.remove('fonts-loading');
+              document.documentElement.classList.add('fonts-loaded', 'fonts-fallback');
+            });
+          } else {
+            // Browsers without font loading API
+            document.documentElement.classList.remove('fonts-loading');
+            document.documentElement.classList.add('fonts-loaded', 'fonts-fallback');
+          }
+        }
+      } catch (e) {
+        // Fallback for any errors (e.g. localStorage blocked)
+        console.warn('Font loading error:', e);
+        document.documentElement.classList.add('fonts-fallback');
+      }
+    })();
   </script>
 </Fragment>
