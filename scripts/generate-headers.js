@@ -19,6 +19,16 @@ const headersContent = `# Cache static assets
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
+# Specific files flagged in PageSpeed Insights
+/fonts/inter-var.woff2
+  Cache-Control: public, max-age=31536000, immutable
+/images/profile-256.webp
+  Cache-Control: public, max-age=2592000
+/images/profile-128.webp
+  Cache-Control: public, max-age=2592000
+/scripts/theme.js
+  Cache-Control: public, max-age=604800, must-revalidate
+
 # Cache fonts
 /*.woff2
   Cache-Control: public, max-age=31536000, immutable

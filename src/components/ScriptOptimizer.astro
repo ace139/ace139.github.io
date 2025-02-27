@@ -84,13 +84,25 @@ if (socialEmbed) {
     // Load medium priority scripts after page load
     window.addEventListener('load', () => {
       setTimeout(() => {
-        {mediumPriorityScripts.map(script => `
-          const script_${script.src.replace(/[^\w]/g, '_')} = document.createElement('script');
-          script_${script.src.replace(/[^\w]/g, '_')}.src = '${script.src}';
-          script_${script.src.replace(/[^\w]/g, '_')}.async = ${script.async || false};
-          script_${script.src.replace(/[^\w]/g, '_')}.defer = ${script.defer || false};
-          document.body.appendChild(script_${script.src.replace(/[^\w]/g, '_')});
-        `)}
+        const mediumPriorityScripts = [
+          {mediumPriorityScripts.map(script => `{
+            src: '${script.src}',
+            async: ${script.async || false},
+            defer: ${script.defer || false},
+            dataDomain: ${script.dataDomain ? `'${script.dataDomain}'` : 'null'}
+          }`).join(',')}
+        ];
+        
+        mediumPriorityScripts.forEach(script => {
+          const scriptEl = document.createElement('script');
+          scriptEl.src = script.src;
+          scriptEl.async = script.async;
+          scriptEl.defer = script.defer;
+          if (script.dataDomain) {
+            scriptEl.setAttribute('data-domain', script.dataDomain);
+          }
+          document.body.appendChild(scriptEl);
+        });
       }, 1000); // 1 second delay
     });
   </script>
@@ -100,19 +112,31 @@ if (socialEmbed) {
     // Load low priority scripts when user becomes inactive
     let userActive = true;
     let lowPriorityLoaded = false;
+    
+    // Define low priority scripts array
+    const lowPriorityScripts = [
+      {lowPriorityScripts.map(script => `{
+        src: '${script.src}',
+        async: ${script.async || false},
+        defer: ${script.defer || false},
+        dataDomain: ${script.dataDomain ? `'${script.dataDomain}'` : 'null'}
+      }`).join(',')}
+    ];
 
     function loadLowPriorityScripts() {
       if (lowPriorityLoaded) return;
       lowPriorityLoaded = true;
 
-      {lowPriorityScripts.map(script => `
-        const script_${script.src.replace(/[^\w]/g, '_')} = document.createElement('script');
-        script_${script.src.replace(/[^\w]/g, '_')}.src = '${script.src}';
-        script_${script.src.replace(/[^\w]/g, '_')}.async = ${script.async || false};
-        script_${script.src.replace(/[^\w]/g, '_')}.defer = ${script.defer || false};
-        ${script.dataDomain ? `script_${script.src.replace(/[^\w]/g, '_')}.setAttribute('data-domain', '${script.dataDomain}');` : ''}
-        document.body.appendChild(script_${script.src.replace(/[^\w]/g, '_')});
-      `)}
+      lowPriorityScripts.forEach(script => {
+        const scriptEl = document.createElement('script');
+        scriptEl.src = script.src;
+        scriptEl.async = script.async;
+        scriptEl.defer = script.defer;
+        if (script.dataDomain) {
+          scriptEl.setAttribute('data-domain', script.dataDomain);
+        }
+        document.body.appendChild(scriptEl);
+      });
     }
 
     // Check user inactivity

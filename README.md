@@ -206,6 +206,14 @@ This website implements an efficient caching strategy to improve performance and
 - **JavaScript/CSS**: JS and CSS files are cached for 1 day with `must-revalidate` to ensure timely updates.
 - **HTML**: HTML files have a short cache time (no caching) with `must-revalidate` to ensure content is always fresh.
 
+#### Specific Optimizations
+
+The following specific files have custom cache settings to address PageSpeed Insights recommendations:
+- `/fonts/inter-var.woff2`: 1 year (immutable)
+- `/images/profile-256.webp`: 30 days
+- `/images/profile-128.webp`: 30 days
+- `/scripts/theme.js`: 7 days
+
 The caching is implemented through:
 1. A `_headers` file that's automatically generated during the build process
 2. Content hashing in filenames via Astro's build configuration
@@ -222,8 +230,27 @@ To modify cache settings:
 | Fonts | 1 year | `max-age=31536000, immutable` |
 | Images | 30 days | `max-age=2592000` |
 | JS/CSS | 1 day | `max-age=86400, must-revalidate` |
+| theme.js | 7 days | `max-age=604800, must-revalidate` |
 | HTML | No cache | `max-age=0, must-revalidate` |
 | Other | 1 hour | `max-age=3600` |
+
+## 🐛 Browser Console Error Prevention
+
+The website is designed to prevent common browser console errors:
+
+### Script Loading Optimization
+
+- **Progressive Loading**: Scripts are loaded in priority tiers (high, medium, low) to optimize page performance
+- **Proper Variable Scoping**: All script variables are properly defined in their execution context
+- **Error Handling**: Script loading includes proper error handling to prevent reference errors
+
+### Font Loading Optimization
+
+- **Correct Font Weight Syntax**: Using numeric weights (e.g., `700`) instead of descriptive weights (e.g., `bold`)
+- **Font Display Strategy**: Using `font-display: swap` to prevent invisible text during font loading
+- **Font Loading Detection**: Proper detection of font loading status to apply appropriate styles
+
+These optimizations help prevent common browser console errors that could affect user experience or page performance.
 
 ## 🎨 Customization
 

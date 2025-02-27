@@ -30,7 +30,7 @@
     .fonts-loading {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     }
-  </style><script type="module">"fonts"in document&&Promise.all([document.fonts.load("1em Inter"),document.fonts.load("bold Inter")]).then(()=>{document.documentElement.classList.add("fonts-loaded"),document.documentElement.classList.remove("fonts-loading")});localStorage.fontsLoaded?document.documentElement.classList.add("fonts-loaded"):document.documentElement.classList.add("fonts-loading");</script><!-- Inline critical CSS --><style>
+  </style><script type="module">"fonts"in document&&Promise.all([document.fonts.load("1em Inter"),document.fonts.load("700 Inter")]).then(()=>{document.documentElement.classList.add("fonts-loaded"),document.documentElement.classList.remove("fonts-loading")});localStorage.fontsLoaded?document.documentElement.classList.add("fonts-loaded"):document.documentElement.classList.add("fonts-loading");</script><!-- Inline critical CSS --><style>
       /* Add only the most critical styles here */
       :root { 
         color-scheme: light dark;
@@ -47,32 +47,56 @@
     // Load medium priority scripts after page load
     window.addEventListener('load', () => {
       setTimeout(() => {
-        {mediumPriorityScripts.map(script => `
-          const script_${script.src.replace(/[^\w]/g, '_')} = document.createElement('script');
-          script_${script.src.replace(/[^\w]/g, '_')}.src = '${script.src}';
-          script_${script.src.replace(/[^\w]/g, '_')}.async = ${script.async || false};
-          script_${script.src.replace(/[^\w]/g, '_')}.defer = ${script.defer || false};
-          document.body.appendChild(script_${script.src.replace(/[^\w]/g, '_')});
-        `)}
+        const mediumPriorityScripts = [
+          {mediumPriorityScripts.map(script => `{
+            src: '${script.src}',
+            async: ${script.async || false},
+            defer: ${script.defer || false},
+            dataDomain: ${script.dataDomain ? `'${script.dataDomain}'` : 'null'}
+          }`).join(',')}
+        ];
+        
+        mediumPriorityScripts.forEach(script => {
+          const scriptEl = document.createElement('script');
+          scriptEl.src = script.src;
+          scriptEl.async = script.async;
+          scriptEl.defer = script.defer;
+          if (script.dataDomain) {
+            scriptEl.setAttribute('data-domain', script.dataDomain);
+          }
+          document.body.appendChild(scriptEl);
+        });
       }, 1000); // 1 second delay
     });
   </script><script>
     // Load low priority scripts when user becomes inactive
     let userActive = true;
     let lowPriorityLoaded = false;
+    
+    // Define low priority scripts array
+    const lowPriorityScripts = [
+      {lowPriorityScripts.map(script => `{
+        src: '${script.src}',
+        async: ${script.async || false},
+        defer: ${script.defer || false},
+        dataDomain: ${script.dataDomain ? `'${script.dataDomain}'` : 'null'}
+      }`).join(',')}
+    ];
 
     function loadLowPriorityScripts() {
       if (lowPriorityLoaded) return;
       lowPriorityLoaded = true;
 
-      {lowPriorityScripts.map(script => `
-        const script_${script.src.replace(/[^\w]/g, '_')} = document.createElement('script');
-        script_${script.src.replace(/[^\w]/g, '_')}.src = '${script.src}';
-        script_${script.src.replace(/[^\w]/g, '_')}.async = ${script.async || false};
-        script_${script.src.replace(/[^\w]/g, '_')}.defer = ${script.defer || false};
-        ${script.dataDomain ? `script_${script.src.replace(/[^\w]/g, '_')}.setAttribute('data-domain', '${script.dataDomain}');` : ''}
-        document.body.appendChild(script_${script.src.replace(/[^\w]/g, '_')});
-      `)}
+      lowPriorityScripts.forEach(script => {
+        const scriptEl = document.createElement('script');
+        scriptEl.src = script.src;
+        scriptEl.async = script.async;
+        scriptEl.defer = script.defer;
+        if (script.dataDomain) {
+          scriptEl.setAttribute('data-domain', script.dataDomain);
+        }
+        document.body.appendChild(scriptEl);
+      });
     }
 
     // Check user inactivity
