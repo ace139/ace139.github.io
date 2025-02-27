@@ -22,6 +22,9 @@ const headersContent = `# Cache static assets
 # Specific files flagged in PageSpeed Insights
 /fonts/inter-var.woff2
   Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET
+  Access-Control-Allow-Headers: Content-Type
 /images/profile-256.webp
   Cache-Control: public, max-age=2592000
 /images/profile-128.webp
@@ -29,13 +32,28 @@ const headersContent = `# Cache static assets
 /scripts/theme.js
   Cache-Control: public, max-age=604800, must-revalidate
 
+# CORS headers for all font files
+/fonts/*
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET
+  Access-Control-Allow-Headers: Content-Type
+
 # Cache fonts
 /*.woff2
   Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET
+  Access-Control-Allow-Headers: Content-Type
 /*.woff
   Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET
+  Access-Control-Allow-Headers: Content-Type
 /*.ttf
   Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET
+  Access-Control-Allow-Headers: Content-Type
 
 # Cache images
 /*.jpg
