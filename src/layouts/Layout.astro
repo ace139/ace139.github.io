@@ -11,7 +11,7 @@ interface Props {
 
 const { 
   title, 
-  analytics = true, // Enable by default for production
+  analytics = false, // Disabled by default since not using Plausible
   substack = false, // Enable only on pages that need it
   socialEmbed = false // Enable only on pages that need it
 } = Astro.props;

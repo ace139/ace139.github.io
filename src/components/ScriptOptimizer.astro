@@ -13,7 +13,6 @@ interface ScriptConfig {
   defer?: boolean;
   async?: boolean;
   priority: 'high' | 'medium' | 'low';
-  requiresCookieConsent?: boolean;
 }
 
 const { 
@@ -28,20 +27,17 @@ const scripts: Record<string, ScriptConfig> = {
     src: 'https://plausible.io/js/script.js',
     dataDomain: 'ace139.github.io',
     defer: true,
-    priority: 'low',
-    requiresCookieConsent: true
+    priority: 'low'
   },
   substack: {
     src: 'https://substackapi.com/widget.js',
     async: true,
-    priority: 'medium',
-    requiresCookieConsent: true
+    priority: 'medium'
   },
   socialEmbed: {
     src: 'https://platform.twitter.com/widgets.js',
     async: true,
-    priority: 'low',
-    requiresCookieConsent: true
+    priority: 'low'
   }
 };
 
@@ -83,92 +79,8 @@ if (socialEmbed) {
     />
   ))}
 
-  <!-- Cookie consent banner -->
-  <div id="cookie-consent-banner" class="fixed bottom-0 left-0 right-0 bg-gray-100 dark:bg-gray-800 p-4 shadow-lg transform translate-y-full transition-transform duration-300 z-50 hidden">
-    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-      <p class="text-sm">
-        This website uses cookies for analytics and to enhance the user experience. 
-        <a href="/privacy" class="text-blue-600 dark:text-blue-400 underline">Learn more</a>
-      </p>
-      <div class="flex gap-2">
-        <button id="cookie-consent-reject" class="px-4 py-2 text-sm bg-gray-200 dark:bg-gray-700 rounded">Reject</button>
-        <button id="cookie-consent-accept" class="px-4 py-2 text-sm bg-blue-600 text-white rounded">Accept</button>
-      </div>
-    </div>
-  </div>
-
   <!-- Medium priority scripts - Load after initial render -->
   <script is:inline define:vars={{ mediumPriorityScripts }}>
-    // Cookie consent handling
-    (function() {
-      function showCookieConsentBanner() {
-        const banner = document.getElementById('cookie-consent-banner');
-        if (banner) {
-          banner.classList.remove('hidden');
-          setTimeout(() => {
-            banner.classList.remove('translate-y-full');
-          }, 100);
-        }
-      }
-
-      function hideCookieConsentBanner() {
-        const banner = document.getElementById('cookie-consent-banner');
-        if (banner) {
-          banner.classList.add('translate-y-full');
-          setTimeout(() => {
-            banner.classList.add('hidden');
-          }, 300);
-        }
-      }
-
-      // Check for existing consent
-      try {
-        const cookieConsent = localStorage.getItem('cookie-consent');
-        if (cookieConsent === null) {
-          // Show banner only if consent hasn't been given or rejected
-          document.addEventListener('DOMContentLoaded', showCookieConsentBanner);
-        }
-      } catch (e) {
-        console.warn('Error accessing localStorage:', e);
-      }
-
-      // Set up event listeners for the consent buttons
-      document.addEventListener('DOMContentLoaded', () => {
-        const acceptButton = document.getElementById('cookie-consent-accept');
-        const rejectButton = document.getElementById('cookie-consent-reject');
-        
-        if (acceptButton) {
-          acceptButton.addEventListener('click', () => {
-            try {
-              localStorage.setItem('cookie-consent', 'accepted');
-            } catch (e) {
-              console.warn('Error setting localStorage:', e);
-            }
-            hideCookieConsentBanner();
-            // Load consent-requiring scripts
-            loadConsentRequiringScripts();
-          });
-        }
-        
-        if (rejectButton) {
-          rejectButton.addEventListener('click', () => {
-            try {
-              localStorage.setItem('cookie-consent', 'rejected');
-            } catch (e) {
-              console.warn('Error setting localStorage:', e);
-            }
-            hideCookieConsentBanner();
-          });
-        }
-      });
-
-      // Function to load scripts that require consent
-      function loadConsentRequiringScripts() {
-        // This will be called if consent is given
-        // The actual loading will be handled by the priority-based loaders
-      }
-    })();
-
     // Load medium priority scripts after page load
     window.addEventListener('load', () => {
       setTimeout(() => {
@@ -182,22 +94,11 @@ if (socialEmbed) {
             src: script.src,
             async: script.async || false,
             defer: script.defer || false,
-            dataDomain: script.dataDomain || null,
-            requiresCookieConsent: script.requiresCookieConsent || false
+            dataDomain: script.dataDomain || null
           });
         }
         
         mediumPriorityScriptsArray.forEach(script => {
-          // Skip scripts that require consent if consent not given
-          try {
-            if (script.requiresCookieConsent && localStorage.getItem('cookie-consent') !== 'accepted') {
-              return;
-            }
-          } catch (e) {
-            console.warn('Error accessing localStorage:', e);
-            return; // Skip if we can't check consent
-          }
-          
           const scriptEl = document.createElement('script');
           scriptEl.src = script.src;
           scriptEl.async = script.async;
@@ -227,8 +128,7 @@ if (socialEmbed) {
           src: script.src,
           async: script.async || false,
           defer: script.defer || false,
-          dataDomain: script.dataDomain || null,
-          requiresCookieConsent: script.requiresCookieConsent || false
+          dataDomain: script.dataDomain || null
         });
       }
 
@@ -237,16 +137,6 @@ if (socialEmbed) {
         lowPriorityLoaded = true;
 
         lowPriorityScriptsArray.forEach(script => {
-          // Skip scripts that require consent if consent not given
-          try {
-            if (script.requiresCookieConsent && localStorage.getItem('cookie-consent') !== 'accepted') {
-              return;
-            }
-          } catch (e) {
-            console.warn('Error accessing localStorage:', e);
-            return; // Skip if we can't check consent
-          }
-          
           const scriptEl = document.createElement('script');
           scriptEl.src = script.src;
           scriptEl.async = script.async;
