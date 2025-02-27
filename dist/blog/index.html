@@ -1,11 +1,38 @@
-<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="description" content="Personal website and blog"><meta name="viewport" content="width=device-width"><meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><!-- Font optimization --><link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin><style>
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="description" content="Personal website and blog"><meta name="viewport" content="width=device-width"><meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><!-- Font optimization --><link rel="preload" href="/fonts/inter/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/inter/Inter-Medium.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/inter/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/inter/Inter-Bold.woff2" as="font" type="font/woff2" crossorigin><style>
     /* Font loading and fallback strategy */
     @font-face {
       font-family: 'Inter';
-      font-weight: 100 900;
+      font-weight: 400;
       font-display: swap;
       font-style: normal;
-      src: url('/fonts/inter-var.woff2') format('woff2-variations');
+      src: url('/fonts/inter/Inter-Regular.woff2') format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    
+    @font-face {
+      font-family: 'Inter';
+      font-weight: 500;
+      font-display: swap;
+      font-style: normal;
+      src: url('/fonts/inter/Inter-Medium.woff2') format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    
+    @font-face {
+      font-family: 'Inter';
+      font-weight: 600;
+      font-display: swap;
+      font-style: normal;
+      src: url('/fonts/inter/Inter-SemiBold.woff2') format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    
+    @font-face {
+      font-family: 'Inter';
+      font-weight: 700;
+      font-display: swap;
+      font-style: normal;
+      src: url('/fonts/inter/Inter-Bold.woff2') format('woff2');
       unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
     }
 
@@ -19,54 +46,55 @@
       font-family: var(--font-sans);
     }
 
-    /* Font optimization for different weights */
-    .font-light { font-variation-settings: 'wght' 300; }
-    .font-normal { font-variation-settings: 'wght' 400; }
-    .font-medium { font-variation-settings: 'wght' 500; }
-    .font-semibold { font-variation-settings: 'wght' 600; }
-    .font-bold { font-variation-settings: 'wght' 700; }
+    /* Font classes by weight */
+    .font-light { font-weight: 300; }
+    .font-normal { font-weight: 400; }
+    .font-medium { font-weight: 500; }
+    .font-semibold { font-weight: 600; }
+    .font-bold { font-weight: 700; }
 
-    /* Fallback fonts with similar metrics to prevent layout shift */
+    /* Font loading classes */
     .fonts-loading {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      /* Optional: customize appearance during loading */
     }
-  </style><script type="module">
-    // Font loading detection - this will only run in the browser
+
+    .fonts-loaded {
+      /* Apply any specific styles once fonts are loaded */
+    }
+
+    .fonts-fallback {
+      /* Fallback styles when font loading fails */
+    }
+  </style><script>
     (function() {
-      try {
-        // Check if fonts are already loaded from a previous visit
-        if (localStorage.fontsLoaded) {
-          document.documentElement.classList.add('fonts-loaded');
-        } else {
-          document.documentElement.classList.add('fonts-loading');
-          
-          // Font loading detection
-          if ('fonts' in document) {
-            Promise.all([
-              document.fonts.load('1em Inter'),
-              document.fonts.load('bold Inter'),
-            ])
-            .then(() => {
-              document.documentElement.classList.add('fonts-loaded');
-              document.documentElement.classList.remove('fonts-loading');
-              localStorage.fontsLoaded = true;
-            })
-            .catch(error => {
-              // Fallback if font loading fails
-              console.warn('Font loading failed, using system fonts:', error);
-              document.documentElement.classList.remove('fonts-loading');
-              document.documentElement.classList.add('fonts-loaded', 'fonts-fallback');
-            });
-          } else {
-            // Browsers without font loading API
+      // Check if fonts loading state is already stored
+      if (localStorage.fontsLoaded) {
+        document.documentElement.classList.add('fonts-loaded');
+      } else {
+        document.documentElement.classList.add('fonts-loading');
+        
+        // Use font loading API if available
+        if ('fonts' in document) {
+          Promise.all([
+            document.fonts.load('400 1em Inter'),
+            document.fonts.load('700 1em Inter'),
+          ])
+          .then(() => {
+            document.documentElement.classList.add('fonts-loaded');
+            document.documentElement.classList.remove('fonts-loading');
+            localStorage.fontsLoaded = true;
+          })
+          .catch(error => {
+            // Fallback if font loading fails
+            console.warn('Font loading failed, using system fonts:', error);
             document.documentElement.classList.remove('fonts-loading');
             document.documentElement.classList.add('fonts-loaded', 'fonts-fallback');
-          }
+          });
+        } else {
+          // Browsers without font loading API
+          document.documentElement.classList.remove('fonts-loading');
+          document.documentElement.classList.add('fonts-loaded', 'fonts-fallback');
         }
-      } catch (e) {
-        // Fallback for any errors (e.g. localStorage blocked)
-        console.warn('Font loading error:', e);
-        document.documentElement.classList.add('fonts-fallback');
       }
     })();
   </script><!-- Inline critical CSS --><style>
