@@ -47,21 +47,34 @@
     }
   </style>
 
-  <script>
+  <script is:inline>
     // Font loading detection
     if ('fonts' in document) {
       Promise.all([
         document.fonts.load('1em Inter'),
         document.fonts.load('700 Inter'),
-      ]).then(() => {
+      ])
+      .then(() => {
         document.documentElement.classList.add('fonts-loaded');
         document.documentElement.classList.remove('fonts-loading');
+        localStorage.fontsLoaded = true;
+      })
+      .catch(error => {
+        // Fallback if font loading fails
+        console.warn('Font loading failed, using system fonts:', error);
+        document.documentElement.classList.remove('fonts-loading');
+        document.documentElement.classList.add('fonts-loaded', 'fonts-fallback');
       });
+    } else {
+      // Browsers without font loading API
+      document.documentElement.classList.remove('fonts-loading');
+      document.documentElement.classList.add('fonts-loaded', 'fonts-fallback');
     }
 
-    // Store font loading status
+    // Check for stored font loading status
     if (localStorage.fontsLoaded) {
       document.documentElement.classList.add('fonts-loaded');
+      document.documentElement.classList.remove('fonts-loading');
     } else {
       document.documentElement.classList.add('fonts-loading');
     }

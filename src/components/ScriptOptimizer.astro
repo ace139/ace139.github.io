@@ -13,6 +13,7 @@ interface ScriptConfig {
   defer?: boolean;
   async?: boolean;
   priority: 'high' | 'medium' | 'low';
+  requiresCookieConsent?: boolean;
 }
 
 const { 
@@ -27,17 +28,20 @@ const scripts: Record<string, ScriptConfig> = {
     src: 'https://plausible.io/js/script.js',
     dataDomain: 'ace139.github.io',
     defer: true,
-    priority: 'low'
+    priority: 'low',
+    requiresCookieConsent: true
   },
   substack: {
     src: 'https://substackapi.com/widget.js',
     async: true,
-    priority: 'medium'
+    priority: 'medium',
+    requiresCookieConsent: true
   },
   socialEmbed: {
     src: 'https://platform.twitter.com/widgets.js',
     async: true,
-    priority: 'low'
+    priority: 'low',
+    requiresCookieConsent: true
   }
 };
 
@@ -79,21 +83,95 @@ if (socialEmbed) {
     />
   ))}
 
+  <!-- Cookie consent banner -->
+  <div id="cookie-consent-banner" class="fixed bottom-0 left-0 right-0 bg-gray-100 dark:bg-gray-800 p-4 shadow-lg transform translate-y-full transition-transform duration-300 z-50 hidden">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-sm">
+        This website uses cookies for analytics and to enhance the user experience. 
+        <a href="/privacy" class="text-blue-600 dark:text-blue-400 underline">Learn more</a>
+      </p>
+      <div class="flex gap-2">
+        <button id="cookie-consent-reject" class="px-4 py-2 text-sm bg-gray-200 dark:bg-gray-700 rounded">Reject</button>
+        <button id="cookie-consent-accept" class="px-4 py-2 text-sm bg-blue-600 text-white rounded">Accept</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Medium priority scripts - Load after initial render -->
   <script is:inline>
+    // Cookie consent handling
+    function showCookieConsentBanner() {
+      const banner = document.getElementById('cookie-consent-banner');
+      if (banner) {
+        banner.classList.remove('hidden');
+        setTimeout(() => {
+          banner.classList.remove('translate-y-full');
+        }, 100);
+      }
+    }
+
+    function hideCookieConsentBanner() {
+      const banner = document.getElementById('cookie-consent-banner');
+      if (banner) {
+        banner.classList.add('translate-y-full');
+        setTimeout(() => {
+          banner.classList.add('hidden');
+        }, 300);
+      }
+    }
+
+    // Check for existing consent
+    const cookieConsent = localStorage.getItem('cookie-consent');
+    if (cookieConsent === null) {
+      // Show banner only if consent hasn't been given or rejected
+      document.addEventListener('DOMContentLoaded', showCookieConsentBanner);
+    }
+
+    // Set up event listeners for the consent buttons
+    document.addEventListener('DOMContentLoaded', () => {
+      const acceptButton = document.getElementById('cookie-consent-accept');
+      const rejectButton = document.getElementById('cookie-consent-reject');
+      
+      if (acceptButton) {
+        acceptButton.addEventListener('click', () => {
+          localStorage.setItem('cookie-consent', 'accepted');
+          hideCookieConsentBanner();
+          // Load consent-requiring scripts
+          loadConsentRequiringScripts();
+        });
+      }
+      
+      if (rejectButton) {
+        rejectButton.addEventListener('click', () => {
+          localStorage.setItem('cookie-consent', 'rejected');
+          hideCookieConsentBanner();
+        });
+      }
+    });
+
+    // Function to load scripts that require consent
+    function loadConsentRequiringScripts() {
+      // This will be called if consent is given
+      // The actual loading will be handled by the priority-based loaders
+    }
+
     // Load medium priority scripts after page load
     window.addEventListener('load', () => {
       setTimeout(() => {
-        const mediumPriorityScripts = [
-          {mediumPriorityScripts.map(script => `{
-            src: '${script.src}',
-            async: ${script.async || false},
-            defer: ${script.defer || false},
-            dataDomain: ${script.dataDomain ? `'${script.dataDomain}'` : 'null'}
-          }`).join(',')}
-        ];
+        const mediumPriorityScriptsArray = mediumPriorityScripts.map(script => ({
+          src: script.src,
+          async: script.async || false,
+          defer: script.defer || false,
+          dataDomain: script.dataDomain ? script.dataDomain : null,
+          requiresCookieConsent: script.requiresCookieConsent || false
+        }));
         
-        mediumPriorityScripts.forEach(script => {
+        mediumPriorityScriptsArray.forEach(script => {
+          // Skip scripts that require consent if consent not given
+          if (script.requiresCookieConsent && localStorage.getItem('cookie-consent') !== 'accepted') {
+            return;
+          }
+          
           const scriptEl = document.createElement('script');
           scriptEl.src = script.src;
           scriptEl.async = script.async;
@@ -114,20 +192,24 @@ if (socialEmbed) {
     let lowPriorityLoaded = false;
     
     // Define low priority scripts array
-    const lowPriorityScripts = [
-      {lowPriorityScripts.map(script => `{
-        src: '${script.src}',
-        async: ${script.async || false},
-        defer: ${script.defer || false},
-        dataDomain: ${script.dataDomain ? `'${script.dataDomain}'` : 'null'}
-      }`).join(',')}
-    ];
+    const lowPriorityScriptsArray = lowPriorityScripts.map(script => ({
+      src: script.src,
+      async: script.async || false,
+      defer: script.defer || false,
+      dataDomain: script.dataDomain ? script.dataDomain : null,
+      requiresCookieConsent: script.requiresCookieConsent || false
+    }));
 
     function loadLowPriorityScripts() {
       if (lowPriorityLoaded) return;
       lowPriorityLoaded = true;
 
-      lowPriorityScripts.forEach(script => {
+      lowPriorityScriptsArray.forEach(script => {
+        // Skip scripts that require consent if consent not given
+        if (script.requiresCookieConsent && localStorage.getItem('cookie-consent') !== 'accepted') {
+          return;
+        }
+        
         const scriptEl = document.createElement('script');
         scriptEl.src = script.src;
         scriptEl.async = script.async;

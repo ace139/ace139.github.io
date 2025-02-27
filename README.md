@@ -15,6 +15,8 @@ A modern, responsive personal portfolio website built with Astro 5, TailwindCSS,
 - 🎯 **Accessibility**: Screen reader support and semantic HTML
 - 🛠 **Type Safety**: TypeScript integration for better development experience
 - 📦 **Efficient Caching**: Optimized cache policies for static assets to improve performance
+- 🍪 **Cookie Consent**: GDPR-compliant cookie consent mechanism for third-party scripts
+- 🔧 **Browser Compatibility**: Fixes for common browser console errors and warnings
 
 ## 🏗 Architecture
 
@@ -243,14 +245,25 @@ The website is designed to prevent common browser console errors:
 - **Progressive Loading**: Scripts are loaded in priority tiers (high, medium, low) to optimize page performance
 - **Proper Variable Scoping**: All script variables are properly defined in their execution context
 - **Error Handling**: Script loading includes proper error handling to prevent reference errors
+- **Cookie Consent Integration**: Third-party scripts are only loaded after obtaining user consent
 
 ### Font Loading Optimization
 
 - **Correct Font Weight Syntax**: Using numeric weights (e.g., `700`) instead of descriptive weights (e.g., `bold`)
-- **Font Display Strategy**: Using `font-display: swap` to prevent invisible text during font loading
-- **Font Loading Detection**: Proper detection of font loading status to apply appropriate styles
+- **Font Loading Error Handling**: Graceful fallback to system fonts if web fonts fail to load
+- **Font Loading State Management**: Proper tracking of font loading state in localStorage
 
-These optimizations help prevent common browser console errors that could affect user experience or page performance.
+### CSS Syntax Fixes
+
+- **Proper CSS Property Syntax**: Ensuring all CSS properties include required semicolons
+- **Valid CSS Values**: Using valid CSS values for all properties including aspect-ratio
+
+### Cookie and Privacy Compliance
+
+- **Cookie Consent Banner**: User-friendly banner for obtaining cookie consent
+- **Privacy Policy Page**: Detailed privacy policy explaining data collection practices
+- **SameSite Cookie Handling**: Proper handling of third-party cookies with SameSite attributes
+- **Conditional Script Loading**: Third-party scripts only load when consent is given
 
 ## 🎨 Customization
 
