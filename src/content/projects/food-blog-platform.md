@@ -6,7 +6,6 @@ heroImage: "/images/food-blog.jpg"
 tags: ["Next.js", "TailwindCSS", "Markdown"]
 github: "https://github.com/johndoe/food-blog"
 demo: "https://food-blog.demo.com"
-layout: "../../layouts/ProjectPost.astro"
 ---
 
 # Food Blog Platform
@@ -87,7 +86,6 @@ heroImage: "/projects/portfolio-hero.jpg"
 tags: ["Astro", "TailwindCSS", "TypeScript"]
 github: "https://github.com/username/portfolio"
 demo: "https://portfolio.demo.com"
-layout: "../../layouts/ProjectPost.astro"
 ---
 
 # Portfolio Website
