@@ -14,6 +14,7 @@ A modern, responsive personal portfolio website built with Astro 5, TailwindCSS,
   - Code splitting and lazy loading
 - 🎯 **Accessibility**: Screen reader support and semantic HTML
 - 🛠 **Type Safety**: TypeScript integration for better development experience
+- 📦 **Efficient Caching**: Optimized cache policies for static assets to improve performance
 
 ## 🏗 Architecture
 
@@ -192,6 +193,37 @@ npm run analyze
 # Check bundle sizes
 npm run build -- --debug
 ```
+
+## 📦 Caching Strategy
+
+This website implements an efficient caching strategy to improve performance and reduce bandwidth usage:
+
+### Cache Implementation
+
+- **Static Assets**: All static assets in the `/assets/` directory are cached for 1 year with the `immutable` flag, as they include content hashes in their filenames.
+- **Fonts**: Font files (woff2, woff, ttf) are cached for 1 year with the `immutable` flag.
+- **Images**: Image files (jpg, png, webp, svg, etc.) are cached for 30 days.
+- **JavaScript/CSS**: JS and CSS files are cached for 1 day with `must-revalidate` to ensure timely updates.
+- **HTML**: HTML files have a short cache time (no caching) with `must-revalidate` to ensure content is always fresh.
+
+The caching is implemented through:
+1. A `_headers` file that's automatically generated during the build process
+2. Content hashing in filenames via Astro's build configuration
+
+To modify cache settings:
+1. Edit the `scripts/generate-headers.js` file
+2. Adjust the cache durations as needed
+
+### Cache Duration Reference
+
+| Asset Type | Cache Duration | Directive |
+|------------|---------------|-----------|
+| Static Assets | 1 year | `max-age=31536000, immutable` |
+| Fonts | 1 year | `max-age=31536000, immutable` |
+| Images | 30 days | `max-age=2592000` |
+| JS/CSS | 1 day | `max-age=86400, must-revalidate` |
+| HTML | No cache | `max-age=0, must-revalidate` |
+| Other | 1 hour | `max-age=3600` |
 
 ## 🎨 Customization
 
