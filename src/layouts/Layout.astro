@@ -55,8 +55,19 @@ const {
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     
+    <!-- Only preload profile images on homepage -->
     {Astro.url.pathname === "/" && (
-      <link rel="preload" fetchpriority="high" type="image/webp" as="image" href="/images/profile-128.webp" />
+      <>
+        <link 
+          rel="preload" 
+          fetchpriority="high" 
+          as="image" 
+          type="image/webp" 
+          href="/images/profile-128.webp" 
+          imagesrcset="/images/profile-128.webp 1x, /images/profile-256.webp 2x" 
+          imagesizes="128px"
+        />
+      </>
     )}
 
     <!-- Optimize third-party scripts -->
