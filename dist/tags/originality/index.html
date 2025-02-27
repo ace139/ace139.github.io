@@ -44,7 +44,7 @@
           if ('fonts' in document) {
             Promise.all([
               document.fonts.load('1em Inter'),
-              document.fonts.load('700 Inter'),
+              document.fonts.load('bold Inter'),
             ])
             .then(() => {
               document.documentElement.classList.add('fonts-loaded');

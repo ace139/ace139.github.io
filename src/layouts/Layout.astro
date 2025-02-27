@@ -55,10 +55,9 @@ const {
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     
-    {/* Preload LCP image only on homepage */}
-    {Astro.url.pathname === "/" ? (
-      <link rel="preload" as="image" href="/images/profile-128.webp" />
-    ) : null}
+    {Astro.url.pathname === "/" && (
+      <link rel="preload" fetchpriority="high" type="image/webp" as="image" href="/images/profile-128.webp" />
+    )}
 
     <!-- Optimize third-party scripts -->
     <ScriptOptimizer
