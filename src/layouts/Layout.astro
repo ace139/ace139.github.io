@@ -26,7 +26,28 @@ const {
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    
+
+    <script>
+      const theme =
+        localStorage.getItem('theme') ??
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+      const dark = document.getElementById('theme-toggle-dark-icon'),
+        light = document.getElementById('theme-toggle-light-icon'),
+        toggle = document.getElementById('theme-toggle');
+      if (theme === 'dark') {
+        light?.classList.remove('hidden');
+      } else {
+        dark?.classList.remove('hidden');
+      }
+      toggle?.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        light?.classList.toggle('hidden', isDark);
+        dark?.classList.toggle('hidden', !isDark);
+      });
+    </script>
+
     <!-- Font optimization -->
     <FontOptimizer />
     
@@ -45,12 +66,6 @@ const {
       }
       img { max-width: 100%; height: auto; }
     </style>
-    
-    <!-- Preload critical assets -->
-    <link rel="preload" href="/scripts/theme.js" as="script" />
-    
-    <!-- Cache control -->
-    <meta http-equiv="Cache-Control" content="max-age=31536000" />
     
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
@@ -134,7 +149,6 @@ const {
         document.getElementById('mobile-menu')?.classList.toggle('hidden');
       });
     </script>
-    <script src="/scripts/theme.js" defer></script>
   </body>
 </html>
 

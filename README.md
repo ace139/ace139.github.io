@@ -45,8 +45,6 @@ graph TD
 ├── public/
 │   ├── images/
 │   │   └── [optimized images]
-│   └── scripts/
-│       └── theme.js
 ├── src/
 │   ├── layouts/
 │   │   └── Layout.astro
@@ -59,8 +57,6 @@ graph TD
 │   ├── config/
 │   │   ├── socials.ts
 │   │   └── icons.ts
-│   └── scripts/
-│       └── theme.js
 ├── scripts/
 │   └── optimize-images.js
 ├── astro.config.mjs
@@ -214,7 +210,6 @@ The following specific files have custom cache settings to address PageSpeed Ins
 - `/fonts/inter-var.woff2`: 1 year (immutable)
 - `/images/profile-256.webp`: 30 days
 - `/images/profile-128.webp`: 30 days
-- `/scripts/theme.js`: 7 days
 
 The caching is implemented through:
 1. A `_headers` file that's automatically generated during the build process
@@ -232,7 +227,6 @@ To modify cache settings:
 | Fonts | 1 year | `max-age=31536000, immutable` |
 | Images | 30 days | `max-age=2592000` |
 | JS/CSS | 1 day | `max-age=86400, must-revalidate` |
-| theme.js | 7 days | `max-age=604800, must-revalidate` |
 | HTML | No cache | `max-age=0, must-revalidate` |
 | Other | 1 hour | `max-age=3600` |
 
