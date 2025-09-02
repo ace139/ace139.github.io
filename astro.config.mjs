@@ -8,7 +8,7 @@ export default defineConfig({
   integrations: [tailwind()],
   output: 'static',
   build: {
-    inlineStylesheets: 'always',
+    inlineStylesheets: 'auto',
     assets: 'assets',
     minify: true,
     splitting: true,
