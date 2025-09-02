@@ -1,6 +1,9 @@
 [build]
-  command = "npx playwright install --with-deps chromium && npm run build"
+  command = "npm run build"
   publish = "dist"
+
+[build.environment]
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1"
 
 [build.processing]
   skip_processing = false

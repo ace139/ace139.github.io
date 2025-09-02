@@ -1,6 +1,6 @@
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
-import remarkMermaid from 'remark-mermaidjs';
+import rehypeMermaid from 'rehype-mermaid';
 
 export default defineConfig({
   site: 'https://ace139.github.io',
@@ -53,9 +53,9 @@ export default defineConfig({
       },
       wrap: true
     },
-    // Only include plugins we actually use
-    remarkPlugins: [remarkMermaid],
-    rehypePlugins: []
+    // Use rehype-mermaid (recommended replacement)
+    remarkPlugins: [],
+    rehypePlugins: [rehypeMermaid]
   },
   compressHTML: true
 });

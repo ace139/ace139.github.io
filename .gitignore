@@ -1,4 +1,27 @@
 node_modules
 
+# Build outputs
+dist
+.astro
+
 # Local Netlify folder
 .netlify
+
+# OS/editor cruft
+.DS_Store
+.vscode/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Env files
+.env
+.env.*
+
+# Playwright artifacts (if tests are added later)
+playwright-report/
+test-results/
