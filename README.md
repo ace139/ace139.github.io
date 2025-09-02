@@ -4,19 +4,18 @@ A modern, responsive personal portfolio website built with Astro 5, TailwindCSS,
 
 ## 🌟 Features
 
-- 🎨 **Responsive Design**: Mobile-first approach with a clean, modern interface
-- 🌓 **Dark/Light Mode**: System-preference detection with manual toggle option
-- 🔗 **Dynamic Social Links**: Centralized configuration for easy management
-- ⚡ **Performance Optimized**:
-  - Optimized image loading with WebP support
-  - Inline SVG icons for faster loading
-  - Minimal JavaScript footprint
-  - Code splitting and lazy loading
-- 🎯 **Accessibility**: Screen reader support and semantic HTML
-- 🛠 **Type Safety**: TypeScript integration for better development experience
-- 📦 **Efficient Caching**: Optimized cache policies for static assets to improve performance
-- 🍪 **Cookie Consent**: GDPR-compliant cookie consent mechanism for third-party scripts
-- 🔧 **Browser Compatibility**: Fixes for common browser console errors and warnings
+- 🎨 **Responsive Design**: Mobile-first, clean UI with TailwindCSS
+- 🌓 **Dark/Light Mode**: System preference + manual toggle without flashes
+- 🔗 **Dynamic Social Links**: Centralized in `src/config/socials.ts`
+- 🖼️ **Images via astro:assets**:
+  - `ResponsiveImage.astro` wraps `Picture` for AVIF/WebP + original fallback
+  - SVG/string paths fall back to `<img>` automatically
+  - Homepage avatar now uses `Picture` with responsive variants
+- 🧩 **MDX Support**: Write content in `.mdx`, import images, and embed components
+- 🐟 **Mermaid Diagrams**: Enabled using `rehype-mermaid` in Markdown
+- ⚡ **Performance**: Minimal JS, code-splitting, responsive images
+- 📦 **Caching & Headers**: Netlify headers auto-generated after build
+- 🛠 **Type Safety**: TypeScript across content & components
 
 ## 🏗 Architecture
 
@@ -44,26 +43,37 @@ graph TD
 /
 ├── public/
 │   ├── images/
-│   │   └── [optimized images]
-│   └── scripts/
-│       └── theme.js
+│   ├── fonts/
+│   └── favicon.svg
+├── scripts/
+│   ├── optimize-images.js        # prebuild image optimization
+│   ├── generate-headers.js       # postbuild Netlify _headers
+│   └── fix-fonts.js
 ├── src/
+│   ├── components/
+│   │   ├── ResponsiveImage.astro
+│   │   ├── FontOptimizer.astro
+│   │   ├── SocialIcons.astro
+│   │   └── Icons.astro
+│   ├── content/
+│   │   ├── blog/                  # .md or .mdx files
+│   │   ├── projects/              # .md or .mdx files
+│   │   └── config.ts              # collections schema
+│   ├── images/
+│   │   └── avatar.jpg             # homepage avatar (astro:assets)
 │   ├── layouts/
-│   │   └── Layout.astro
+│   │   ├── Layout.astro
+│   │   ├── BlogPost.astro
+│   │   └── ProjectPost.astro
 │   ├── pages/
 │   │   ├── index.astro
-│   │   └── resume.astro
-│   ├── components/
-│   │   ├── Icons.astro
-│   │   └── SocialIcons.astro
-│   ├── config/
-│   │   ├── socials.ts
-│   │   └── icons.ts
-│   └── scripts/
-│       └── theme.js
-├── scripts/
-│   └── optimize-images.js
+│   │   ├── blog.astro
+│   │   ├── blog/[...slug].astro
+│   │   ├── projects.astro
+│   │   ├── projects/[...slug].astro
+│   │   └── tags/[tag].astro
 ├── astro.config.mjs
+├── netlify.toml
 ├── tailwind.config.mjs
 ├── package.json
 └── README.md
@@ -109,11 +119,11 @@ graph TD
 
 #### ResponsiveImage.astro
 
-- Optimized image loading component
-- Blur placeholder generation
-- WebP format support
-- Responsive image handling
-- Lazy loading implementation
+- High-level wrapper over `astro:assets` `Picture`
+- Inputs `ImageMetadata | string`; auto-falls back to `<img>` for SVG/string
+- Responsive widths default: `[320, 480, 768, 1024, 1280]`
+- Formats default: `['avif', 'webp']` plus original format fallback
+- Props: `sizes?`, `widths?`, `formats?`, `loading?`, `fetchpriority?`
 
 #### FontOptimizer.astro
 
@@ -142,10 +152,9 @@ graph TD
 
 ### Homepage (index.astro)
 
-- Main landing page with optimized image loading
-- Profile section with WebP image support
-- Dynamic social media links with SVG icons
-- Responsive layout adjustments
+- Main landing page with optimized avatar via `Picture` (AVIF/WebP + responsive)
+- Dynamic social links with inline SVG icons
+- Responsive layout with dark mode
 
 ### Icons System (Icons.astro)
 
@@ -179,21 +188,62 @@ graph TD
   - Sharp-powered image processing
 - Automated optimization script
 
-## 🖼️ Authoring Hero Images (Content Collections)
+## 📝 Content Authoring (Blog & Projects with MDX)
 
-Place hero media next to your Markdown files in `src/content/**` and reference them with a relative path. This enables schema validation via `image()` and lets Astro optimize raster images.
+Content lives in `src/content/blog/` and `src/content/projects/`, defined by `src/content/config.ts` with schema-validated frontmatter using `image()`.
 
-- Store alongside markdown:
-  - Blog: `src/content/blog/my-post/hero.png` → frontmatter `heroImage: './hero.png'`
-  - Projects: `src/content/projects/my-project/hero.svg` → frontmatter `heroImage: './hero.svg'`
-- Schema validation (`src/content/config.ts`):
-  - Use `schema: ({ image }) => z.object({ heroImage: image().optional(), ... })` to import as `ImageMetadata` when applicable.
-- Rendering:
-  - Prefer `<Image />` from `astro:assets` when `heroImage` is `ImageMetadata` and not SVG to get optimized output and CLS-safe dimensions.
-  - SVGs (or string paths) are not transformed; render via `<img>` with explicit width/height to avoid CLS.
-  - Alternatively, use `src/components/ResponsiveImage.astro` which accepts `ImageMetadata | string` and falls back to `<img>` for SVG.
+- __Frontmatter schema__ (`src/content/config.ts`):
+  - Blog: `title` (string), `date` (string), `heroImage` (image optional), `tags?`, `description?`
+  - Projects: `title`, `description`, `date`, `heroImage?`, `tags?`, `github?`, `demo?`
 
-References: Astro docs on images (where to store, Image component, content collections)
+- __Create a new blog post__
+  1) Create a folder with media next to it (recommended):
+     - `src/content/blog/my-post/index.mdx`
+     - `src/content/blog/my-post/hero.jpg`
+  2) In `index.mdx`:
+     ```mdx
+     ---
+     title: My Post
+     date: 2025-09-02
+     heroImage: ./hero.jpg
+     tags: [astro]
+     ---
+
+     import { Picture } from 'astro:assets';
+     import ResponsiveImage from '../../components/ResponsiveImage.astro';
+     import diagram from './diagram.png';
+
+     Inline image via Picture:
+     <Picture src={diagram} widths={[320,640,960,1280]} sizes="(min-width:768px) 768px, 100vw" formats={['avif','webp','png']} alt="Diagram" />
+
+     Or via shared component:
+     <ResponsiveImage src={diagram} alt="Diagram" sizes="(min-width:768px) 768px, 100vw" />
+     ```
+
+- __Create a new project__
+  1) `src/content/projects/my-project/index.mdx`
+  2) Frontmatter:
+     ```md
+     ---
+     title: My Project
+     description: Short summary
+     date: 2025-09-02
+     heroImage: ./hero.png
+     github: https://github.com/you/repo
+     demo: https://example.com
+     ---
+     ```
+
+- __Hero images__
+  - Store images next to the content file, reference with a relative path.
+  - When schema `image()` resolves to `ImageMetadata`, the routes/layouts render with `ResponsiveImage.astro` (uses `Picture` under the hood). SVGs fall back to `<img>`.
+
+- __Routing__
+  - Blog pages: `src/pages/blog/[...slug].astro` (uses `getCollection('blog')` and `post.render()`).
+  - Project pages: `src/pages/projects/[...slug].astro`.
+
+- __Mermaid diagrams__
+  - Markdown/MDX diagrams are rendered server-side via `rehype-mermaid` configured in `astro.config.mjs`.
 
 ## 🔧 Performance Tools
 
@@ -227,48 +277,21 @@ npm run analyze
 npm run build -- --debug
 ```
 
-## 📦 Caching Strategy
+## 📦 Caching & Headers
 
-This website implements an efficient caching strategy to improve performance and reduce bandwidth usage:
+Implemented via generated Netlify headers and hashed filenames:
 
-### Cache Implementation
+- __Hashed assets__: `/assets/*` immutable for 1 year
+- __Bundled JS__: `/chunks/*.js` and `/entry.*.js` immutable for 1 year
+- __Fonts__: woff2 immutable for 1 year
+- __HTML__: `max-age=0, must-revalidate`
 
-- **Static Assets**: All static assets in the `/assets/` directory are cached for 1 year with the `immutable` flag, as they include content hashes in their filenames.
-- **Fonts**: Font files (woff2, woff, ttf) are cached for 1 year with the `immutable` flag.
-- **Images**: Image files (jpg, png, webp, svg, etc.) are cached for 30 days.
-- **JavaScript/CSS**: JS and CSS files are cached for 1 day with `must-revalidate` to ensure timely updates.
-- **HTML**: HTML files have a short cache time (no caching) with `must-revalidate` to ensure content is always fresh.
+How it works:
+- `scripts/generate-headers.js` writes `dist/_headers` in `postbuild`
+- Filenames include content hashes per `astro.config.mjs` rollup output settings
 
-#### Specific Optimizations
-
-The following specific files have custom cache settings to address PageSpeed Insights recommendations:
-
-- `/fonts/inter-var.woff2`: 1 year (immutable)
-- `/images/profile-256.webp`: 30 days
-- `/images/profile-128.webp`: 30 days
-- `/scripts/theme.js`: 7 days
-
-The caching is implemented through:
-
-1. A `_headers` file that's automatically generated during the build process
-2. Content hashing in filenames via Astro's build configuration
-
-To modify cache settings:
-
-1. Edit the `scripts/generate-headers.js` file
-2. Adjust the cache durations as needed
-
-### Cache Duration Reference
-
-| Asset Type    | Cache Duration | Directive                         |
-| ------------- | -------------- | --------------------------------- |
-| Static Assets | 1 year         | `max-age=31536000, immutable`     |
-| Fonts         | 1 year         | `max-age=31536000, immutable`     |
-| Images        | 30 days        | `max-age=2592000`                 |
-| JS/CSS        | 1 day          | `max-age=86400, must-revalidate`  |
-| theme.js      | 7 days         | `max-age=604800, must-revalidate` |
-| HTML          | No cache       | `max-age=0, must-revalidate`      |
-| Other         | 1 hour         | `max-age=3600`                    |
+Modify headers:
+- Edit `scripts/generate-headers.js`, rebuild. The old root `_headers` file was removed in favor of generated headers.
 
 ## 🐛 Browser Console Error Prevention
 
@@ -353,6 +376,12 @@ The website is designed to prevent common browser console errors:
 | `npm run preview`                 | Preview your build locally before deploying |
 | `node scripts/optimize-images.js` | Optimize and convert images                 |
 
+## 🚀 Deployment
+
+- Hosted on Netlify. Build command: `npm run build`; publish directory: `dist/`.
+- Postbuild generates `dist/_headers` for caching (`scripts/generate-headers.js`).
+- For local preview: `npm run preview`.
+
 ## 📊 Performance Metrics
 
 ### Core Web Vitals
@@ -395,26 +424,9 @@ The website is designed to prevent common browser console errors:
 
 ### Dependencies
 
-#### Core Dependencies
-
-```json
-{
-  "@astrojs/tailwind": "^5.1.0",
-  "astro": "^4.0.0",
-  "sharp": "^0.33.5",
-  "date-fns": "^4.1.0"
-}
-```
-
-#### Development Dependencies
-
-```json
-{
-  "tailwindcss": "^3.4.0",
-  "typescript": "^5.0.0",
-  "@types/node": "^20.0.0"
-}
-```
+- Core: `astro`, `@astrojs/tailwind`, `sharp`, `rehype-mermaid`, `date-fns`
+- Dev: `@astrojs/mdx`, ESLint/Prettier toolchain, TailwindCSS
+- See `package.json` for exact versions.
 
 ### Performance Features
 
@@ -425,24 +437,28 @@ The website is designed to prevent common browser console errors:
 
 ### Optimization Configuration
 
-#### Astro Config
+#### Config highlights (astro.config.mjs)
 
-```javascript
-// astro.config.mjs
+```js
+import mdx from '@astrojs/mdx';
+import tailwind from '@astrojs/tailwind';
+
 export default defineConfig({
-  // ... other config
+  prefetch: true,
+  integrations: [tailwind(), mdx()],
   build: {
-    inlineStylesheets: 'always',
     assets: 'assets',
-    minify: true,
-    splitting: true,
+    rollupOptions: {
+      output: {
+        entryFileNames: 'entry.[hash].js',
+        chunkFileNames: 'chunks/[name].[hash].js',
+        assetFileNames: 'assets/[name].[hash][extname]'
+      }
+    }
   },
-  vite: {
-    build: {
-      cssCodeSplit: true,
-      reportCompressedSize: true,
-    },
-  },
+  markdown: {
+    rehypePlugins: [require('rehype-mermaid')]
+  }
 });
 ```
 
