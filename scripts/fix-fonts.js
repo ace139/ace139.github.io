@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { exec } from 'child_process';
 
 /**
  * This script does the following:
@@ -49,13 +48,15 @@ async function main() {
 
   // Check for Inter variable font
   const interVarPath = path.join(FONTS_DIR, 'inter-var.woff2');
-  const interVarExists = checkFontFile(interVarPath);
+  const _interVarExists = checkFontFile(interVarPath);
 
   // Add headers file with CORS settings
   console.log('Adding CORS headers for font files...');
-  
+
   // Create or update _headers file in the root directory for Netlify
-  fs.writeFileSync(HEADERS_FILE, `
+  fs.writeFileSync(
+    HEADERS_FILE,
+    `
 # CORS headers for font files
 /fonts/*
   Access-Control-Allow-Origin: *
@@ -68,13 +69,14 @@ async function main() {
   Access-Control-Allow-Methods: GET
   Access-Control-Allow-Headers: Content-Type
   Cache-Control: public, max-age=31536000, immutable
-`);
+`,
+  );
 
   console.log('Headers file created/updated.');
   console.log('Font fix script completed.');
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error('Error:', err);
   process.exit(1);
 });

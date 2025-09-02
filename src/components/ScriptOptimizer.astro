@@ -15,11 +15,7 @@ interface ScriptConfig {
   priority: 'high' | 'medium' | 'low';
 }
 
-const { 
-  analytics = false, 
-  substack = false,
-  socialEmbed = false 
-} = Astro.props;
+const { analytics = false, substack = false, socialEmbed = false } = Astro.props;
 
 // Define script configurations
 const scripts: Record<string, ScriptConfig> = {
@@ -27,18 +23,18 @@ const scripts: Record<string, ScriptConfig> = {
     src: 'https://plausible.io/js/script.js',
     dataDomain: 'ace139.github.io',
     defer: true,
-    priority: 'low'
+    priority: 'low',
   },
   substack: {
     src: 'https://substackapi.com/widget.js',
     async: true,
-    priority: 'medium'
+    priority: 'medium',
   },
   socialEmbed: {
     src: 'https://platform.twitter.com/widgets.js',
     async: true,
-    priority: 'low'
-  }
+    priority: 'low',
+  },
 };
 
 // Group scripts by priority
@@ -59,25 +55,21 @@ if (socialEmbed) {
 
 <Fragment>
   <!-- Resource hints for third-party domains -->
-  {analytics && (
-    <link rel="preconnect" href="https://plausible.io" crossorigin />
-  )}
-  {substack && (
-    <link rel="preconnect" href="https://substackapi.com" crossorigin />
-  )}
-  {socialEmbed && (
-    <link rel="preconnect" href="https://platform.twitter.com" crossorigin />
-  )}
+  {analytics && <link rel="preconnect" href="https://plausible.io" crossorigin />}
+  {substack && <link rel="preconnect" href="https://substackapi.com" crossorigin />}
+  {socialEmbed && <link rel="preconnect" href="https://platform.twitter.com" crossorigin />}
 
   <!-- High priority scripts (none currently) -->
-  {highPriorityScripts.map(script => (
-    <script 
-      src={script.src} 
-      data-domain={script.dataDomain}
-      async={script.async}
-      defer={script.defer}
-    />
-  ))}
+  {
+    highPriorityScripts.map((script) => (
+      <script
+        src={script.src}
+        data-domain={script.dataDomain}
+        async={script.async}
+        defer={script.defer}
+      />
+    ))
+  }
 
   <!-- Medium priority scripts - Load after initial render -->
   <script is:inline define:vars={{ mediumPriorityScripts }}>
@@ -87,18 +79,18 @@ if (socialEmbed) {
         // Create an array of script configurations
         // This avoids TypeScript issues with the previous approach
         const mediumPriorityScriptsArray = [];
-        
+
         // Use the mediumPriorityScripts variable passed from Astro component
         for (const script of mediumPriorityScripts) {
           mediumPriorityScriptsArray.push({
             src: script.src,
             async: script.async || false,
             defer: script.defer || false,
-            dataDomain: script.dataDomain || null
+            dataDomain: script.dataDomain || null,
           });
         }
-        
-        mediumPriorityScriptsArray.forEach(script => {
+
+        mediumPriorityScriptsArray.forEach((script) => {
           const scriptEl = document.createElement('script');
           scriptEl.src = script.src;
           scriptEl.async = script.async;
@@ -115,20 +107,19 @@ if (socialEmbed) {
   <!-- Low priority scripts - Load when user becomes inactive -->
   <script is:inline define:vars={{ lowPriorityScripts }}>
     // Load low priority scripts when user becomes inactive
-    (function() {
-      let userActive = true;
+    (function () {
       let lowPriorityLoaded = false;
-      
+
       // Define low priority scripts array
       const lowPriorityScriptsArray = [];
-      
+
       // Use the lowPriorityScripts variable passed from Astro component
       for (const script of lowPriorityScripts) {
         lowPriorityScriptsArray.push({
           src: script.src,
           async: script.async || false,
           defer: script.defer || false,
-          dataDomain: script.dataDomain || null
+          dataDomain: script.dataDomain || null,
         });
       }
 
@@ -136,7 +127,7 @@ if (socialEmbed) {
         if (lowPriorityLoaded) return;
         lowPriorityLoaded = true;
 
-        lowPriorityScriptsArray.forEach(script => {
+        lowPriorityScriptsArray.forEach((script) => {
           const scriptEl = document.createElement('script');
           scriptEl.src = script.src;
           scriptEl.async = script.async;
@@ -151,16 +142,14 @@ if (socialEmbed) {
       // Check user inactivity
       let inactivityTimer;
       function resetInactivityTimer() {
-        userActive = true;
         clearTimeout(inactivityTimer);
         inactivityTimer = setTimeout(() => {
-          userActive = false;
           loadLowPriorityScripts();
         }, 5000); // 5 seconds of inactivity
       }
 
       // Monitor user activity
-      ['mousemove', 'keydown', 'scroll', 'touchstart'].forEach(event => {
+      ['mousemove', 'keydown', 'scroll', 'touchstart'].forEach((event) => {
         document.addEventListener(event, resetInactivityTimer, { passive: true });
       });
 
@@ -169,14 +158,17 @@ if (socialEmbed) {
 
       // Load when user scrolls near bottom
       if ('IntersectionObserver' in window) {
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              loadLowPriorityScripts();
-              observer.disconnect();
-            }
-          });
-        }, { rootMargin: '200px' });
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                loadLowPriorityScripts();
+                observer.disconnect();
+              }
+            });
+          },
+          { rootMargin: '200px' },
+        );
 
         // Observe footer or bottom of page
         document.addEventListener('DOMContentLoaded', () => {

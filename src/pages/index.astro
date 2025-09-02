@@ -1,19 +1,14 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import { socials } from "../config/socials";
-import SocialIcons from "../components/SocialIcons.astro";
+import Layout from '../layouts/Layout.astro';
+import { socials } from '../config/socials';
+import SocialIcons from '../components/SocialIcons.astro';
 ---
 
 <Layout title="Soumyo Dey">
-  <main
-    class="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] py-12"
-  >
+  <main class="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center py-12">
     <div class="text-center">
-      <div class="relative w-32 h-32 mx-auto mb-8">
-        <div
-          class="absolute inset-0 bg-gradient-to-r from-white to-black rounded-full"
-        >
-        </div>
+      <div class="relative mx-auto mb-8 h-32 w-32">
+        <div class="absolute inset-0 rounded-full bg-gradient-to-r from-white to-black"></div>
         <picture>
           <source
             type="image/webp"
@@ -24,7 +19,7 @@ import SocialIcons from "../components/SocialIcons.astro";
             src="/images/profile-128.jpg"
             srcset="/images/profile-128.jpg 1x, /images/profile-256.jpg 2x"
             alt="Profile"
-            class="relative w-full h-full rounded-full object-cover"
+            class="relative h-full w-full rounded-full object-cover"
             width="128"
             height="128"
             loading="eager"
@@ -34,120 +29,123 @@ import SocialIcons from "../components/SocialIcons.astro";
         </picture>
       </div>
 
-      <h1 class="text-4xl font-bold mb-4">Soumyo Dey</h1>
-      <p class="text-lg text-gray-600 dark:text-gray-400 mb-8">
+      <h1 class="mb-4 text-4xl font-bold">Soumyo Dey</h1>
+      <p class="mb-8 text-lg text-gray-600 dark:text-gray-400">
         A Man who travels the world eating noodles
       </p>
 
-      <div class="flex justify-center space-x-6 mb-12">
-        {
-          socials.map((social) => (
-            <SocialIcons {...social} />
-          ))
-        }
+      <div class="mb-12 flex justify-center space-x-6">
+        {socials.map((social) => <SocialIcons {...social} />)}
       </div>
 
       <!-- Newsletter section with optimized loading -->
-      <div 
+      <div
         id="newsletter-section"
-        class="w-full max-w-2xl mx-auto rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-black overflow-hidden"
+        class="mx-auto w-full max-w-2xl overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-gray-800 dark:bg-black"
       >
         <!-- Static content shown immediately -->
         <div class="p-6 text-center">
-    <h2 class="text-xl font-semibold mb-2">Subscribe to Stochastic Musings!</h2>
-    <p class="text-gray-600 dark:text-gray-400 mb-4">Get my writings directly in your inbox.</p>
-    <button
-      id="load-newsletter"
-      class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-      onclick="loadNewsletterEmbed()"
-    >
-      Subscribe Here!
-    </button>
-  </div>
+          <h2 class="mb-2 text-xl font-semibold">Subscribe to Stochastic Musings!</h2>
+          <p class="mb-4 text-gray-600 dark:text-gray-400">
+            Get my writings directly in your inbox.
+          </p>
+          <button
+            id="load-newsletter"
+            class="rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
+            onclick="loadNewsletterEmbed()"
+          >
+            Subscribe Here!
+          </button>
+        </div>
 
-  <!-- Container for lazy-loaded iframe -->
-  <div id="substack-container" class="hidden">
-    <div class="w-full h-[320px] flex items-center justify-center text-gray-500 dark:text-gray-400">
-      Loading newsletter...
+        <!-- Container for lazy-loaded iframe -->
+        <div id="substack-container" class="hidden">
+          <div
+            class="flex h-[320px] w-full items-center justify-center text-gray-500 dark:text-gray-400"
+          >
+            Loading newsletter...
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
+    <script is:inline>
+      function loadNewsletterEmbed() {
+        const container = document.getElementById('substack-container');
+        const button = document.getElementById('load-newsletter');
 
-<script is:inline>
-  function loadNewsletterEmbed() {
-    const container = document.getElementById('substack-container');
-    const button = document.getElementById('load-newsletter');
-    
-    if (container && button) {
-      // Show container
-      container.classList.remove('hidden');
-      
-      // Create and append iframe
-      const iframe = document.createElement('iframe');
-      iframe.src = 'https://stochasticmusings.substack.com/embed';
-      iframe.style.width = '100%';
-      iframe.style.height = '320px';
-      iframe.style.border = 'none';
-      iframe.classList.add('rounded-lg', 'dark:filter', 'dark:invert');
-      
-      // Replace loading message with iframe
-      container.innerHTML = '';
-      container.appendChild(iframe);
-      
-      // Hide button
-      button.parentElement.classList.add('hidden');
-    }
-  }
+        if (container && button) {
+          // Show container
+          container.classList.remove('hidden');
 
-  // Load newsletter automatically if user has previously interacted
-  if (localStorage.getItem('newsletter-interaction')) {
-    window.addEventListener('load', () => {
-      setTimeout(loadNewsletterEmbed, 1000);
-    });
-  }
+          // Create and append iframe
+          const iframe = document.createElement('iframe');
+          iframe.src = 'https://stochasticmusings.substack.com/embed';
+          iframe.style.width = '100%';
+          iframe.style.height = '320px';
+          iframe.style.border = 'none';
+          iframe.classList.add('rounded-lg', 'dark:filter', 'dark:invert');
 
-  // Save interaction preference
-  document.getElementById('load-newsletter')?.addEventListener('click', () => {
-    localStorage.setItem('newsletter-interaction', 'true');
-  });
-</script>
+          // Replace loading message with iframe
+          container.innerHTML = '';
+          container.appendChild(iframe);
 
-  <script>
-    // Only load iframe when it comes into view
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const container = document.getElementById('substack-container');
-          if (container && !container.querySelector('iframe')) {
-            const iframe = document.createElement('iframe');
-            iframe.src = 'https://stochasticmusings.substack.com/embed';
-            iframe.height = '320';
-            iframe.className = 'w-full h-full rounded-lg dark:filter dark:invert';
-            iframe.loading = 'lazy';
-            
-            // Remove placeholder and add iframe
-            const placeholder = document.getElementById('substack-placeholder');
-            if (placeholder) {
-              placeholder.remove();
-            }
-            container.appendChild(iframe);
-            
-            // Disconnect observer after loading
-            observer.disconnect();
-          }
+          // Hide button
+          button.parentElement.classList.add('hidden');
         }
+      }
+
+      // Load newsletter automatically if user has previously interacted
+      if (localStorage.getItem('newsletter-interaction')) {
+        window.addEventListener('load', () => {
+          setTimeout(loadNewsletterEmbed, 1000);
+        });
+      }
+
+      // Save interaction preference
+      document.getElementById('load-newsletter')?.addEventListener('click', () => {
+        localStorage.setItem('newsletter-interaction', 'true');
       });
-    }, {
-      rootMargin: '50px' // Start loading slightly before it comes into view
-    });
+    </script>
 
-    // Start observing the container
-    const container = document.getElementById('substack-container');
-    if (container) {
-      observer.observe(container);
-    }
-  </script>
+    <script>
+      // Only load iframe when it comes into view
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const container = document.getElementById('substack-container');
+              if (container && !container.querySelector('iframe')) {
+                const iframe = document.createElement('iframe');
+                iframe.src = 'https://stochasticmusings.substack.com/embed';
+                iframe.height = '320';
+                iframe.className = 'w-full h-full rounded-lg dark:filter dark:invert';
+                iframe.loading = 'lazy';
 
+                // Remove placeholder and add iframe
+                const placeholder = document.getElementById('substack-placeholder');
+                if (placeholder) {
+                  placeholder.remove();
+                }
+                container.appendChild(iframe);
+
+                // Disconnect observer after loading
+                observer.disconnect();
+              }
+            }
+          });
+        },
+        {
+          rootMargin: '50px', // Start loading slightly before it comes into view
+        },
+      );
+
+      // Start observing the container
+      const container = document.getElementById('substack-container');
+      if (container) {
+        observer.observe(container);
+      }
+    </script>
+  </main>
 </Layout>
 
 <style>

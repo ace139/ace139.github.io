@@ -4,23 +4,23 @@ import BlogPost from '../../components/BlogPost.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
-    const allPosts = await getCollection('blog');
-    const allProjects = await getCollection('projects');
-    
-    // Combine all content items
-    const allContent = [...allPosts, ...allProjects];
-    
-    // Get unique tags
-    const uniqueTags = [...new Set(allContent.map((item) => item.data.tags).flat())];
+  const allPosts = await getCollection('blog');
+  const allProjects = await getCollection('projects');
 
-    // Return params for each tag
-    return uniqueTags.map((tag) => {
-        const filteredContent = allContent.filter((item) => item.data.tags.includes(tag));
-        return {
-            params: { tag },
-            props: { posts: filteredContent },
-        };
-    });
+  // Combine all content items
+  const allContent = [...allPosts, ...allProjects];
+
+  // Get unique tags
+  const uniqueTags = [...new Set(allContent.map((item) => item.data.tags).flat())];
+
+  // Return params for each tag
+  return uniqueTags.map((tag) => {
+    const filteredContent = allContent.filter((item) => item.data.tags.includes(tag));
+    return {
+      params: { tag },
+      props: { posts: filteredContent },
+    };
+  });
 }
 
 const { tag } = Astro.params;
@@ -28,18 +28,20 @@ const { posts } = Astro.props;
 ---
 
 <Layout title={`Posts tagged with ${tag}`}>
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-4xl font-bold mb-8">Posts tagged with "{tag}"</h1>
-        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {posts.map((post) => (
-                <BlogPost
-                    url={`/${post.collection}/${post.slug}/`}
-                    title={post.data.title}
-                    description={post.data.description}
-                    date={post.data.date}
-                    tags={post.data.tags}
-                />
-            ))}
-        </div>
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="mb-8 text-4xl font-bold">Posts tagged with "{tag}"</h1>
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      {
+        posts.map((post) => (
+          <BlogPost
+            url={`/${post.collection}/${post.slug}/`}
+            title={post.data.title}
+            description={post.data.description}
+            date={post.data.date}
+            tags={post.data.tags}
+          />
+        ))
+      }
     </div>
+  </div>
 </Layout>

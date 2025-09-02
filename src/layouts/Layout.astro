@@ -9,11 +9,11 @@ interface Props {
   socialEmbed?: boolean;
 }
 
-const { 
-  title, 
+const {
+  title,
   analytics = false, // Disabled by default since not using Plausible
   substack = false, // Enable only on pages that need it
-  socialEmbed = false // Enable only on pages that need it
+  socialEmbed = false, // Enable only on pages that need it
 } = Astro.props;
 ---
 
@@ -26,104 +26,141 @@ const {
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    
+
     <!-- Font optimization -->
     <FontOptimizer />
-    
+
     <!-- Inline critical CSS -->
     <style is:inline>
       /* Add only the most critical styles here */
-      :root { 
+      :root {
         color-scheme: light dark;
         font-family: var(--font-sans);
       }
-      body { 
+      body {
         margin: 0;
         text-rendering: optimizeLegibility;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
-      img { max-width: 100%; height: auto; }
+      img {
+        max-width: 100%;
+        height: auto;
+      }
     </style>
-    
+
     <!-- Preload critical assets -->
     <link rel="preload" href="/scripts/theme.js" as="script" />
-    
+
     <!-- Cache control -->
     <meta http-equiv="Cache-Control" content="max-age=31536000" />
-    
+
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
-    
+
     <!-- Only preload profile images on homepage -->
-    {Astro.url.pathname === "/" && (
-      <>
-        <link 
-          rel="preload" 
-          fetchpriority="high" 
-          as="image" 
-          type="image/webp" 
-          href="/images/profile-128.webp" 
-          imagesrcset="/images/profile-128.webp 1x, /images/profile-256.webp 2x" 
-          imagesizes="128px"
-        />
-      </>
-    )}
+    {
+      Astro.url.pathname === '/' && (
+        <>
+          <link
+            rel="preload"
+            fetchpriority="high"
+            as="image"
+            type="image/webp"
+            href="/images/profile-128.webp"
+            imagesrcset="/images/profile-128.webp 1x, /images/profile-256.webp 2x"
+            imagesizes="128px"
+          />
+        </>
+      )
+    }
 
     <!-- Optimize third-party scripts -->
-    <ScriptOptimizer
-      analytics={analytics}
-      substack={substack}
-      socialEmbed={socialEmbed}
-    />
+    <ScriptOptimizer analytics={analytics} substack={substack} socialEmbed={socialEmbed} />
   </head>
-  <body class="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
-          <a href="/" class="text-xl font-bold hover:text-purple-600 transition-colors">Soumyo Dey</a>
-          
-          <div class="hidden md:flex space-x-8">
-            <a href="/blog" class="hover:text-purple-600 transition-colors">Blog</a>
-            <a href="/projects" class="hover:text-purple-600 transition-colors">Projects</a>
-            <a href="/about" class="hover:text-purple-600 transition-colors">About</a>
-            <a href="/resume" class="hover:text-purple-600 transition-colors">Resume</a>
+  <body class="min-h-screen bg-white font-sans text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+    <nav
+      class="fixed left-0 right-0 top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-sm dark:border-gray-800 dark:bg-gray-900/80"
+    >
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div class="flex h-16 items-center justify-between">
+          <a href="/" class="text-xl font-bold transition-colors hover:text-purple-600"
+            >Soumyo Dey</a
+          >
+
+          <div class="hidden space-x-8 md:flex">
+            <a href="/blog" class="transition-colors hover:text-purple-600">Blog</a>
+            <a href="/projects" class="transition-colors hover:text-purple-600">Projects</a>
+            <a href="/about" class="transition-colors hover:text-purple-600">About</a>
+            <a href="/resume" class="transition-colors hover:text-purple-600">Resume</a>
           </div>
 
           <div class="flex items-center gap-4">
-            <button id="theme-toggle" aria-label="Toggle dark mode" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
-              <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <button
+              id="theme-toggle"
+              aria-label="Toggle dark mode"
+              class="rounded-lg p-2 hover:bg-gray-100 focus:outline-none dark:hover:bg-gray-700"
+            >
+              <svg
+                id="theme-toggle-dark-icon"
+                class="hidden h-5 w-5"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
                 <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
               </svg>
-              <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+              <svg
+                id="theme-toggle-light-icon"
+                class="hidden h-5 w-5"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                  clip-rule="evenodd"></path>
               </svg>
             </button>
             <button id="menu-toggle" aria-label="Toggle navigation menu" class="md:hidden">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+              <svg
+                class="h-6 w-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"></path>
               </svg>
             </button>
           </div>
         </div>
       </div>
 
-      <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
-        <div class="px-4 py-2 flex flex-col space-y-4">
-          <a href="/blog" class="hover:text-purple-600 transition-colors block">Blog</a>
-          <a href="/projects" class="hover:text-purple-600 transition-colors block">Projects</a>
-          <a href="/about" class="hover:text-purple-600 transition-colors block">About</a>
-          <a href="/resume" class="hover:text-purple-600 transition-colors block">Resume</a>
+      <div
+        id="mobile-menu"
+        class="hidden border-t border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 md:hidden"
+      >
+        <div class="flex flex-col space-y-4 px-4 py-2">
+          <a href="/blog" class="block transition-colors hover:text-purple-600">Blog</a>
+          <a href="/projects" class="block transition-colors hover:text-purple-600">Projects</a>
+          <a href="/about" class="block transition-colors hover:text-purple-600">About</a>
+          <a href="/resume" class="block transition-colors hover:text-purple-600">Resume</a>
         </div>
       </div>
     </nav>
 
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-16">
+    <div class="mx-auto max-w-6xl px-4 pt-16 sm:px-6 lg:px-8">
       <slot />
     </div>
 
-    <footer class="mt-20 py-8 border-t border-gray-200 dark:border-gray-800">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600 dark:text-gray-400">
+    <footer class="mt-20 border-t border-gray-200 py-8 dark:border-gray-800">
+      <div
+        class="mx-auto max-w-6xl px-4 text-center text-gray-600 dark:text-gray-400 sm:px-6 lg:px-8"
+      >
         <p>&copy; {new Date().getFullYear()} Soumyo Dey. All rights reserved.</p>
       </div>
     </footer>
@@ -142,7 +179,7 @@ const {
   :root {
     color-scheme: light dark;
   }
-  
+
   html {
     font-family: system-ui, sans-serif;
     scroll-behavior: smooth;

@@ -1,5 +1,6 @@
 // Immediately set the theme to prevent flash
-const theme = localStorage.getItem('theme') || 
+const theme =
+  localStorage.getItem('theme') ||
   (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 document.documentElement.classList.toggle('dark', theme === 'dark');
 
@@ -19,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   themeToggle?.addEventListener('click', () => {
     const isDark = document.documentElement.classList.toggle('dark');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    
+
     if (isDark) {
       lightIcon?.classList.remove('hidden');
       darkIcon?.classList.add('hidden');

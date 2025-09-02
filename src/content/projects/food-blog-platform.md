@@ -1,11 +1,11 @@
 ---
-title: "Food Blog Platform"
-description: "A modern food blog platform built with Next.js"
-date: "2025-01-15"
-heroImage: "/images/food-blog.jpg"
-tags: ["Next.js", "TailwindCSS", "Markdown"]
-github: "https://github.com/johndoe/food-blog"
-demo: "https://food-blog.demo.com"
+title: 'Food Blog Platform'
+description: 'A modern food blog platform built with Next.js'
+date: '2025-01-15'
+heroImage: '/images/food-blog.jpg'
+tags: ['Next.js', 'TailwindCSS', 'Markdown']
+github: 'https://github.com/johndoe/food-blog'
+demo: 'https://food-blog.demo.com'
 ---
 
 # Food Blog Platform
@@ -34,25 +34,19 @@ A modern, performant food blog platform that makes it easy for food enthusiasts 
 
 ```javascript
 const ImageComponent = ({ image, alt }) => {
-  return (
-    <Image
-      src={image}
-      alt={alt}
-      width={800}
-      height={500}
-      className="rounded-lg"
-    />
-  );
+  return <Image src={image} alt={alt} width={800} height={500} className="rounded-lg" />;
 };
 ```
 
 ---
+
 title: "Mastering Web Development in 2025"
 description: "A comprehensive guide to modern web development practices and tools"
 pubDate: "2025-02-14"
 heroImage: "/blog/web-dev-hero.jpg"
 tags: ["web development", "javascript", "react", "nextjs"]
 draft: false
+
 ---
 
 # Mastering Web Development in 2025
@@ -66,6 +60,7 @@ Modern web development relies heavily on JavaScript frameworks and tools that en
 ### Next.js and React
 
 Next.js has become the go-to framework for React applications, offering:
+
 - Server-side rendering
 - Static site generation
 - API routes
@@ -86,6 +81,7 @@ heroImage: "/projects/portfolio-hero.jpg"
 tags: ["Astro", "TailwindCSS", "TypeScript"]
 github: "https://github.com/username/portfolio"
 demo: "https://portfolio.demo.com"
+
 ---
 
 # Portfolio Website
