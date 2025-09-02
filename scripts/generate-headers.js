@@ -19,23 +19,14 @@ const headersContent = `# Cache static assets
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
+# Cache hashed JS bundles
+/chunks/*.js
+  Cache-Control: public, max-age=31536000, immutable
+/entry.*.js
+  Cache-Control: public, max-age=31536000, immutable
+
 # Specific files flagged in PageSpeed Insights
-/fonts/inter/Inter-Regular.woff2
-  Cache-Control: public, max-age=31536000, immutable
-  Access-Control-Allow-Origin: *
-  Access-Control-Allow-Methods: GET
-  Access-Control-Allow-Headers: Content-Type
-/fonts/inter/Inter-Medium.woff2
-  Cache-Control: public, max-age=31536000, immutable
-  Access-Control-Allow-Origin: *
-  Access-Control-Allow-Methods: GET
-  Access-Control-Allow-Headers: Content-Type
-/fonts/inter/Inter-SemiBold.woff2
-  Cache-Control: public, max-age=31536000, immutable
-  Access-Control-Allow-Origin: *
-  Access-Control-Allow-Methods: GET
-  Access-Control-Allow-Headers: Content-Type
-/fonts/inter/Inter-Bold.woff2
+/fonts/inter-var.woff2
   Cache-Control: public, max-age=31536000, immutable
   Access-Control-Allow-Origin: *
   Access-Control-Allow-Methods: GET
@@ -44,8 +35,6 @@ const headersContent = `# Cache static assets
   Cache-Control: public, max-age=2592000
 /images/profile-128.webp
   Cache-Control: public, max-age=2592000
-/scripts/theme.js
-  Cache-Control: public, max-age=31536000, immutable
 
 # CORS headers for all font files
 /fonts/*

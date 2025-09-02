@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Food Blog Platform — Project Hero</title>
+  <desc id="desc">Simple placeholder hero graphic for the Food Blog Platform project.</desc>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4f46e5"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#g)"/>
+  <g fill="#ffffff" opacity="0.1">
+    <circle cx="200" cy="150" r="80"/>
+    <circle cx="400" cy="300" r="120"/>
+    <circle cx="900" cy="200" r="100"/>
+    <circle cx="750" cy="420" r="140"/>
+  </g>
+  <text x="600" y="320" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial" font-size="48" fill="#fff" text-anchor="middle">Food Blog Platform</text>
+  <text x="600" y="370" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial" font-size="22" fill="#e9d5ff" text-anchor="middle">Project Hero</text>
+</svg>

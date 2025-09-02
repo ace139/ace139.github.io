@@ -174,10 +174,26 @@ graph TD
 
 - WebP format support with JPEG fallback
 - Multiple sizes for responsive images (1x and 2x)
-- Proper width and height attributes to prevent layout shifts
-- Lazy loading for off-screen images
-- Sharp-powered image processing
+  - Proper width and height attributes to prevent layout shifts
+  - Lazy loading for off-screen images
+  - Sharp-powered image processing
 - Automated optimization script
+
+## 🖼️ Authoring Hero Images (Content Collections)
+
+Place hero media next to your Markdown files in `src/content/**` and reference them with a relative path. This enables schema validation via `image()` and lets Astro optimize raster images.
+
+- Store alongside markdown:
+  - Blog: `src/content/blog/my-post/hero.png` → frontmatter `heroImage: './hero.png'`
+  - Projects: `src/content/projects/my-project/hero.svg` → frontmatter `heroImage: './hero.svg'`
+- Schema validation (`src/content/config.ts`):
+  - Use `schema: ({ image }) => z.object({ heroImage: image().optional(), ... })` to import as `ImageMetadata` when applicable.
+- Rendering:
+  - Prefer `<Image />` from `astro:assets` when `heroImage` is `ImageMetadata` and not SVG to get optimized output and CLS-safe dimensions.
+  - SVGs (or string paths) are not transformed; render via `<img>` with explicit width/height to avoid CLS.
+  - Alternatively, use `src/components/ResponsiveImage.astro` which accepts `ImageMetadata | string` and falls back to `<img>` for SVG.
+
+References: Astro docs on images (where to store, Image component, content collections)
 
 ## 🔧 Performance Tools
 

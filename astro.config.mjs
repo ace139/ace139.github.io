@@ -1,11 +1,13 @@
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import rehypeMermaid from 'rehype-mermaid';
+import mdx from '@astrojs/mdx';
 
 export default defineConfig({
   site: 'https://ace139.github.io',
   base: '/',
-  integrations: [tailwind()],
+  prefetch: true,
+  integrations: [tailwind(), mdx()],
   output: 'static',
   build: {
     inlineStylesheets: 'auto',
@@ -14,11 +16,6 @@ export default defineConfig({
     splitting: true,
     rollupOptions: {
       output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            return 'vendor';
-          }
-        },
         entryFileNames: 'entry.[hash].js',
         chunkFileNames: 'chunks/[name].[hash].js',
         assetFileNames: 'assets/[name].[hash][extname]'
@@ -30,13 +27,7 @@ export default defineConfig({
       cssCodeSplit: true,
       reportCompressedSize: true,
       assetsInlineLimit: 4096,
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            vendor: [/node_modules/]
-          }
-        }
-      }
+      rollupOptions: {}
     },
     ssr: {
       noExternal: ['@astrojs/tailwind']

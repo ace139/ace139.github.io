@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import Tags from '../components/Tags.astro';
+import ResponsiveImage from '../components/ResponsiveImage.astro';
 
 const projects = await getCollection('projects');
 projects.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
@@ -16,10 +17,12 @@ projects.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).
         projects.map((project) => (
           <div class="rounded-lg border p-6 transition-shadow hover:shadow-lg dark:border-gray-700">
             {project.data.heroImage && (
-              <img
+              <ResponsiveImage
                 src={project.data.heroImage}
                 alt={project.data.title}
                 class="mb-4 h-48 w-full rounded-lg object-cover"
+                loading="lazy"
+                sizes="(min-width: 768px) 50vw, 100vw"
               />
             )}
             <h2 class="mb-3 text-2xl font-semibold">{project.data.title}</h2>
@@ -62,6 +65,7 @@ projects.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).
               <a
                 href={`/projects/${project.slug}`}
                 class="ml-auto flex items-center gap-1 text-purple-600 hover:text-purple-500"
+                data-astro-prefetch
               >
                 Learn More →
               </a>

@@ -2,6 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import { socials } from '../config/socials';
 import SocialIcons from '../components/SocialIcons.astro';
+import { Picture } from 'astro:assets';
+import avatar from '../images/avatar.jpg';
 ---
 
 <Layout title="Soumyo Dey">
@@ -9,24 +11,16 @@ import SocialIcons from '../components/SocialIcons.astro';
     <div class="text-center">
       <div class="relative mx-auto mb-8 h-32 w-32">
         <div class="absolute inset-0 rounded-full bg-gradient-to-r from-white to-black"></div>
-        <picture>
-          <source
-            type="image/webp"
-            srcset="/images/profile-128.webp 1x, /images/profile-256.webp 2x"
-            sizes="128px"
-          />
-          <img
-            src="/images/profile-128.jpg"
-            srcset="/images/profile-128.jpg 1x, /images/profile-256.jpg 2x"
-            alt="Profile"
-            class="relative h-full w-full rounded-full object-cover"
-            width="128"
-            height="128"
-            loading="eager"
-            fetchpriority="high"
-            decoding="async"
-          />
-        </picture>
+        <Picture
+          src={avatar}
+          widths={[128, 256]}
+          sizes="128px"
+          formats={['avif', 'webp', 'jpeg']}
+          alt="Profile"
+          loading="eager"
+          fetchpriority="high"
+          class="relative h-full w-full rounded-full object-cover"
+        />
       </div>
 
       <h1 class="mb-4 text-4xl font-bold">Soumyo Dey</h1>
@@ -105,45 +99,6 @@ import SocialIcons from '../components/SocialIcons.astro';
       document.getElementById('load-newsletter')?.addEventListener('click', () => {
         localStorage.setItem('newsletter-interaction', 'true');
       });
-    </script>
-
-    <script>
-      // Only load iframe when it comes into view
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const container = document.getElementById('substack-container');
-              if (container && !container.querySelector('iframe')) {
-                const iframe = document.createElement('iframe');
-                iframe.src = 'https://stochasticmusings.substack.com/embed';
-                iframe.height = '320';
-                iframe.className = 'w-full h-full rounded-lg dark:filter dark:invert';
-                iframe.loading = 'lazy';
-
-                // Remove placeholder and add iframe
-                const placeholder = document.getElementById('substack-placeholder');
-                if (placeholder) {
-                  placeholder.remove();
-                }
-                container.appendChild(iframe);
-
-                // Disconnect observer after loading
-                observer.disconnect();
-              }
-            }
-          });
-        },
-        {
-          rootMargin: '50px', // Start loading slightly before it comes into view
-        },
-      );
-
-      // Start observing the container
-      const container = document.getElementById('substack-container');
-      if (container) {
-        observer.observe(container);
-      }
     </script>
   </main>
 </Layout>

@@ -2,7 +2,7 @@
 title: 'Food Blog Platform'
 description: 'A modern food blog platform built with Next.js'
 date: '2025-01-15'
-heroImage: '/images/food-blog.jpg'
+heroImage: './food-blog-hero.svg'
 tags: ['Next.js', 'TailwindCSS', 'Markdown']
 github: 'https://github.com/johndoe/food-blog'
 demo: 'https://food-blog.demo.com'

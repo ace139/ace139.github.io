@@ -2,7 +2,7 @@
 title: 'Beyond the Vacuum: The Fertile Ground Where Originality Flourishes'
 description: 'Exploring how original ideas emerge not from isolation, but from the rich interplay of diverse knowledge and experiences'
 date: '2025-02-14'
-heroImage: '/images/blog/beyond-vacuum-hero.svg'
+heroImage: './beyond-vacuum-hero.svg'
 tags: ['creativity', 'writing', 'personal-growth', 'originality']
 draft: false
 ---

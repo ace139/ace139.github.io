@@ -1,6 +1,7 @@
 ---
 import Layout from './Layout.astro';
 import Tags from '../components/Tags.astro';
+import ResponsiveImage from '../components/ResponsiveImage.astro';
 
 const { frontmatter } = Astro.props;
 ---
@@ -10,10 +11,13 @@ const { frontmatter } = Astro.props;
     <div class="mb-8">
       {
         frontmatter.heroImage && (
-          <img
+          <ResponsiveImage
             src={frontmatter.heroImage}
             alt={frontmatter.title}
             class="mb-6 h-[400px] w-full rounded-lg object-cover"
+            loading="eager"
+            fetchpriority="high"
+            sizes="(min-width: 768px) 768px, 100vw"
           />
         )
       }
