@@ -21,6 +21,8 @@ pnpm-debug.log*
 # Env files
 .env
 .env.*
+!/.env.public
+!/.env.example
 
 # Playwright artifacts (if tests are added later)
 playwright-report/

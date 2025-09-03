@@ -1,6 +1,7 @@
 ---
 import FontOptimizer from '../components/FontOptimizer.astro';
 import ScriptOptimizer from '../components/ScriptOptimizer.astro';
+import PostHog from '../components/posthog.astro';
 
 interface Props {
   title: string;
@@ -88,6 +89,7 @@ const {
 
     <!-- Optimize third-party scripts -->
     <ScriptOptimizer analytics={analytics} substack={substack} socialEmbed={socialEmbed} />
+    <PostHog />
   </head>
   <body class="min-h-screen bg-white font-sans text-gray-900 dark:bg-gray-900 dark:text-gray-100">
     <nav

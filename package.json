@@ -3,7 +3,9 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "prebuild": "node scripts/optimize-images.js",
+    "predev": "node scripts/sync-public-env.js",
+    "prestart": "node scripts/sync-public-env.js",
+    "prebuild": "node scripts/sync-public-env.js && node scripts/optimize-images.js",
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",

@@ -3,7 +3,8 @@ import { Picture } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
 interface Props {
-  src: string | ImageMetadata;
+  // Accept string paths, ImageMetadata from astro:assets, or an imported SVG component
+  src: string | ImageMetadata | any;
   alt: string;
   width?: number;
   height?: number;
@@ -28,8 +29,10 @@ const {
   formats: formatsProp,
 } = Astro.props;
 
-const isMeta = typeof src === 'object';
+const isComponent = typeof src === 'function';
+const isMeta = !isComponent && typeof src === 'object';
 const isSvg = isMeta && (src as ImageMetadata).format === 'svg';
+const SvgComponent = isComponent ? (src as any) : undefined;
 
 // Compute defaults from metadata when available
 const computedWidth = width ?? (isMeta ? (src as ImageMetadata).width : undefined);
@@ -41,7 +44,7 @@ const finalSrc = isSvg
   ? isMeta
     ? (src as ImageMetadata).src
     : (src as string)
-  : !isMeta
+  : !isMeta && !isComponent
     ? (src as string)
     : undefined;
 
@@ -65,6 +68,7 @@ if (fallbackFormat && !formatsFinal.includes(fallbackFormat as any)) {
 >
   <div class="h-full w-full">
     {
+      // Use <Picture> for raster metadata
       isMeta && !isSvg ? (
         <Picture
           src={src as ImageMetadata}
@@ -76,6 +80,10 @@ if (fallbackFormat && !formatsFinal.includes(fallbackFormat as any)) {
           fetchpriority={fetchpriority}
           class={`h-full w-full object-cover`}
         />
+      ) : isComponent ? (
+        // Handle imported SVGs as components
+        // Note: SVG components don't support an <img> alt attribute; use ARIA labeling
+        <SvgComponent aria-label={alt} role="img" class={`h-full w-full object-cover`} />
       ) : (
         <img
           src={finalSrc as string}

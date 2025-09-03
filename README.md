@@ -113,6 +113,39 @@ graph TD
    npm run dev
    ```
 
+## 📈 Analytics (PostHog)
+
+This site uses PostHog for privacy-friendly web analytics.
+
+- Location: `src/components/posthog.astro` is included once in the base layout (`src/layouts/Layout.astro`).
+- Client env vars: Only `PUBLIC_*` variables are exposed to the browser. We use:
+  - `PUBLIC_POSTHOG_KEY`: your PostHog Project API key
+  - `PUBLIC_POSTHOG_HOST`: API host (default `https://us.i.posthog.com`, EU: `https://eu.i.posthog.com`)
+- Env files:
+  - `.env.public` (committed): holds safe public values. Used for both dev and production builds.
+  - `.env.example` (committed): template with placeholders for new environments.
+  - `.env` (gitignored): created automatically from `.env.public` if missing.
+- Loading mechanism:
+  - A small script (`scripts/sync-public-env.js`) runs before dev/start/build to copy `.env.public` → `.env` if `.env` is missing so Vite/Astro load the values.
+  - You can also set `PUBLIC_POSTHOG_*` directly in your hosting provider’s environment variables.
+
+Quick start:
+
+1) Set your key in `.env.public` (or host env):
+   ```env
+   PUBLIC_POSTHOG_KEY=phc_XXXXXXXXXXXXXXXXXXXXXXXX
+   PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
+   ```
+2) Run `npm run dev` and open the site. Events are enabled in dev for easy testing.
+3) Deploy and set the same env variables in your hosting UI.
+
+Notes:
+- The key is intentionally public; PostHog client keys are safe to expose.
+- If you want to filter dev vs prod traffic in PostHog, you can register an env tag after init:
+  ```js
+  posthog.register({ env: import.meta.env.MODE })
+  ```
+
 ## 🛠 Core Components
 
 ### Performance Components
