@@ -1,5 +1,5 @@
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
+import tailwindcss from '@tailwindcss/vite';
 import rehypeMermaid from 'rehype-mermaid';
 import mdx from '@astrojs/mdx';
 
@@ -7,7 +7,7 @@ export default defineConfig({
   site: 'https://ace139.github.io',
   base: '/',
   prefetch: true,
-  integrations: [tailwind(), mdx()],
+  integrations: [mdx()],
   output: 'static',
   build: {
     inlineStylesheets: 'auto',
@@ -23,14 +23,12 @@ export default defineConfig({
     }
   },
   vite: {
+    plugins: [tailwindcss()],
     build: {
       cssCodeSplit: true,
       reportCompressedSize: true,
       assetsInlineLimit: 4096,
       rollupOptions: {}
-    },
-    ssr: {
-      noExternal: ['@astrojs/tailwind']
     },
     optimizeDeps: {
       exclude: ['@astrojs/image', 'sharp']
