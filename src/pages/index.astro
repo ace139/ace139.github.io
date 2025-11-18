@@ -7,10 +7,13 @@ import avatar from '../images/avatar.jpg';
 ---
 
 <Layout title="Soumyo Dey">
+  <div class="absolute top-0 left-1/2 -z-10 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-violet-500/20 blur-[100px] dark:bg-violet-900/20"></div>
+  
   <main class="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center py-12">
     <div class="text-center">
-      <div class="relative mx-auto mb-8 h-32 w-32">
-        <div class="absolute inset-0 rounded-full bg-gradient-to-r from-white to-black"></div>
+      <div class="animate-fade-in relative mx-auto mb-8 h-32 w-32">
+        <div class="absolute inset-0 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 blur-lg opacity-75"></div>
+        <div class="absolute inset-0 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500"></div>
         <Picture
           src={avatar}
           widths={[128, 256]}
@@ -23,29 +26,29 @@ import avatar from '../images/avatar.jpg';
         />
       </div>
 
-      <h1 class="mb-4 text-4xl font-bold">Soumyo Dey</h1>
-      <p class="mb-8 text-lg text-gray-600 dark:text-gray-400">
+      <h1 class="animate-fade-in delay-100 mb-4 text-4xl font-bold font-serif tracking-tight text-slate-900 dark:text-white">Soumyo Dey</h1>
+      <p class="animate-fade-in delay-200 mb-8 text-lg text-slate-600 dark:text-slate-400">
         A Man who travels the world eating noodles
       </p>
 
-      <div class="mb-12 flex justify-center space-x-6">
+      <div class="animate-fade-in delay-300 mb-12 flex justify-center gap-4">
         {socials.map((social) => <SocialIcons {...social} />)}
       </div>
 
       <!-- Newsletter section with optimized loading -->
       <div
         id="newsletter-section"
-        class="mx-auto w-full max-w-2xl overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-gray-800 dark:bg-black"
+        class="animate-fade-in delay-300 glass-panel mx-auto w-full max-w-2xl overflow-hidden rounded-xl border border-gray-200 bg-white/50 dark:border-white/5 dark:bg-white/5"
       >
         <!-- Static content shown immediately -->
-        <div class="p-6 text-center">
-          <h2 class="mb-2 text-xl font-semibold">Subscribe to Stochastic Musings!</h2>
-          <p class="mb-4 text-gray-600 dark:text-gray-400">
+        <div class="p-8 text-center">
+          <h2 class="mb-3 text-2xl font-bold font-serif text-slate-900 dark:text-white">Subscribe to Stochastic Musings!</h2>
+          <p class="mb-6 text-slate-600 dark:text-slate-300">
             Get my writings directly in your inbox.
           </p>
           <button
             id="load-newsletter"
-            class="rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
+            class="rounded-lg bg-gradient-to-r from-violet-600 to-fuchsia-600 px-6 py-2.5 font-medium text-white shadow-lg shadow-violet-500/25 transition-all hover:scale-105 hover:shadow-violet-500/40 active:scale-95"
             onclick="loadNewsletterEmbed()"
           >
             Subscribe Here!

@@ -21,8 +21,8 @@ const { frontmatter } = Astro.props;
           />
         )
       }
-      <h1 class="mb-4 text-4xl font-bold">{frontmatter.title}</h1>
-      <div class="mb-8 flex items-center text-gray-600 dark:text-gray-400">
+      <h1 class="mb-4 text-4xl font-bold font-serif text-slate-900 dark:text-white">{frontmatter.title}</h1>
+      <div class="mb-8 flex items-center text-slate-600 dark:text-slate-400">
         <time datetime={frontmatter.date}>
           {
             new Date(frontmatter.date).toLocaleDateString('en-US', {
@@ -46,8 +46,8 @@ const { frontmatter } = Astro.props;
       <slot />
     </div>
 
-    <div class="mt-12 border-t border-gray-200 pt-8 dark:border-gray-800">
-      <a href="/blog" class="inline-flex items-center text-purple-600 hover:text-purple-500">
+    <div class="mt-12 border-t border-gray-200 pt-8 dark:border-white/10">
+      <a href="/blog" class="inline-flex items-center text-violet-600 hover:text-violet-500">
         <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             stroke-linecap="round"
@@ -60,41 +60,3 @@ const { frontmatter } = Astro.props;
     </div>
   </article>
 </Layout>
-
-<style is:global>
-  @reference "../styles/globals.css";
-
-  .prose {
-    @apply text-gray-900 dark:text-gray-100;
-  }
-  .prose h2 {
-    @apply mb-4 mt-8 text-2xl font-bold;
-  }
-  .prose h3 {
-    @apply mb-3 mt-6 text-xl font-bold;
-  }
-  .prose p {
-    @apply mb-4;
-  }
-  .prose ul {
-    @apply mb-4 list-disc pl-6;
-  }
-  .prose ol {
-    @apply mb-4 list-decimal pl-6;
-  }
-  .prose code {
-    @apply rounded bg-gray-100 px-1 py-0.5 dark:bg-gray-800;
-  }
-  .prose pre {
-    @apply mb-4 overflow-x-auto rounded-lg bg-gray-100 p-4 dark:bg-gray-800;
-  }
-  .prose a {
-    @apply text-purple-600 hover:text-purple-500;
-  }
-  .prose img {
-    @apply my-8 rounded-lg;
-  }
-  .prose blockquote {
-    @apply my-4 border-l-4 border-purple-600 pl-4 italic;
-  }
-</style>

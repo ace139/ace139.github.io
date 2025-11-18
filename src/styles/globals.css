@@ -1,1 +1,74 @@
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+  --font-serif: "Playfair Display", serif;
+  
+  --color-midnight-950: #020617;
+  --color-midnight-900: #0f172a;
+  --color-midnight-800: #1e293b;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    opacity: 0;
+  }
+  
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+  
+  .glass-panel {
+    @apply border border-white/10 bg-white/5 backdrop-blur-md shadow-xl;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@layer components {
+  .prose {
+    @apply text-gray-900 dark:text-gray-100;
+  }
+  .prose h2 {
+    @apply mb-4 mt-8 text-2xl font-bold font-serif;
+  }
+  .prose h3 {
+    @apply mb-3 mt-6 text-xl font-bold font-serif;
+  }
+  .prose p {
+    @apply mb-4;
+  }
+  .prose ul {
+    @apply mb-4 list-disc pl-6;
+  }
+  .prose ol {
+    @apply mb-4 list-decimal pl-6;
+  }
+  .prose code {
+    @apply rounded bg-gray-100 px-1 py-0.5 dark:bg-gray-800;
+  }
+  .prose pre {
+    @apply mb-4 overflow-x-auto rounded-lg bg-gray-100 p-4 dark:bg-gray-800;
+  }
+  .prose a {
+    @apply text-purple-600 hover:text-purple-500;
+  }
+  .prose img {
+    @apply my-8 rounded-lg;
+  }
+  .prose blockquote {
+    @apply my-4 border-l-4 border-purple-600 pl-4 italic;
+  }
+}
