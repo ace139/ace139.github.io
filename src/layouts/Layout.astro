@@ -2,6 +2,7 @@
 import FontOptimizer from '../components/FontOptimizer.astro';
 import ScriptOptimizer from '../components/ScriptOptimizer.astro';
 import PostHog from '../components/posthog.astro';
+import { ClientRouter } from 'astro:transitions';
 
 interface Props {
   title: string;
@@ -90,6 +91,7 @@ const {
     <!-- Optimize third-party scripts -->
     <ScriptOptimizer analytics={analytics} substack={substack} socialEmbed={socialEmbed} />
     <PostHog />
+    <ClientRouter />
   </head>
   <body class="min-h-screen bg-white font-sans text-gray-900 dark:bg-gray-900 dark:text-gray-100">
     <nav
@@ -200,13 +202,32 @@ const {
 
     <script>
       // Simple mobile menu toggle
-      document.getElementById('menu-toggle')?.addEventListener('click', () => {
-        document.getElementById('mobile-menu')?.classList.toggle('hidden');
-      });
+      function setupMobileMenu() {
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (menuToggle && mobileMenu) {
+          // Remove old listener if it exists to prevent duplicates (though Astro swaps body, so usually fine)
+          const newToggle = menuToggle.cloneNode(true);
+          if (menuToggle.parentNode) {
+            menuToggle.parentNode.replaceChild(newToggle, menuToggle);
+          }
+          
+          newToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+          });
+        }
+      }
+      
+      // Initial load
+      setupMobileMenu();
+      
+      // View Transitions load
+      document.addEventListener('astro:page-load', setupMobileMenu);
     </script>
     <script>
       // Theme toggle handler and icon sync
-      (function () {
+      function setupTheme() {
         const themeToggle = document.getElementById('theme-toggle');
         const darkIcon = document.getElementById('theme-toggle-dark-icon');
         const lightIcon = document.getElementById('theme-toggle-light-icon');
@@ -224,16 +245,31 @@ const {
 
         syncIcons();
 
-        themeToggle?.addEventListener('click', () => {
-          const isDark = document.documentElement.classList.toggle('dark');
-          try {
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-          } catch {
-            /* noop */ return;
+        if (themeToggle) {
+           // Remove old listener
+          const newToggle = themeToggle.cloneNode(true);
+          if (themeToggle.parentNode) {
+            themeToggle.parentNode.replaceChild(newToggle, themeToggle);
           }
-          syncIcons();
-        });
-      })();
+
+          newToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.classList.toggle('dark');
+            try {
+              localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            } catch {
+              /* noop */ return;
+            }
+            syncIcons();
+          });
+        }
+      }
+      
+      // Initial load
+      setupTheme();
+      
+      // View Transitions load
+      document.addEventListener('astro:after-swap', setupTheme);
+      document.addEventListener('astro:page-load', setupTheme);
     </script>
   </body>
 </html>

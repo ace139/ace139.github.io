@@ -63,42 +63,51 @@ import avatar from '../images/avatar.jpg';
       </div>
     </div>
     <script is:inline>
-      function loadNewsletterEmbed() {
-        const container = document.getElementById('substack-container');
-        const button = document.getElementById('load-newsletter');
+      function setupNewsletter() {
+        function loadNewsletterEmbed() {
+          const container = document.getElementById('substack-container');
+          const button = document.getElementById('load-newsletter');
 
-        if (container && button) {
-          // Show container
-          container.classList.remove('hidden');
+          if (container && button) {
+            // Show container
+            container.classList.remove('hidden');
 
-          // Create and append iframe
-          const iframe = document.createElement('iframe');
-          iframe.src = 'https://stochasticmusings.substack.com/embed';
-          iframe.style.width = '100%';
-          iframe.style.height = '320px';
-          iframe.style.border = 'none';
-          iframe.classList.add('rounded-lg', 'dark:filter', 'dark:invert');
+            // Create and append iframe
+            const iframe = document.createElement('iframe');
+            iframe.src = 'https://stochasticmusings.substack.com/embed';
+            iframe.style.width = '100%';
+            iframe.style.height = '320px';
+            iframe.style.border = 'none';
+            iframe.classList.add('rounded-lg', 'dark:filter', 'dark:invert');
 
-          // Replace loading message with iframe
-          container.innerHTML = '';
-          container.appendChild(iframe);
+            // Replace loading message with iframe
+            container.innerHTML = '';
+            container.appendChild(iframe);
 
-          // Hide button
-          button.parentElement.classList.add('hidden');
+            // Hide button
+            button.parentElement.classList.add('hidden');
+          }
         }
-      }
+        
+        // Expose to global scope for onclick handler
+        window.loadNewsletterEmbed = loadNewsletterEmbed;
 
-      // Load newsletter automatically if user has previously interacted
-      if (localStorage.getItem('newsletter-interaction')) {
-        window.addEventListener('load', () => {
+        // Load newsletter automatically if user has previously interacted
+        if (localStorage.getItem('newsletter-interaction')) {
           setTimeout(loadNewsletterEmbed, 1000);
+        }
+
+        // Save interaction preference
+        document.getElementById('load-newsletter')?.addEventListener('click', () => {
+          localStorage.setItem('newsletter-interaction', 'true');
         });
       }
-
-      // Save interaction preference
-      document.getElementById('load-newsletter')?.addEventListener('click', () => {
-        localStorage.setItem('newsletter-interaction', 'true');
-      });
+      
+      // Initial load
+      setupNewsletter();
+      
+      // View Transitions load
+      document.addEventListener('astro:page-load', setupNewsletter);
     </script>
   </main>
 </Layout>

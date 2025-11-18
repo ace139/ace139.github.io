@@ -72,12 +72,14 @@ if (socialEmbed) {
   }
 
   <!-- Medium priority scripts - Load after initial render -->
+  <!-- Medium priority scripts - Load after initial render -->
   <script is:inline define:vars={{ mediumPriorityScripts }}>
     // Load medium priority scripts after page load
-    window.addEventListener('load', () => {
+    function loadMediumPriority() {
+      if (window._mediumPriorityLoaded) return;
+      
       setTimeout(() => {
         // Create an array of script configurations
-        // This avoids TypeScript issues with the previous approach
         const mediumPriorityScriptsArray = [];
 
         // Use the mediumPriorityScripts variable passed from Astro component
@@ -91,6 +93,9 @@ if (socialEmbed) {
         }
 
         mediumPriorityScriptsArray.forEach((script) => {
+          // Check if script is already present
+          if (document.querySelector(`script[src="${script.src}"]`)) return;
+          
           const scriptEl = document.createElement('script');
           scriptEl.src = script.src;
           scriptEl.async = script.async;
@@ -100,16 +105,26 @@ if (socialEmbed) {
           }
           document.body.appendChild(scriptEl);
         });
+        
+        window._mediumPriorityLoaded = true;
       }, 1000); // 1 second delay
-    });
+    }
+
+    // Initial load
+    if (document.readyState === 'complete') {
+      loadMediumPriority();
+    } else {
+      window.addEventListener('load', loadMediumPriority);
+    }
+    
+    // View Transitions
+    document.addEventListener('astro:page-load', loadMediumPriority);
   </script>
 
   <!-- Low priority scripts - Load when user becomes inactive -->
   <script is:inline define:vars={{ lowPriorityScripts }}>
     // Load low priority scripts when user becomes inactive
     (function () {
-      let lowPriorityLoaded = false;
-
       // Define low priority scripts array
       const lowPriorityScriptsArray = [];
 
@@ -124,10 +139,13 @@ if (socialEmbed) {
       }
 
       function loadLowPriorityScripts() {
-        if (lowPriorityLoaded) return;
-        lowPriorityLoaded = true;
+        if (window._lowPriorityLoaded) return;
+        window._lowPriorityLoaded = true;
 
         lowPriorityScriptsArray.forEach((script) => {
+          // Check if script is already present
+          if (document.querySelector(`script[src="${script.src}"]`)) return;
+
           const scriptEl = document.createElement('script');
           scriptEl.src = script.src;
           scriptEl.async = script.async;
@@ -171,10 +189,18 @@ if (socialEmbed) {
         );
 
         // Observe footer or bottom of page
-        document.addEventListener('DOMContentLoaded', () => {
-          const footer = document.querySelector('footer');
-          if (footer) observer.observe(footer);
-        });
+        const observeFooter = () => {
+            const footer = document.querySelector('footer');
+            if (footer) observer.observe(footer);
+        };
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', observeFooter);
+        } else {
+            observeFooter();
+        }
+        
+        document.addEventListener('astro:page-load', observeFooter);
       }
     })();
   </script>
