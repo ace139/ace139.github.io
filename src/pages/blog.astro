@@ -9,13 +9,19 @@ posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).get
 ---
 
 <Layout title="Blog | Soumyo Dey">
-  <main class="pt-20">
-    <h1 class="mb-8 text-4xl font-bold font-serif text-slate-900 dark:text-white">Blog</h1>
+  <main class="space-y-12 pt-24">
+    <section class="rounded-[28px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] px-6 py-10 shadow-card dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.9)]">
+      <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Field notes</p>
+      <h1 class="mt-4 text-4xl font-serif font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">Stories from the build log</h1>
+      <p class="mt-4 max-w-2xl text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
+        Deep dives into product bets, learnings at the intersection of AI and experience design, and travel-inspired essays.
+      </p>
+    </section>
 
     <div class="space-y-8">
       {
         posts.map((post) => (
-          <article class="rounded-2xl border border-gray-100 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-white/10 dark:bg-white/5">
+          <article class="rounded-[24px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] p-8 shadow-card transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_25px_60px_rgba(15,23,42,0.12)] dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.85)]">
             {post.data.heroImage && (
               <a href={`/blog/${post.slug}`} class="mb-4 block">
                 <ResponsiveImage
@@ -27,29 +33,41 @@ posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).get
                 />
               </a>
             )}
-            <h2 class="mb-2 text-2xl font-bold font-serif">
-              <a href={`/blog/${post.slug}`} class="text-slate-900 transition-colors hover:text-violet-600 dark:text-white dark:hover:text-violet-400">
+            <div class="flex flex-wrap items-center gap-4 text-sm text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
+              <time class="font-semibold uppercase tracking-[0.2em]" datetime={post.data.date}>
+                {new Date(post.data.date).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                })}
+              </time>
+              {post.data.readingTime && <span>{post.data.readingTime} min read</span>}
+            </div>
+            <h2 class="mb-3 mt-3 text-2xl font-serif font-semibold">
+              <a href={`/blog/${post.slug}`} class="text-[var(--color-text-light)] transition-colors hover:text-[var(--color-primary-light)] dark:text-[var(--color-text-dark)] dark:hover:text-[var(--color-primary-dark)]">
                 {post.data.title}
               </a>
             </h2>
-            <time class="mb-3 block text-sm font-medium text-slate-500 dark:text-slate-400">
-              {new Date(post.data.date).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
-            </time>
             {post.data.tags && (
               <div class="mb-4">
                 <Tags tags={post.data.tags} />
               </div>
             )}
-            <a
-              href={`/blog/${post.slug}`}
-              class="mt-4 inline-block font-medium text-violet-600 hover:text-violet-500"
-            >
-              Read more →
-            </a>
+            <p class="mb-6 text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">{post.data.description}</p>
+            <div class="flex items-center gap-3">
+              <a
+                href={`/blog/${post.slug}`}
+                class="inline-flex items-center rounded-full bg-[var(--color-primary-light)] px-5 py-2 text-sm font-semibold text-white shadow-[0_15px_30px_rgba(76,95,215,0.25)] transition-transform hover:-translate-y-0.5 hover:bg-[var(--color-primary-light-hover)] dark:bg-[var(--color-primary-dark)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-primary-dark-hover)]"
+              >
+                Read article
+              </a>
+              <a
+                href={`/blog/${post.slug}`}
+                class="inline-flex items-center text-sm font-semibold text-[var(--color-primary-light)] transition-colors hover:text-[var(--color-primary-light-hover)] dark:text-[var(--color-primary-dark)] dark:hover:text-[var(--color-primary-dark-hover)]"
+              >
+                Quick view →
+              </a>
+            </div>
           </article>
         ))
       }

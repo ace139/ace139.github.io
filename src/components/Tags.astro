@@ -12,7 +12,7 @@ const { tags, class: className = '' } = Astro.props;
     tags.map((tag) => (
       <a
         href={`/tags/${tag}`}
-        class="inline-block rounded-full bg-indigo-100 px-3 py-1 text-sm font-medium text-indigo-600 transition-colors hover:bg-indigo-200 dark:bg-indigo-900/30 dark:text-indigo-400 dark:hover:bg-indigo-900/50"
+        class="inline-flex items-center rounded-full border border-[var(--color-border-light)] bg-white/80 px-3 py-1 text-sm font-medium text-[var(--color-muted-light)] transition-all hover:-translate-y-0.5 hover:border-transparent hover:bg-[var(--color-primary-light)]/10 hover:text-[var(--color-primary-light)] dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.85)] dark:text-[var(--color-muted-dark)] dark:hover:bg-[var(--color-primary-dark)]/15 dark:hover:text-[var(--color-primary-dark)]"
       >
         #{tag}
       </a>

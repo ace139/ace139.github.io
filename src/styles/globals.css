@@ -3,10 +3,75 @@
 @theme {
   --font-sans: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
   --font-serif: "Playfair Display", serif;
-  
-  --color-midnight-950: #020617;
-  --color-midnight-900: #0f172a;
-  --color-midnight-800: #1e293b;
+
+  --color-bg-light: #f5f7fb;
+  --color-surface-light: #ffffff;
+  --color-border-light: #e4e8f0;
+  --color-text-light: #0f172a;
+  --color-muted-light: #5f6b85;
+  --color-primary-light: #4c5fd7;
+  --color-primary-light-hover: #3e4ab4;
+  --color-secondary-light: #f25c54;
+
+  --color-bg-dark: #050910;
+  --color-surface-dark: #0f172a;
+  --color-border-dark: #1e293b;
+  --color-text-dark: #f1f5ff;
+  --color-muted-dark: #a6b1ce;
+  --color-primary-dark: #8ea2ff;
+  --color-primary-dark-hover: #b9c4ff;
+  --color-secondary-dark: #ffa38e;
+}
+
+:root {
+  color-scheme: light dark;
+}
+
+html {
+  font-family: var(--font-sans);
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-bg-light);
+  color: var(--color-text-light);
+}
+
+.dark body {
+  background: var(--color-bg-dark);
+  color: var(--color-text-dark);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  p {
+    line-height: 1.7;
+  }
+
+  a {
+    color: var(--color-primary-light);
+    transition: color 150ms ease, opacity 150ms ease;
+  }
+
+  .dark a {
+    color: var(--color-primary-dark);
+  }
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -22,7 +87,19 @@
   .delay-300 { animation-delay: 300ms; }
   
   .glass-panel {
-    @apply border border-white/10 bg-white/5 backdrop-blur-md shadow-xl;
+    @apply border border-white/10 bg-white/5 backdrop-blur-md shadow-[0_20px_60px_rgba(15,23,42,0.1)];
+  }
+
+  .shadow-soft {
+    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+  }
+
+  .shadow-card {
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+  }
+
+  .gradient-ring {
+    background: radial-gradient(circle at 30% 20%, rgba(76, 95, 215, 0.35), transparent 55%);
   }
 }
 

@@ -113,27 +113,27 @@ const {
     <PostHog />
     <ClientRouter />
   </head>
-  <body class="min-h-screen bg-white font-sans text-slate-900 dark:bg-midnight-950 dark:text-slate-100">
+  <body class="min-h-screen bg-[var(--color-bg-light)] font-sans text-[var(--color-text-light)] antialiased transition-colors duration-300 dark:bg-[var(--color-bg-dark)] dark:text-[var(--color-text-dark)]">
     <nav
-      class="fixed left-0 right-0 top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-md dark:border-white/10 dark:bg-midnight-950/80"
+      class="fixed left-0 right-0 top-0 z-50 border-b border-transparent bg-[rgba(245,247,251,0.9)] shadow-[0_6px_25px_rgba(15,23,42,0.08)] backdrop-blur-xl transition-colors duration-300 dark:border-[rgba(255,255,255,0.08)] dark:bg-[rgba(15,23,42,0.85)]"
     >
       <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 items-center justify-between">
-          <a href="/" class="text-xl font-bold transition-colors hover:text-purple-600"
+          <a href="/" class="text-lg font-semibold tracking-tight text-[var(--color-text-light)] transition-colors hover:text-[var(--color-primary-light)] dark:text-[var(--color-text-dark)] dark:hover:text-[var(--color-primary-dark)]"
             >Soumyo Dey</a
           >
 
-          <div class="hidden space-x-8 md:flex">
-            <a href="/blog" class="transition-colors hover:text-purple-600" data-astro-prefetch
+          <div class="hidden items-center gap-8 text-sm font-medium uppercase tracking-[0.2em] text-[var(--color-muted-light)] md:flex">
+            <a href="/blog" class="transition-colors hover:text-[var(--color-primary-light)] dark:text-[var(--color-muted-dark)] dark:hover:text-[var(--color-primary-dark)]" data-astro-prefetch
               >Blog</a
             >
-            <a href="/projects" class="transition-colors hover:text-purple-600" data-astro-prefetch
+            <a href="/projects" class="transition-colors hover:text-[var(--color-primary-light)] dark:text-[var(--color-muted-dark)] dark:hover:text-[var(--color-primary-dark)]" data-astro-prefetch
               >Projects</a
             >
-            <a href="/about" class="transition-colors hover:text-purple-600" data-astro-prefetch
+            <a href="/about" class="transition-colors hover:text-[var(--color-primary-light)] dark:text-[var(--color-muted-dark)] dark:hover:text-[var(--color-primary-dark)]" data-astro-prefetch
               >About</a
             >
-            <a href="/resume" class="transition-colors hover:text-purple-600" data-astro-prefetch
+            <a href="/resume" class="transition-colors hover:text-[var(--color-primary-light)] dark:text-[var(--color-muted-dark)] dark:hover:text-[var(--color-primary-dark)]" data-astro-prefetch
               >Resume</a
             >
           </div>
@@ -142,7 +142,7 @@ const {
             <button
               id="theme-toggle"
               aria-label="Toggle dark mode"
-              class="rounded-lg p-2 hover:bg-gray-100 focus:outline-none dark:hover:bg-gray-700"
+              class="rounded-full border border-[var(--color-border-light)]/70 p-2 text-[var(--color-muted-light)] transition-colors hover:border-transparent hover:bg-[var(--color-primary-light)]/10 hover:text-[var(--color-primary-light)] focus:outline-none dark:border-[var(--color-border-dark)] dark:text-[var(--color-muted-dark)] dark:hover:bg-[var(--color-primary-dark)]/15 dark:hover:text-[var(--color-primary-dark)]"
             >
               <svg
                 id="theme-toggle-dark-icon"
@@ -173,7 +173,7 @@ const {
                 ></path>
               </svg>
             </button>
-            <button id="menu-toggle" aria-label="Toggle navigation menu" class="md:hidden">
+            <button id="menu-toggle" aria-label="Toggle navigation menu" class="rounded-full border border-[var(--color-border-light)]/70 p-2 text-[var(--color-text-light)] transition-colors hover:border-transparent hover:bg-[var(--color-primary-light)]/10 hover:text-[var(--color-primary-light)] focus:outline-none md:hidden dark:border-[var(--color-border-dark)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-primary-dark)]/15 dark:hover:text-[var(--color-primary-dark)]">
               <svg
                 class="h-6 w-6"
                 fill="none"
@@ -194,38 +194,55 @@ const {
 
       <div
         id="mobile-menu"
-        class="hidden border-t border-gray-200 bg-white dark:border-gray-800 dark:bg-midnight-950 md:hidden"
+        class="hidden border-t border-[var(--color-border-light)] bg-[var(--color-surface-light)]/95 text-[var(--color-muted-light)] shadow-card dark:border-[var(--color-border-dark)] dark:bg-[var(--color-surface-dark)] dark:text-[var(--color-muted-dark)] md:hidden"
       >
         <div class="flex flex-col space-y-4 px-4 py-2">
-          <a href="/blog" class="block transition-colors hover:text-purple-600" data-astro-prefetch
+          <a href="/blog" class="block text-sm font-medium uppercase tracking-[0.2em] transition-colors hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)]" data-astro-prefetch
             >Blog</a
           >
           <a
             href="/projects"
-            class="block transition-colors hover:text-purple-600"
+            class="block text-sm font-medium uppercase tracking-[0.2em] transition-colors hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)]"
             data-astro-prefetch>Projects</a
           >
-          <a href="/about" class="block transition-colors hover:text-purple-600" data-astro-prefetch
+          <a href="/about" class="block text-sm font-medium uppercase tracking-[0.2em] transition-colors hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)]" data-astro-prefetch
             >About</a
           >
           <a
             href="/resume"
-            class="block transition-colors hover:text-purple-600"
+            class="block text-sm font-medium uppercase tracking-[0.2em] transition-colors hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)]"
             data-astro-prefetch>Resume</a
           >
         </div>
       </div>
     </nav>
 
-    <div class="mx-auto max-w-6xl px-4 pt-16 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-6xl px-4 pt-24 pb-16 sm:px-6 lg:px-8">
       <slot />
     </div>
 
-    <footer class="mt-20 border-t border-gray-200 py-8 dark:border-white/10">
-      <div
-        class="mx-auto max-w-6xl px-4 text-center text-gray-600 dark:text-gray-400 sm:px-6 lg:px-8"
-      >
-        <p>&copy; {new Date().getFullYear()} Soumyo Dey. All rights reserved.</p>
+    <footer class="border-t border-[var(--color-border-light)]/70 bg-[var(--color-surface-light)]/70 py-12 text-[var(--color-muted-light)] dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.8)] dark:text-[var(--color-muted-dark)]">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div class="grid gap-10 text-sm sm:grid-cols-2 lg:grid-cols-3">
+          <div>
+            <p class="mb-3 text-base font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">Soumyo Dey</p>
+            <p>Writing about product, AI, and travel stories from around the world.</p>
+          </div>
+          <div class="space-y-2">
+            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Navigate</p>
+            <div class="flex flex-wrap gap-3">
+              <a class="transition-colors hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)]" href="/blog">Blog</a>
+              <a class="transition-colors hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)]" href="/projects">Projects</a>
+              <a class="transition-colors hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)]" href="/about">About</a>
+              <a class="transition-colors hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)]" href="/resume">Resume</a>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Elsewhere</p>
+            <p>Email: <a class="underline decoration-dashed underline-offset-4 hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)]" href="mailto:heysoumyo@gmail.com">heysoumyo@gmail.com</a></p>
+          </div>
+        </div>
+        <p class="mt-10 text-center text-xs uppercase tracking-[0.3em]">© {new Date().getFullYear()} Soumyo Dey · Crafted with coffee & code.</p>
       </div>
     </footer>
 

@@ -7,64 +7,94 @@ import avatar from '../images/avatar.jpg';
 ---
 
 <Layout title="Soumyo Dey">
-  <div class="absolute top-0 left-1/2 -z-10 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-violet-500/20 blur-[100px] dark:bg-violet-900/20"></div>
-  
-  <main class="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center py-12">
-    <div class="text-center">
-      <div class="animate-fade-in relative mx-auto mb-8 h-32 w-32">
-        <div class="absolute inset-0 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 blur-lg opacity-75"></div>
-        <div class="absolute inset-0 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500"></div>
-        <Picture
-          src={avatar}
-          widths={[128, 256]}
-          sizes="128px"
-          formats={['avif', 'webp', 'jpeg']}
-          alt="Profile"
-          loading="eager"
-          fetchpriority="high"
-          class="relative h-full w-full rounded-full object-cover"
-        />
-      </div>
-
-      <h1 class="animate-fade-in delay-100 mb-4 text-4xl font-bold font-serif tracking-tight text-slate-900 dark:text-white">Soumyo Dey</h1>
-      <p class="animate-fade-in delay-200 mb-8 text-lg text-slate-600 dark:text-slate-400">
-        A Man who travels the world eating noodles
-      </p>
-
-      <div class="animate-fade-in delay-300 mb-12 flex justify-center gap-4">
-        {socials.map((social) => <SocialIcons {...social} />)}
-      </div>
-
-      <!-- Newsletter section with optimized loading -->
-      <div
-        id="newsletter-section"
-        class="animate-fade-in delay-300 glass-panel mx-auto w-full max-w-2xl overflow-hidden rounded-xl border border-gray-200 bg-white/50 dark:border-white/5 dark:bg-white/5"
-      >
-        <!-- Static content shown immediately -->
-        <div class="p-8 text-center">
-          <h2 class="mb-3 text-2xl font-bold font-serif text-slate-900 dark:text-white">Subscribe to Stochastic Musings!</h2>
-          <p class="mb-6 text-slate-600 dark:text-slate-300">
-            Get my writings directly in your inbox.
-          </p>
-          <button
-            id="load-newsletter"
-            class="rounded-lg bg-gradient-to-r from-violet-600 to-fuchsia-600 px-6 py-2.5 font-medium text-white shadow-lg shadow-violet-500/25 transition-all hover:scale-105 hover:shadow-violet-500/40 active:scale-95"
-            onclick="loadNewsletterEmbed()"
-          >
-            Subscribe Here!
-          </button>
-        </div>
-
-        <!-- Container for lazy-loaded iframe -->
-        <div id="substack-container" class="hidden">
-          <div
-            class="flex h-[320px] w-full items-center justify-center text-gray-500 dark:text-gray-400"
-          >
-            Loading newsletter...
+  <main class="space-y-16">
+    <section class="relative isolate overflow-hidden rounded-[32px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] px-6 py-16 text-center shadow-soft dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.92)]">
+      <div class="pointer-events-none absolute inset-x-0 -top-32 h-[420px] bg-[radial-gradient(circle_at_top,rgba(76,95,215,0.35),transparent_65%)] dark:bg-[radial-gradient(circle_at_top,rgba(142,162,255,0.35),transparent_60%)]" aria-hidden="true"></div>
+      <div class="relative mx-auto flex max-w-3xl flex-col items-center gap-10">
+        <p class="inline-flex items-center gap-3 rounded-full border border-[var(--color-border-light)]/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.4em] text-[var(--color-muted-light)] dark:border-[var(--color-border-dark)] dark:text-[var(--color-muted-dark)]">
+          Product • AI • Travel
+        </p>
+        <div class="relative">
+          <div class="gradient-ring absolute inset-0 rounded-full opacity-70 blur-[60px]"></div>
+          <div class="relative mx-auto h-32 w-32 rounded-full border-4 border-[var(--color-surface-light)] shadow-card dark:border-[rgba(19,26,42,0.92)]">
+            <Picture
+              src={avatar}
+              widths={[128, 256]}
+              sizes="128px"
+              formats={['avif', 'webp', 'jpeg']}
+              alt="Profile"
+              loading="eager"
+              fetchpriority="high"
+              class="h-full w-full rounded-full object-cover"
+            />
           </div>
         </div>
+        <div class="space-y-5">
+          <h1 class="text-4xl font-serif font-semibold tracking-tight text-[var(--color-text-light)] dark:text-[var(--color-text-dark)] sm:text-5xl">
+            Soumyo Dey
+          </h1>
+          <p class="text-lg text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
+            Exploring how thoughtful product strategy, AI, and curious travel stories intersect to shape better experiences.
+          </p>
+        </div>
+        <div class="flex flex-col items-center gap-3">
+          <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Connect</p>
+          <div class="flex flex-wrap justify-center gap-4">
+            {socials.map((social) => <SocialIcons {...social} />)}
+          </div>
+        </div>
+        <div class="flex w-full flex-col gap-4 sm:flex-row sm:justify-center">
+          <a
+            href="/blog"
+            class="inline-flex items-center justify-center rounded-full bg-[var(--color-primary-light)] px-6 py-3 text-base font-semibold text-white shadow-lg shadow-[rgba(76,95,215,0.35)] transition-transform hover:-translate-y-0.5 hover:bg-[var(--color-primary-light-hover)] dark:bg-[var(--color-primary-dark)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-primary-dark-hover)]"
+          >
+            Explore writing
+          </a>
+          <a
+            href="/resume"
+            class="inline-flex items-center justify-center rounded-full border border-[var(--color-border-light)] bg-white/70 px-6 py-3 text-base font-semibold text-[var(--color-text-light)] transition-colors hover:border-transparent hover:bg-[var(--color-primary-light)]/10 hover:text-[var(--color-primary-light)] dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.7)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-primary-dark)]/15 dark:hover:text-[var(--color-primary-dark)]"
+          >
+            View resume
+          </a>
+        </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Newsletter section with optimized loading -->
+    <section
+      id="newsletter-section"
+      class="grid gap-10 rounded-[28px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] p-8 shadow-card dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.92)] lg:grid-cols-[1.2fr_0.8fr]"
+    >
+      <!-- Static content shown immediately -->
+      <div class="space-y-6">
+        <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Newsletter</p>
+        <div class="space-y-4">
+          <h2 class="text-3xl font-serif font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">Stochastic Musings</h2>
+          <p class="text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
+            Short dispatches on building lovable products, decoding AI signals, and savoring stories from noodles to night trains.
+          </p>
+          <ul class="space-y-2 text-left text-sm text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
+            <li>• Evergreen essays and field notes</li>
+            <li>• Occasional deep dives into product strategy</li>
+            <li>• Travel sketches and experiments worth sharing</li>
+          </ul>
+        </div>
+        <button
+          id="load-newsletter"
+          class="inline-flex w-full items-center justify-center rounded-full bg-[var(--color-primary-light)] px-6 py-3 text-base font-semibold text-white shadow-lg shadow-[rgba(76,95,215,0.35)] transition-transform hover:-translate-y-0.5 hover:bg-[var(--color-primary-light-hover)] dark:bg-[var(--color-primary-dark)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-primary-dark-hover)]"
+          onclick="loadNewsletterEmbed()"
+        >
+          Subscribe here
+        </button>
+      </div>
+
+      <!-- Container for lazy-loaded iframe -->
+      <div id="substack-container" class="hidden">
+        <div class="flex h-full min-h-[260px] w-full items-center justify-center rounded-2xl border border-dashed border-[var(--color-border-light)] text-[var(--color-muted-light)] dark:border-[var(--color-border-dark)] dark:text-[var(--color-muted-dark)]">
+          Loading newsletter...
+        </div>
+      </div>
+    </section>
     <script is:inline>
       function setupNewsletter() {
         function loadNewsletterEmbed() {
@@ -88,7 +118,7 @@ import avatar from '../images/avatar.jpg';
             container.appendChild(iframe);
 
             // Hide button
-            button.parentElement.classList.add('hidden');
+            button.classList.add('hidden');
           }
         }
         

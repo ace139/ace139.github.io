@@ -1,5 +1,7 @@
+export type SocialPlatform = 'x-twitter' | 'linkedin' | 'github' | 'email';
+
 interface Social {
-  platform: string;
+  platform: SocialPlatform;
   url: string;
   label: string;
 }

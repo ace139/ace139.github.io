@@ -9,32 +9,39 @@ projects.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).
 ---
 
 <Layout title="Projects | Soumyo Dey">
-  <main class="pt-20">
-    <h1 class="mb-8 text-4xl font-bold font-serif text-slate-900 dark:text-white">Projects</h1>
+  <main class="space-y-12 pt-24">
+    <section class="rounded-[28px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] px-6 py-10 shadow-card dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.9)]">
+      <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Build log</p>
+      <h1 class="mt-4 text-4xl font-serif font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">Selected projects</h1>
+      <p class="mt-4 max-w-2xl text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
+        Experiments, shipping stories, and products that bend AI, strategy, and delightful UI into something useful.
+      </p>
+    </section>
 
     <div class="grid gap-8 md:grid-cols-2">
       {
         projects.map((project) => (
-          <div class="group relative flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-white/10 dark:bg-white/5">
+          <div class="group relative flex flex-col rounded-[24px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_20px_50px_rgba(15,23,42,0.12)] dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.85)]">
             {project.data.heroImage && (
               <ResponsiveImage
                 src={project.data.heroImage}
                 alt={project.data.title}
-                class="mb-4 h-48 w-full rounded-lg object-cover"
+                class="mb-4 h-48 w-full rounded-2xl object-cover"
                 loading="lazy"
                 sizes="(min-width: 768px) 50vw, 100vw"
               />
             )}
-            <h2 class="mb-3 text-2xl font-bold font-serif text-slate-900 dark:text-white">{project.data.title}</h2>
-            <p class="mb-4 flex-grow text-slate-600 dark:text-slate-400">{project.data.description}</p>
+            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">{project.data.date?.toLocaleDateString?.() ?? 'Project'}</p>
+            <h2 class="mb-3 text-2xl font-serif font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">{project.data.title}</h2>
+            <p class="mb-4 flex-grow text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">{project.data.description}</p>
 
             <div class="mb-4">{project.data.tags && <Tags tags={project.data.tags} />}</div>
 
-            <div class="mt-auto flex gap-4">
+            <div class="mt-auto flex flex-wrap gap-3">
               {project.data.github && (
                 <a
                   href={project.data.github}
-                  class="flex items-center gap-1 text-sm font-medium text-violet-600 hover:text-violet-500"
+                  class="inline-flex items-center rounded-full border border-[var(--color-border-light)]/80 px-4 py-2 text-sm font-semibold text-[var(--color-text-light)] transition-colors hover:border-transparent hover:bg-[var(--color-primary-light)]/10 hover:text-[var(--color-primary-light)] dark:border-[var(--color-border-dark)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-primary-dark)]/15 dark:hover:text-[var(--color-primary-dark)]"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -47,7 +54,7 @@ projects.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).
               {project.data.demo && (
                 <a
                   href={project.data.demo}
-                  class="flex items-center gap-1 text-sm font-medium text-violet-600 hover:text-violet-500"
+                  class="inline-flex items-center rounded-full border border-[var(--color-border-light)]/80 px-4 py-2 text-sm font-semibold text-[var(--color-text-light)] transition-colors hover:border-transparent hover:bg-[var(--color-primary-light)]/10 hover:text-[var(--color-primary-light)] dark:border-[var(--color-border-dark)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-primary-dark)]/15 dark:hover:text-[var(--color-primary-dark)]"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -64,7 +71,7 @@ projects.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).
               )}
               <a
                 href={`/projects/${project.slug}`}
-                class="ml-auto flex items-center gap-1 text-sm font-medium text-violet-600 hover:text-violet-500"
+                class="ml-auto inline-flex items-center text-sm font-semibold text-[var(--color-primary-light)] transition-colors hover:text-[var(--color-primary-light-hover)] dark:text-[var(--color-primary-dark)] dark:hover:text-[var(--color-primary-dark-hover)]"
                 data-astro-prefetch
               >
                 Learn More →

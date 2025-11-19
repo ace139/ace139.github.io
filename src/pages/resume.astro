@@ -143,33 +143,42 @@ const skills = [
 ---
 
 <Layout title="Resume | Soumyo Dey">
-  <main class="pt-20">
-    <div class="mx-auto max-w-4xl">
-      <div class="mb-8 flex items-center justify-between">
-        <h1 class="text-4xl font-bold">Resume</h1>
-        <a
-          href="/SoumyoDey_Resume.pdf"
-          class="inline-flex items-center rounded-md border border-transparent bg-purple-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-purple-700"
-          download
-        >
-          Download PDF
-        </a>
-      </div>
+  <main class="space-y-12 pt-24">
+    <div class="mx-auto max-w-4xl space-y-10">
+      <header class="rounded-[28px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] p-8 shadow-card dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.9)]">
+        <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Résumé</p>
+        <div class="mt-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h1 class="text-4xl font-serif font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">Soumyo Dey</h1>
+            <p class="mt-2 text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Product leader · AI strategist · Storyteller of delightful experiences</p>
+          </div>
+          <a
+            href="/SoumyoDey_Resume.pdf"
+            class="inline-flex items-center justify-center rounded-full bg-[var(--color-primary-light)] px-6 py-3 text-base font-semibold text-white shadow-[0_15px_30px_rgba(76,95,215,0.25)] transition-transform hover:-translate-y-0.5 hover:bg-[var(--color-primary-light-hover)] dark:bg-[var(--color-primary-dark)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-primary-dark-hover)]"
+            download
+          >
+            Download PDF
+          </a>
+        </div>
+      </header>
 
-      <section class="mb-12">
-        <h2 class="mb-6 text-2xl font-semibold">Experience</h2>
+      <section class="space-y-6 rounded-[28px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] p-8 shadow-card dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.9)]">
+        <h2 class="text-3xl font-serif font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">Experience</h2>
         <div class="space-y-8">
           {
             experience.map((job) => (
-              <div class="border-l-4 border-purple-600 pl-4">
-                <h3 class="text-xl font-semibold">{job.title}</h3>
-                <p class="mb-2 text-purple-600">
-                  {job.company} | {job.period}
-                </p>
-                <p class="mb-3 text-gray-600 dark:text-gray-400">{job.description}</p>
-                <div class="flex flex-wrap gap-2">
+              <div class="relative rounded-2xl border border-[var(--color-border-light)] bg-white/85 p-6 shadow-card dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.85)]">
+                <div class="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
+                  <div>
+                    <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">{job.period}</p>
+                    <h3 class="text-xl font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">{job.title}</h3>
+                    <p class="text-[var(--color-primary-light)] dark:text-[var(--color-primary-dark)]">{job.company} · {job.location}</p>
+                  </div>
+                </div>
+                <p class="mt-4 text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">{job.description}</p>
+                <div class="mt-4 flex flex-wrap gap-2">
                   {job.skills.map((skill) => (
-                    <span class="rounded bg-purple-100 px-2 py-1 text-sm text-purple-800 dark:bg-purple-900 dark:text-purple-100">
+                    <span class="rounded-full border border-[var(--color-border-light)] px-3 py-1 text-sm text-[var(--color-muted-light)] dark:border-[var(--color-border-dark)] dark:text-[var(--color-muted-dark)]">
                       {skill}
                     </span>
                   ))}
@@ -180,28 +189,26 @@ const skills = [
         </div>
       </section>
 
-      <section class="mb-12">
-        <h2 class="mb-6 text-2xl font-semibold">Education</h2>
-        <div class="space-y-6">
+      <section class="rounded-[28px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] p-8 shadow-card dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.9)]">
+        <h2 class="text-3xl font-serif font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">Education</h2>
+        <div class="mt-6 space-y-6">
           {
             education.map((edu) => (
-              <div>
-                <h3 class="text-xl font-semibold">{edu.degree}</h3>
-                <p class="text-purple-600">
-                  {edu.school} | {edu.period}
-                </p>
+              <div class="rounded-2xl border border-[var(--color-border-light)] bg-white/80 p-6 dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.85)]">
+                <h3 class="text-xl font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">{edu.degree}</h3>
+                <p class="text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">{edu.school} · {edu.period}</p>
               </div>
             ))
           }
         </div>
       </section>
 
-      <section>
-        <h2 class="mb-6 text-2xl font-semibold">Skills</h2>
-        <div class="flex flex-wrap gap-2">
+      <section class="rounded-[28px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] p-8 shadow-card dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.9)]">
+        <h2 class="text-3xl font-serif font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">Skills</h2>
+        <div class="mt-6 flex flex-wrap gap-2">
           {
             skills.map((skill) => (
-              <span class="rounded-full bg-gray-100 px-3 py-1 text-sm dark:bg-gray-800">
+              <span class="rounded-full border border-[var(--color-border-light)] bg-white/80 px-3 py-1 text-sm text-[var(--color-muted-light)] dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.85)] dark:text-[var(--color-muted-dark)]">
                 {skill}
               </span>
             ))
