@@ -4,6 +4,7 @@ const posthogHost = import.meta.env.PUBLIC_POSTHOG_HOST || 'https://us.i.posthog
 ---
 
 <script is:inline type="text/javascript" id="posthog-js" define:vars={{ posthogKey, posthogHost }}>
+  /* global posthog */
   !(function (t, e) {
     var o, n, p, r;
     e.__SV ||

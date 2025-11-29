@@ -1,0 +1,38 @@
+# Soumyo Dey
+
+> Tech, AI & data products, and the stories picked up along the way
+
+## About
+
+I’ve always gravitated toward problems where engineering, intelligence, and real-world constraints intersect. What started as a curiosity for how things work turned into a career spent building products and platforms that make complex systems feel simple.
+
+## Site Structure
+
+- Home: https://soumyo.com/
+- Blog: https://soumyo.com/blog
+- About: https://soumyo.com/about
+- Projects: https://soumyo.com/projects
+- Resume: https://soumyo.com/resume
+
+## Recent Blog Posts
+
+- [Beyond the Vacuum](https://soumyo.com/blog/beyond-the-vacuum)
+  Exploring how original ideas emerge not from isolation, but from the rich interplay of diverse knowledge and experiences
+- [Facts, Hypotheses, and the Art of Writing PRDs](https://soumyo.com/blog/facts-hypotheses-and-the-art-of-writing-prds)
+  Every sentence in a PRD should either be a Fact or a Hypothesis. Avoid making Statements at all costs.
+
+## Newsletter
+
+Subscribe to "Stochastic Musings" - Notes on product intuition, engineering systems, and signals from the AI landscape.
+- https://stochasticmusings.substack.com/
+
+## Contact
+
+- Email: heysoumyo@gmail.com
+- X/Twitter: https://x.com/soumyo
+- LinkedIn: https://linkedin.com/in/soumyo-dey
+- GitHub: https://github.com/ace139
+
+---
+
+This site is built with Astro, optimized for performance and accessibility. Last updated: 2025-11-29

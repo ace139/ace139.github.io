@@ -5,7 +5,7 @@
   "scripts": {
     "predev": "node scripts/sync-public-env.js",
     "prestart": "node scripts/sync-public-env.js",
-    "prebuild": "node scripts/sync-public-env.js && node scripts/optimize-images.js",
+    "prebuild": "node scripts/sync-public-env.js && node scripts/optimize-images.js && node scripts/generate-llms-txt.js",
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "@astrojs/mdx": "^4.3.11",
+    "@astrojs/sitemap": "^3.6.0",
     "@tailwindcss/cli": "^4.1.17",
     "@tailwindcss/vite": "^4.1.17",
     "@types/node": "^22.13.4",

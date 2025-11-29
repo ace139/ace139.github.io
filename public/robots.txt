@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# LLM-friendly documentation
+# See https://llmstxt.org/
+llms.txt: https://soumyo.com/llms.txt
+
+Sitemap: https://soumyo.com/sitemap.xml

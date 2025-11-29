@@ -2,12 +2,13 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import rehypeMermaid from 'rehype-mermaid';
 import mdx from '@astrojs/mdx';
+import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://ace139.github.io',
+  site: 'https://soumyo.com',
   base: '/',
   prefetch: true,
-  integrations: [mdx()],
+  integrations: [mdx(), sitemap()],
   output: 'static',
   build: {
     inlineStylesheets: 'auto',
