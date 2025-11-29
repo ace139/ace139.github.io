@@ -9,7 +9,7 @@ interface Social {
 export const socials: Social[] = [
   {
     platform: 'x-twitter',
-    url: 'https://x.com/heySoumyo',
+    url: 'https://x.com/soumyo',
     label: 'X',
   },
   {

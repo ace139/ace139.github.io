@@ -1,72 +1,73 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { socials } from '../config/socials';
+import SocialIcons from '../components/SocialIcons.astro';
 ---
 
 <Layout title="About | Soumyo Dey">
   <main class="space-y-12 pt-24">
     <section class="rounded-[32px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] px-6 py-12 shadow-soft dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.92)]">
-      <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Origin story</p>
-      <h1 class="mt-4 text-4xl font-serif font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">A product brain fueled by noodles & curiosity</h1>
+      <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Origin</p>
+      <h1 class="mt-4 text-4xl font-serif font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">A systems thinker with a product brain</h1>
       <p class="mt-6 max-w-3xl text-lg text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
-        Hi! I'm Soumyo Dey, a product leader and compulsive storyteller who juggles building thoughtful experiences with sampling every bowl of noodles I meet around the world. My work floats between AI strategy, user research, and the practical craft of shipping.
+        I’ve always gravitated toward problems where engineering, intelligence, and real-world constraints intersect. What started as a curiosity for how things work turned into a career spent building products and platforms that make complex systems feel simple.
       </p>
-      <div class="mt-8 grid gap-6 sm:grid-cols-2">
-        <div class="rounded-2xl border border-[var(--color-border-light)] bg-white/80 p-6 dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.8)]">
-          <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Current role</p>
-          <p class="mt-2 text-lg font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">Senior Product Manager @ Ather Energy</p>
-          <p class="mt-2 text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Shaping intelligence across EV experiences and internal tools.</p>
-        </div>
-        <div class="rounded-2xl border border-[var(--color-border-light)] bg-white/80 p-6 dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.8)]">
-          <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Based in</p>
-          <p class="mt-2 text-lg font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">Bengaluru → everywhere</p>
-          <p class="mt-2 text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Remote-first life, rotating kitchens, never-ending playlists.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="grid gap-8 lg:grid-cols-2">
-      <article class="rounded-[28px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] p-8 shadow-card dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.9)]">
-        <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Journey</p>
-        <h2 class="mt-3 text-3xl font-serif font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">From data science to product storytelling</h2>
-        <p class="mt-4 text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
-          A decade across startups and high-growth teams taught me to translate fuzzy bets into lovable product moments. I nerd out on qualitative insights, use data to sharpen instincts, and leave room for the whimsical touches that make products memorable.
-        </p>
-      </article>
-      <article class="rounded-[28px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] p-8 shadow-card dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.9)]">
-        <p class="text-xs.font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">What I do</p>
-        <h2 class="mt-3 text-3xl font-serif font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">Craft systems & stories</h2>
-        <ul class="mt-4 space-y-3 text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
-          <li>• Lead AI-native product explorations and roadmaps.</li>
-          <li>• Design research programs that reveal why users behave the way they do.</li>
-          <li>• Write documentation and essays that make strategy legible.</li>
-          <li>• Build tiny tools to automate the boring parts of remote work.</li>
-        </ul>
-      </article>
     </section>
 
     <section class="rounded-[28px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] p-8 shadow-card dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.9)]">
-      <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-        <div class="max-w-2xl">
-          <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Current focus</p>
-          <h2 class="mt-3 text-3xl font-serif font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">Tools for digital nomads & curious builders</h2>
-          <p class="mt-4 text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
-            I’m mapping the rituals that keep remote creatives sane: finding spaces to work, eat, and recharge on the road. Expect experiments blending travel notes, lightweight software, and interviews with people who live between time zones.
-          </p>
-        </div>
-        <div class="flex flex-col gap-3">
-          <a
-            href="mailto:heysoumyo@gmail.com"
-            class="inline-flex items-center justify-center rounded-full bg-[var(--color-primary-light)] px-6 py-3 text-base font-semibold text-white shadow-[0_20px_40px_rgba(76,95,215,0.25)] transition-transform hover:-translate-y-0.5 hover:bg-[var(--color-primary-light-hover)] dark:bg-[var(--color-primary-dark)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-primary-dark-hover)]"
-          >
-            Email me
-          </a>
-          <a
-            href="/resume"
-            class="inline-flex items-center justify-center rounded-full border border-[var(--color-border-light)] px-6 py-3 text-base font-semibold text-[var(--color-text-light)] transition-colors hover:border-transparent hover:bg-[var(--color-primary-light)]/10 hover:text-[var(--color-primary-light)] dark:border-[var(--color-border-dark)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-primary-dark)]/15 dark:hover:text-[var(--color-primary-dark)]"
-          >
-            View résumé
-          </a>
-        </div>
+      <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">What I do now</p>
+      <h2 class="mt-3 text-3xl font-serif font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">Co-founder & CTO, Cornet Health</h2>
+      <p class="mt-4 text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
+        I’m building voice-first, workflow-aware AI systems that remove administrative friction for clinicians. My work spans system architecture, multi-agent intelligence, voice interfaces, and the operational realities of deploying AI in healthcare environments.
+      </p>
+    </section>
+
+    <section class="rounded-[28px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] p-8 shadow-card dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.9)]">
+      <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Past Experience</p>
+      <h2 class="mt-3 text-3xl font-serif font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">Building large-scale systems and data platforms</h2>
+      <div class="mt-4 space-y-4 text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
+        <p>
+          Before Cornet, I built and scaled the Connected Platforms and Data & AI capabilities at Ather Energy — taking them from early-stage experiments to infrastructure powering 500,000+ EVs across India.
+        </p>
+        <p>
+          I also worked across e-commerce, retail, and supply chain, where I designed data platforms and product systems that improved clarity, speed, and operational decision-making.
+        </p>
+        <p>
+          These roles shaped how I approach problem definition, system architecture, and delivering intelligence that works in the real world.
+        </p>
+      </div>
+    </section>
+
+    <section class="rounded-[28px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] p-8 shadow-card dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.9)]">
+      <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">How I think</p>
+      <h2 class="mt-3 text-3xl font-serif font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">Where intelligence meets execution</h2>
+      <div class="mt-4 space-y-4 text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
+        <p>I focus on clarity, precision, and real-world usefulness. I enjoy working end-to-end:</p>
+        <ul class="list-disc pl-5 space-y-1">
+          <li>defining problems</li>
+          <li>shaping system and data architecture</li>
+          <li>building AI-native products</li>
+          <li>refining interfaces that tie everything together</li>
+        </ul>
+        <p>I bias toward shipping, learning, and continuous improvement — always grounded in how people actually work.</p>
+      </div>
+    </section>
+
+    <section class="rounded-[28px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] p-8 shadow-card dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.9)]">
+      <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">What I’m exploring</p>
+      <h2 class="mt-3 text-3xl font-serif font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">Tech, AI & data products — and the stories picked up along the way</h2>
+      <p class="mt-4 text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
+        Beyond building systems, I write short dispatches on product thinking, AI signals, and the small stories found while traveling. This site is where I share that exploration: the work, the thinking behind it, and the journeys in between.
+      </p>
+    </section>
+
+    <section class="rounded-[28px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] p-8 shadow-card dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.9)]">
+      <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Get in touch</p>
+      <p class="mt-4 text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
+        If you’d like to reach out, collaborate, or just say hello, here are the easiest ways:
+      </p>
+      <div class="mt-6 flex flex-wrap gap-4">
+        {socials.map((social) => <SocialIcons {...social} />)}
       </div>
     </section>
   </main>
