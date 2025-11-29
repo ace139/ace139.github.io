@@ -8,10 +8,10 @@ import avatar from '../images/avatar.jpg';
 
 <Layout title="Soumyo Dey">
   <main class="space-y-16">
-    <section class="relative isolate overflow-hidden rounded-[32px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] px-4 py-16 text-center shadow-soft dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.92)] sm:px-6">
+    <section class="reveal relative isolate overflow-hidden rounded-[28px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] px-4 py-16 text-center shadow-soft dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.92)] sm:px-6">
       <div class="pointer-events-none absolute inset-x-0 -top-32 h-[420px] bg-[radial-gradient(circle_at_top,rgba(76,95,215,0.35),transparent_65%)] dark:bg-[radial-gradient(circle_at_top,rgba(142,162,255,0.35),transparent_60%)]" aria-hidden="true"></div>
       <div class="relative mx-auto flex max-w-3xl flex-col items-center gap-10">
-        <p class="inline-flex items-center gap-3 rounded-full border border-[var(--color-border-light)]/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.4em] text-[var(--color-muted-light)] dark:border-[var(--color-border-dark)] dark:text-[var(--color-muted-dark)]">
+        <p class="inline-flex items-center gap-3 rounded-full border border-[var(--color-border-light)]/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:border-[var(--color-border-dark)] dark:text-[var(--color-muted-dark)]">
           Tech • Data & AI Products • Stories
         </p>
         <div class="relative">
@@ -46,7 +46,7 @@ import avatar from '../images/avatar.jpg';
         <div class="flex w-full flex-col gap-4 sm:flex-row sm:justify-center">
           <a
             href="/blog"
-            class="inline-flex items-center justify-center rounded-full bg-[var(--color-primary-light)] px-6 py-3 text-base font-semibold text-white shadow-lg shadow-[rgba(76,95,215,0.35)] transition-transform hover:-translate-y-0.5 hover:bg-[var(--color-primary-light-hover)] dark:bg-[var(--color-primary-dark)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-primary-dark-hover)]"
+            class="inline-flex items-center justify-center rounded-full bg-[var(--color-primary-light)] px-6 py-3 text-base font-semibold text-white shadow-button transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:bg-[var(--color-primary-light-hover)] hover:shadow-[0_20px_40px_rgba(76,95,215,0.4)] dark:bg-[var(--color-primary-dark)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-primary-dark-hover)]"
           >
             Explore writing
           </a>
@@ -54,109 +54,47 @@ import avatar from '../images/avatar.jpg';
             href="#newsletter-section"
             class="inline-flex items-center justify-center rounded-full border border-[var(--color-border-light)] bg-white/70 px-6 py-3 text-base font-semibold text-[var(--color-text-light)] transition-colors hover:border-transparent hover:bg-[var(--color-primary-light)]/10 hover:text-[var(--color-primary-light)] dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.7)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-primary-dark)]/15 dark:hover:text-[var(--color-primary-dark)]"
           >
-            Come along for the ride
+            Come along for the ride!
           </a>
         </div>
       </div>
     </section>
 
-    <!-- Newsletter section with optimized loading -->
+    <!-- Newsletter section with premium morphing interaction -->
     <section
       id="newsletter-section"
-      class="grid gap-6 rounded-[28px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] p-8 shadow-card dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.92)] lg:grid-cols-[1.2fr_0.8fr] lg:gap-10"
+      class="relative isolate overflow-hidden rounded-[28px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] p-8 shadow-card transition-all duration-500 dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.92)] sm:p-12 lg:bg-transparent lg:border-none lg:shadow-none lg:px-0 lg:py-16"
     >
-      <!-- Static content shown immediately -->
-      <div class="space-y-6">
-        <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Newsletter</p>
-        <div class="space-y-4">
-          <h2 class="text-3xl font-serif font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">Stochastic Musings</h2>
-          <p class="text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
-            Short dispatches on building lovable products, decoding AI signals, and savoring stories from noodles to night trains.
-          </p>
-          <ul class="space-y-2 text-left text-sm text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
-            <li>• Evergreen essays and field notes</li>
-            <li>• Occasional deep dives into product strategy</li>
-            <li>• Travel sketches and experiments worth sharing</li>
-          </ul>
-        </div>
-        <button
-          id="load-newsletter"
-          class="inline-flex w-full items-center justify-center rounded-full bg-[var(--color-primary-light)] px-6 py-3 text-base font-semibold text-white shadow-lg shadow-[rgba(76,95,215,0.35)] transition-transform hover:-translate-y-0.5 hover:bg-[var(--color-primary-light-hover)] dark:bg-[var(--color-primary-dark)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-primary-dark-hover)]"
-          onclick="loadNewsletterEmbed()"
-        >
-          Subscribe here
-        </button>
-      </div>
+      <!-- Background Gradient -->
+      <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(76,95,215,0.08),transparent_50%)] dark:bg-[radial-gradient(circle_at_top_right,rgba(142,162,255,0.05),transparent_50%)] lg:hidden"></div>
 
-      <!-- Container for lazy-loaded iframe -->
-      <div id="substack-container" class="hidden">
-        <div class="flex h-full min-h-[260px] w-full items-center justify-center rounded-2xl border border-dashed border-[var(--color-border-light)] text-[var(--color-muted-light)] dark:border-[var(--color-border-dark)] dark:text-[var(--color-muted-dark)]">
-          Loading newsletter...
+      <div class="relative mx-auto text-center">
+        <!-- Initial Content -->
+        <div id="newsletter-content" class="mx-auto max-w-2xl transition-all duration-500">
+          <p class="mb-6 text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Newsletter</p>
+          <h2 class="mb-4 text-3xl font-serif font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)] sm:text-4xl">Stochastic Musings</h2>
+          <p class="mb-8 text-lg text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
+            Notes on product intuition, engineering systems, and signals from the AI landscape. Exploring the messy reality of how intelligence meets execution.
+          </p>
+          
+          <div class="flex flex-col items-center gap-4">
+            <a
+              href="https://stochasticmusings.substack.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[var(--color-primary-light)] px-8 py-3 text-base font-semibold text-white shadow-button transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:bg-[var(--color-primary-light-hover)] hover:shadow-[0_20px_40px_rgba(76,95,215,0.4)] dark:bg-[var(--color-primary-dark)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-primary-dark-hover)]"
+            >
+              <span class="relative z-10 flex items-center gap-2">
+                Subscribe for free
+                <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </span>
+            </a>
+            <p class="text-sm text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
+              Join the journey · No spam, ever.
+            </p>
+          </div>
         </div>
       </div>
     </section>
-    <script is:inline>
-      function setupNewsletter() {
-        function loadNewsletterEmbed() {
-          const container = document.getElementById('substack-container');
-          const button = document.getElementById('load-newsletter');
-
-          if (container && button) {
-            // Show container
-            container.classList.remove('hidden');
-
-            // Create and append iframe
-            const iframe = document.createElement('iframe');
-            iframe.src = 'https://stochasticmusings.substack.com/embed';
-            iframe.style.width = '100%';
-            iframe.style.height = '320px';
-            iframe.style.border = 'none';
-            iframe.classList.add('rounded-lg', 'dark:filter', 'dark:invert');
-
-            // Replace loading message with iframe
-            container.innerHTML = '';
-            container.appendChild(iframe);
-
-            // Hide button
-            button.classList.add('hidden');
-          }
-        }
-        
-        // Expose to global scope for onclick handler
-        window.loadNewsletterEmbed = loadNewsletterEmbed;
-
-        // Load newsletter automatically if user has previously interacted
-        if (localStorage.getItem('newsletter-interaction')) {
-          setTimeout(loadNewsletterEmbed, 1000);
-        }
-
-        // Save interaction preference
-        document.getElementById('load-newsletter')?.addEventListener('click', () => {
-          localStorage.setItem('newsletter-interaction', 'true');
-        });
-      }
-      
-      // Initial load
-      setupNewsletter();
-      
-      // View Transitions load
-      document.addEventListener('astro:page-load', setupNewsletter);
-    </script>
-  </main>
-</Layout>
-
-<style>
-  iframe {
-    min-width: 480px;
-    max-width: 100%;
-    width: 100%;
-    height: 320px;
-    background: transparent;
-  }
-
-  @media (max-width: 480px) {
-    iframe {
-      min-width: 100%;
-    }
-  }
-</style>

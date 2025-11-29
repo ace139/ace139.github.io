@@ -10,7 +10,7 @@ posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).get
 
 <Layout title="Blog | Soumyo Dey">
   <main class="space-y-12 pt-24">
-    <section class="border-b border-[var(--color-border-light)] pb-12 dark:border-[var(--color-border-dark)]">
+    <section class="reveal border-b border-[var(--color-border-light)] pb-12 dark:border-[var(--color-border-dark)]">
       <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Field notes</p>
       <h1 class="mt-4 text-4xl font-sans font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">Stories from the build log</h1>
       <p class="mt-4 max-w-2xl text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
@@ -21,8 +21,8 @@ posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).get
     <div class="space-y-12">
       {
         posts.map((post) => (
-          <article class="group relative flex flex-col items-start">
-            <div class="flex items-center gap-3 text-xs font-medium uppercase tracking-[0.2em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
+          <article class="reveal group relative flex flex-col items-start transition-transform duration-300 hover:-translate-y-1">
+            <div class="flex items-center gap-3 text-xs font-medium uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
               <time datetime={post.data.date}>
                 {new Date(post.data.date).toLocaleDateString('en-US', {
                   year: 'numeric',

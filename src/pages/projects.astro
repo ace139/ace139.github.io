@@ -10,7 +10,7 @@ projects.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).
 
 <Layout title="Projects | Soumyo Dey">
   <main class="space-y-12 pt-24">
-    <section class="rounded-[28px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] px-6 py-10 shadow-card dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.9)]">
+    <section class="reveal rounded-[28px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] px-6 py-10 shadow-card dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.92)]">
       <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Build log</p>
       <h1 class="mt-4 text-4xl font-serif font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">Selected projects</h1>
       <p class="mt-4 max-w-2xl text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
@@ -21,7 +21,7 @@ projects.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).
     <div class="grid gap-8 md:grid-cols-2">
       {
         projects.map((project) => (
-          <div class="group relative flex flex-col rounded-[24px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_20px_50px_rgba(15,23,42,0.12)] dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.85)]">
+          <div class="reveal group relative flex flex-col rounded-[28px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] p-6 shadow-card transition-all duration-300 hover:-translate-y-2 hover:bg-white hover:shadow-[0_20px_50px_rgba(15,23,42,0.12)] dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.85)]">
             {project.data.heroImage && (
               <ResponsiveImage
                 src={project.data.heroImage}
