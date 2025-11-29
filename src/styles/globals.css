@@ -2,7 +2,7 @@
 
 @theme {
   --font-sans: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
-  --font-serif: "Playfair Display", serif;
+  --font-serif: "Roboto Slab", serif;
 
   --color-bg-light: #f5f7fb;
   --color-surface-light: #ffffff;
@@ -181,16 +181,22 @@ body {
     @apply mb-3 mt-6 text-xl font-bold font-sans;
   }
 
-  .prose p {
-    @apply mb-4;
+  .prose p,
+  .prose ul,
+  .prose ol,
+  .prose li,
+  .prose blockquote,
+  article p {
+    @apply mb-4 text-base leading-relaxed md:text-lg md:leading-loose;
+    font-family: "Roboto Slab", serif !important;
   }
 
   .prose ul {
-    @apply mb-4 list-disc pl-6;
+    @apply list-disc pl-6;
   }
 
   .prose ol {
-    @apply mb-4 list-decimal pl-6;
+    @apply list-decimal pl-6;
   }
 
   .prose code {
@@ -205,8 +211,16 @@ body {
     @apply text-[var(--color-primary-light)] hover:text-[var(--color-primary-light-hover)] dark:text-[var(--color-primary-dark)] dark:hover:text-[var(--color-primary-dark-hover)];
   }
 
-  .prose img {
+  .prose img,
+  .prose iframe {
     @apply my-8 rounded-lg;
+  }
+
+  .prose iframe {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
   }
 
   .prose blockquote {

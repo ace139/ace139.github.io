@@ -23,6 +23,7 @@
   "dependencies": {
     "@fontsource/playfair-display": "^5.2.8",
     "@fontsource/plus-jakarta-sans": "^5.2.8",
+    "@fontsource/roboto-slab": "^5.2.8",
     "astro": "^5.15.9",
     "date-fns": "^4.1.0",
     "rehype-mermaid": "^3.0.0",
