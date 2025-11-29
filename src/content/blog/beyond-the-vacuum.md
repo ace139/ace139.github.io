@@ -1,13 +1,13 @@
 ---
-title: 'Beyond the Vacuum: The Fertile Ground Where Originality Flourishes'
+title: 'Beyond the Vacuum'
+subtitle: 'The Fertile Ground Where Originality Flourishes'
 description: 'Exploring how original ideas emerge not from isolation, but from the rich interplay of diverse knowledge and experiences'
 date: '2025-02-14'
-heroImage: './beyond-vacuum-hero.svg'
+heroImage: './beyond-vacuum-hero-wide.png'
 tags: ['creativity', 'writing', 'personal-growth', 'originality']
 draft: false
 ---
 
-# Beyond the Vacuum: The Fertile Ground Where Originality Flourishes
 
 In all my attempts to write, I've always aspired for originality. It's something I've grappled with for more than 15 years, resulting in innumerable failed attempts. The fear of not being original has been the primary roadblock in my writing process, and it is something I needed to confront head-on.
 

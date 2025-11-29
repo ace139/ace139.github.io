@@ -2,6 +2,9 @@
 import ScriptOptimizer from '../components/ScriptOptimizer.astro';
 import PostHog from '../components/posthog.astro';
 import { ClientRouter } from 'astro:transitions';
+import '@fontsource/playfair-display';
+import '@fontsource/playfair-display/400-italic.css';
+import '@fontsource/plus-jakarta-sans';
 import '../styles/globals.css';
 
 interface Props {
@@ -30,13 +33,7 @@ const {
     <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    
     
     <script is:inline>
       function getTheme() {
@@ -127,15 +124,11 @@ const {
             <a href="/blog" class="transition-colors hover:text-[var(--color-primary-light)] dark:text-[var(--color-muted-dark)] dark:hover:text-[var(--color-primary-dark)]" data-astro-prefetch
               >Blog</a
             >
-            <a href="/projects" class="transition-colors hover:text-[var(--color-primary-light)] dark:text-[var(--color-muted-dark)] dark:hover:text-[var(--color-primary-dark)]" data-astro-prefetch
-              >Projects</a
-            >
+
             <a href="/about" class="transition-colors hover:text-[var(--color-primary-light)] dark:text-[var(--color-muted-dark)] dark:hover:text-[var(--color-primary-dark)]" data-astro-prefetch
               >About</a
             >
-            <a href="/resume" class="transition-colors hover:text-[var(--color-primary-light)] dark:text-[var(--color-muted-dark)] dark:hover:text-[var(--color-primary-dark)]" data-astro-prefetch
-              >Resume</a
-            >
+
           </div>
 
           <div class="flex items-center gap-4">
@@ -200,19 +193,11 @@ const {
           <a href="/blog" class="block text-sm font-medium uppercase tracking-[0.2em] transition-colors hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)]" data-astro-prefetch
             >Blog</a
           >
-          <a
-            href="/projects"
-            class="block text-sm font-medium uppercase tracking-[0.2em] transition-colors hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)]"
-            data-astro-prefetch>Projects</a
-          >
+
           <a href="/about" class="block text-sm font-medium uppercase tracking-[0.2em] transition-colors hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)]" data-astro-prefetch
             >About</a
           >
-          <a
-            href="/resume"
-            class="block text-sm font-medium uppercase tracking-[0.2em] transition-colors hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)]"
-            data-astro-prefetch>Resume</a
-          >
+
         </div>
       </div>
     </nav>
@@ -232,9 +217,9 @@ const {
             <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Navigate</p>
             <div class="flex flex-wrap gap-3">
               <a class="transition-colors hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)]" href="/blog">Blog</a>
-              <a class="transition-colors hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)]" href="/projects">Projects</a>
+
               <a class="transition-colors hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)]" href="/about">About</a>
-              <a class="transition-colors hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)]" href="/resume">Resume</a>
+
             </div>
           </div>
           <div class="space-y-2">
