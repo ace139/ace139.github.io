@@ -35,4 +35,4 @@ Subscribe to "Stochastic Musings" - Notes on product intuition, engineering syst
 
 ---
 
-This site is built with Astro, optimized for performance and accessibility. Last updated: 2025-11-29
+This site is built with Astro, optimized for performance and accessibility. Last updated: 2026-01-23

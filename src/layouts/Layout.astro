@@ -2,6 +2,8 @@
 import ScriptOptimizer from '../components/ScriptOptimizer.astro';
 import PostHog from '../components/posthog.astro';
 import { ClientRouter } from 'astro:transitions';
+import { getImage } from 'astro:assets';
+import avatar from '../images/avatar.jpg';
 import '@fontsource/playfair-display';
 import '@fontsource/playfair-display/400-italic.css';
 import '@fontsource/roboto-slab';
@@ -21,6 +23,13 @@ const {
   substack = false, // Enable only on pages that need it
   socialEmbed = false, // Enable only on pages that need it
 } = Astro.props;
+
+// Generate optimized image for preloading on homepage
+const preloadImage = Astro.url.pathname === '/' ? await getImage({
+  src: avatar,
+  width: 256,
+  format: 'webp'
+}) : null;
 ---
 
 <!doctype html>
@@ -89,22 +98,16 @@ const {
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
 
-    <!-- Only preload profile images on homepage -->
-    {
-      Astro.url.pathname === '/' && (
-        <>
-          <link
-            rel="preload"
-            fetchpriority="high"
-            as="image"
-            type="image/webp"
-            href="/images/profile-128.webp"
-            imagesrcset="/images/profile-128.webp 1x, /images/profile-256.webp 2x"
-            imagesizes="128px"
-          />
-        </>
-      )
-    }
+    <!-- Preload profile image on homepage using Astro's optimized image -->
+    {preloadImage && (
+      <link
+        rel="preload"
+        fetchpriority="high"
+        as="image"
+        type="image/webp"
+        href={preloadImage.src}
+      />
+    )}
 
     <!-- Optimize third-party scripts -->
     <ScriptOptimizer analytics={analytics} substack={substack} socialEmbed={socialEmbed} />

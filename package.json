@@ -5,7 +5,7 @@
   "scripts": {
     "predev": "node scripts/sync-public-env.js",
     "prestart": "node scripts/sync-public-env.js",
-    "prebuild": "node scripts/sync-public-env.js && node scripts/optimize-images.js && node scripts/generate-llms-txt.js",
+    "prebuild": "node scripts/sync-public-env.js && node scripts/generate-llms-txt.js",
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
@@ -24,14 +24,13 @@
     "@fontsource/playfair-display": "^5.2.8",
     "@fontsource/plus-jakarta-sans": "^5.2.8",
     "@fontsource/roboto-slab": "^5.2.8",
-    "astro": "^5.15.9",
+    "astro": "^6.0.0-beta.3",
     "date-fns": "^4.1.0",
-    "rehype-mermaid": "^3.0.0",
-    "sharp": "^0.33.5"
+    "rehype-mermaid": "^3.0.0"
   },
   "devDependencies": {
-    "@astrojs/mdx": "^4.3.11",
-    "@astrojs/sitemap": "^3.6.0",
+    "@astrojs/mdx": "^4.3.13",
+    "@astrojs/sitemap": "^3.7.0",
     "@tailwindcss/cli": "^4.1.17",
     "@tailwindcss/vite": "^4.1.17",
     "@types/node": "^22.13.4",

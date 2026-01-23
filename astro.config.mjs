@@ -30,9 +30,6 @@ export default defineConfig({
       reportCompressedSize: true,
       assetsInlineLimit: 4096,
       rollupOptions: {}
-    },
-    optimizeDeps: {
-      exclude: ['@astrojs/image', 'sharp']
     }
   },
   markdown: {

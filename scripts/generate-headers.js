@@ -1,5 +1,5 @@
 /**
- * This script generates a _headers file for GitHub Pages with cache control directives
+ * This script generates a _headers file for Cloudflare Pages with cache control directives
  * for different types of static assets.
  */
 
@@ -31,10 +31,6 @@ const headersContent = `# Cache static assets
   Access-Control-Allow-Origin: *
   Access-Control-Allow-Methods: GET
   Access-Control-Allow-Headers: Content-Type
-/images/profile-256.webp
-  Cache-Control: public, max-age=2592000
-/images/profile-128.webp
-  Cache-Control: public, max-age=2592000
 
 # CORS headers for all font files
 /fonts/*
