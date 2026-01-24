@@ -24,8 +24,9 @@
     "@fontsource/playfair-display": "^5.2.8",
     "@fontsource/plus-jakarta-sans": "^5.2.8",
     "@fontsource/roboto-slab": "^5.2.8",
-    "astro": "^6.0.0-beta.3",
+    "astro": "6.0.0-beta.3",
     "date-fns": "^4.1.0",
+    "gsap": "^3.14.2",
     "rehype-mermaid": "^3.0.0"
   },
   "devDependencies": {

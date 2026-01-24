@@ -15,7 +15,15 @@ const __dirname = path.dirname(__filename);
 const distDir = path.join(__dirname, '../dist');
 
 // Create the _headers file content
-const headersContent = `# Cache static assets
+const headersContent = `# Security headers
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+# Cache static assets
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
@@ -89,6 +97,10 @@ const headersContent = `# Cache static assets
 `;
 
 // Write the _headers file to the dist directory
-fs.writeFileSync(path.join(distDir, '_headers'), headersContent);
-
-console.log('Generated _headers file with cache control directives');
+try {
+  fs.writeFileSync(path.join(distDir, '_headers'), headersContent);
+  console.log('Generated _headers file with cache control directives');
+} catch (err) {
+  console.error('Failed to write _headers:', err.message);
+  process.exit(1);
+}

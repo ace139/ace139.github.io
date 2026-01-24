@@ -146,7 +146,11 @@ const llmsTxtContent = generateLLMsTxt();
 const publicDir = path.join(__dirname, '../public');
 const llmsTxtPath = path.join(publicDir, 'llms.txt');
 
-fs.writeFileSync(llmsTxtPath, llmsTxtContent, 'utf-8');
-
-console.log('✓ Generated llms.txt');
-console.log(`  Location: ${llmsTxtPath}`);
+try {
+  fs.writeFileSync(llmsTxtPath, llmsTxtContent, 'utf-8');
+  console.log('✓ Generated llms.txt');
+  console.log(`  Location: ${llmsTxtPath}`);
+} catch (err) {
+  console.error('Failed to write llms.txt:', err.message);
+  process.exit(1);
+}

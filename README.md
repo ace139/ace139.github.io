@@ -1,6 +1,6 @@
 # Personal Portfolio Website
 
-A modern, responsive personal portfolio website built with Astro 5, TailwindCSS, and TypeScript. Features dark mode support, dynamic social media links, and a clean, minimalist design with optimized performance.
+A modern, responsive personal portfolio website built with Astro 6 (beta), TailwindCSS, and TypeScript. Uses Bun as the package manager and runtime. Features dark mode support, dynamic social media links, and a clean, minimalist design with optimized performance. Deployed on Cloudflare Pages.
 
 ## 🌟 Features
 
@@ -14,7 +14,7 @@ A modern, responsive personal portfolio website built with Astro 5, TailwindCSS,
 - 🧩 **MDX Support**: Write content in `.mdx`, import images, and embed components
 - 🐟 **Mermaid Diagrams**: Enabled using `rehype-mermaid` in Markdown
 - ⚡ **Performance**: Minimal JS, code-splitting, responsive images
-- 📦 **Caching & Headers**: Netlify headers auto-generated after build
+- 📦 **Caching & Headers**: Cloudflare Pages with optimized caching
 - 🛠 **Type Safety**: TypeScript across content & components
 
 ## 🏗 Architecture
@@ -47,7 +47,6 @@ graph TD
 │   └── favicon.svg
 ├── scripts/
 │   ├── optimize-images.js        # prebuild image optimization
-│   ├── generate-headers.js       # postbuild Netlify _headers
 │   └── fix-fonts.js
 ├── src/
 │   ├── components/
@@ -73,7 +72,6 @@ graph TD
 │   │   ├── projects/[...slug].astro
 │   │   └── tags/[tag].astro
 ├── astro.config.mjs
-├── netlify.toml
 ├── tailwind.config.mjs
 ├── package.json
 └── README.md
@@ -91,7 +89,7 @@ graph TD
 2. **Install dependencies**
 
    ```bash
-   npm install
+   bun install
    ```
 
 3. **Configure social media links**
@@ -110,7 +108,7 @@ graph TD
 
 4. **Start development server**
    ```bash
-   npm run dev
+   bun run dev
    ```
 
 ## 📈 Analytics (PostHog)
@@ -136,7 +134,7 @@ Quick start:
    PUBLIC_POSTHOG_KEY=phc_XXXXXXXXXXXXXXXXXXXXXXXX
    PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
    ```
-2) Run `npm run dev` and open the site. Events are enabled in dev for easy testing.
+2) Run `bun run dev` and open the site. Events are enabled in dev for easy testing.
 3) Deploy and set the same env variables in your hosting UI.
 
 Notes:
@@ -218,7 +216,7 @@ Notes:
 - Multiple sizes for responsive images (1x and 2x)
   - Proper width and height attributes to prevent layout shifts
   - Lazy loading for off-screen images
-  - Sharp-powered image processing
+  - Astro's built-in image optimization
 - Automated optimization script
 
 ## 📝 Content Authoring (Blog & Projects with MDX)
@@ -284,13 +282,10 @@ Content lives in `src/content/blog/` and `src/content/projects/`, defined by `sr
 
 ```bash
 # Optimize images
-node scripts/optimize-images.js
-
-# Analyze bundle
-npm run analyze
+bun run scripts/optimize-images.js
 
 # Build with optimizations
-npm run build
+bun run build
 ```
 
 ### Performance Monitoring
@@ -303,16 +298,13 @@ npm run build
 ### Debug Tools
 
 ```bash
-# View optimization metrics
-npm run analyze
-
 # Check bundle sizes
-npm run build -- --debug
+bun run build -- --debug
 ```
 
 ## 📦 Caching & Headers
 
-Implemented via generated Netlify headers and hashed filenames:
+Implemented via Cloudflare Pages caching and hashed filenames:
 
 - __Hashed assets__: `/assets/*` immutable for 1 year
 - __Bundled JS__: `/chunks/*.js` and `/entry.*.js` immutable for 1 year
@@ -320,11 +312,9 @@ Implemented via generated Netlify headers and hashed filenames:
 - __HTML__: `max-age=0, must-revalidate`
 
 How it works:
-- `scripts/generate-headers.js` writes `dist/_headers` in `postbuild`
+- Cloudflare Pages automatically handles caching for static assets
 - Filenames include content hashes per `astro.config.mjs` rollup output settings
-
-Modify headers:
-- Edit `scripts/generate-headers.js`, rebuild. The old root `_headers` file was removed in favor of generated headers.
+- Custom headers can be configured via `_headers` file or Cloudflare dashboard
 
 ## 🐛 Browser Console Error Prevention
 
@@ -403,17 +393,17 @@ The website is designed to prevent common browser console errors:
 
 | Command                           | Action                                      |
 | :-------------------------------- | :------------------------------------------ |
-| `npm install`                     | Installs dependencies                       |
-| `npm run dev`                     | Starts local dev server at `localhost:4321` |
-| `npm run build`                   | Build your production site to `./dist/`     |
-| `npm run preview`                 | Preview your build locally before deploying |
-| `node scripts/optimize-images.js` | Optimize and convert images                 |
+| `bun install`                     | Installs dependencies                       |
+| `bun run dev`                     | Starts local dev server at `localhost:4321` |
+| `bun run build`                   | Build your production site to `./dist/`     |
+| `bun run preview`                 | Preview your build locally before deploying |
+| `bun run scripts/optimize-images.js` | Optimize and convert images              |
 
 ## 🚀 Deployment
 
-- Hosted on Netlify. Build command: `npm run build`; publish directory: `dist/`.
-- Postbuild generates `dist/_headers` for caching (`scripts/generate-headers.js`).
-- For local preview: `npm run preview`.
+- Hosted on Cloudflare Pages. Build command: `bun run build`; publish directory: `dist/`.
+- Cloudflare Pages automatically handles caching and CDN distribution.
+- For local preview: `bun run preview`.
 
 ## 📊 Performance Metrics
 
@@ -457,16 +447,18 @@ The website is designed to prevent common browser console errors:
 
 ### Dependencies
 
-- Core: `astro`, `@astrojs/tailwind`, `sharp`, `rehype-mermaid`, `date-fns`
+- Core: `astro` (6.x beta), `@astrojs/tailwind`, `@astrojs/cloudflare`, `rehype-mermaid`, `date-fns`
 - Dev: `@astrojs/mdx`, ESLint/Prettier toolchain, TailwindCSS
+- Runtime: Bun (package manager and runtime)
 - See `package.json` for exact versions.
 
 ### Performance Features
 
-- **Astro**: Static site generator
+- **Astro 6 (beta)**: Static site generator with improved performance
 - **TailwindCSS**: Utility-first CSS framework
 - **TypeScript**: Type safety
-- **Sharp**: Image optimization
+- **Bun**: Fast JavaScript runtime and package manager
+- **Cloudflare Pages**: Edge deployment with global CDN
 
 ### Optimization Configuration
 
