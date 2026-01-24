@@ -8,78 +8,143 @@ const projects = await getCollection('projects');
 projects.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 ---
 
-<Layout title="Projects | Soumyo Dey">
-  <main class="space-y-12 pt-24">
-    <section class="reveal rounded-[28px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] px-6 py-10 shadow-card dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.92)]">
-      <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Build log</p>
-      <h1 class="mt-4 text-4xl font-serif font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">Selected projects</h1>
-      <p class="mt-4 max-w-2xl text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
+<Layout title="Work | Soumyo Dey">
+  <main class="space-y-12">
+    <!-- Header Section -->
+    <section class="gsap-fade-up">
+      <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-dark)]">Build log</p>
+      <h1 class="mt-4 text-4xl font-semibold text-[var(--color-text-dark)] sm:text-5xl">Selected Work</h1>
+      <p class="mt-4 max-w-2xl text-lg text-[var(--color-text-secondary-dark)]">
         Experiments, shipping stories, and products that bend AI, strategy, and delightful UI into something useful.
       </p>
     </section>
 
-    <div class="grid gap-8 md:grid-cols-2">
+    <!-- Projects Grid -->
+    <div class="grid gap-8 md:grid-cols-2" data-animate-stagger>
       {
         projects.map((project) => (
-          <div class="reveal group relative flex flex-col rounded-[28px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] p-6 shadow-card transition-all duration-300 hover:-translate-y-2 hover:bg-white hover:shadow-[0_20px_50px_rgba(15,23,42,0.12)] dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.85)]">
+          <article
+            class="project-card group relative flex flex-col rounded-2xl border border-[var(--color-border-dark)] bg-[var(--color-surface-dark)] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-accent)]/30"
+            data-animate-item
+          >
             {project.data.heroImage && (
-              <ResponsiveImage
-                src={project.data.heroImage}
-                alt={project.data.title}
-                class="mb-4 h-48 w-full rounded-2xl object-cover"
-                loading="lazy"
-                sizes="(min-width: 768px) 50vw, 100vw"
-              />
+              <div class="relative mb-6 overflow-hidden rounded-xl">
+                <ResponsiveImage
+                  src={project.data.heroImage}
+                  alt={project.data.title}
+                  class="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                  sizes="(min-width: 768px) 50vw, 100vw"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-[var(--color-surface-dark)]/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              </div>
             )}
-            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">{project.data.date?.toLocaleDateString?.() ?? 'Project'}</p>
-            <h2 class="mb-3 text-2xl font-serif font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">{project.data.title}</h2>
-            <p class="mb-4 flex-grow text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">{project.data.description}</p>
 
-            <div class="mb-4">{project.data.tags && <Tags tags={project.data.tags} />}</div>
+            <div class="flex flex-col flex-grow">
+              <p class="text-xs font-medium uppercase tracking-[0.2em] text-[var(--color-muted-dark)]">
+                {project.data.date?.toLocaleDateString?.('en-US', { year: 'numeric', month: 'short' }) ?? 'Project'}
+              </p>
+              <h2 class="mt-2 text-xl font-semibold text-[var(--color-text-dark)] transition-colors group-hover:text-[var(--color-accent)]">
+                {project.data.title}
+              </h2>
+              <p class="mt-3 flex-grow text-[var(--color-text-secondary-dark)] leading-relaxed">
+                {project.data.description}
+              </p>
 
-            <div class="mt-auto flex flex-wrap gap-3">
-              {project.data.github && (
-                <a
-                  href={project.data.github}
-                  class="inline-flex items-center rounded-full border border-[var(--color-border-light)]/80 px-4 py-2 text-sm font-semibold text-[var(--color-text-light)] transition-colors hover:border-transparent hover:bg-[var(--color-primary-light)]/10 hover:text-[var(--color-primary-light)] dark:border-[var(--color-border-dark)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-primary-dark)]/15 dark:hover:text-[var(--color-primary-dark)]"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                  </svg>
-                  GitHub
-                </a>
+              {project.data.tags && (
+                <div class="mt-4">
+                  <Tags tags={project.data.tags} />
+                </div>
               )}
-              {project.data.demo && (
+
+              <div class="mt-6 flex flex-wrap items-center gap-3 pt-4 border-t border-[var(--color-border-dark)]/50">
+                {project.data.github && (
+                  <a
+                    href={project.data.github}
+                    class="inline-flex items-center gap-2 rounded-full border border-[var(--color-border-dark)] px-4 py-2 text-sm font-medium text-[var(--color-text-secondary-dark)] transition-all hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)]"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                    </svg>
+                    Code
+                  </a>
+                )}
+                {project.data.demo && (
+                  <a
+                    href={project.data.demo}
+                    class="inline-flex items-center gap-2 rounded-full border border-[var(--color-border-dark)] px-4 py-2 text-sm font-medium text-[var(--color-text-secondary-dark)] transition-all hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)]"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                    Demo
+                  </a>
+                )}
                 <a
-                  href={project.data.demo}
-                  class="inline-flex items-center rounded-full border border-[var(--color-border-light)]/80 px-4 py-2 text-sm font-semibold text-[var(--color-text-light)] transition-colors hover:border-transparent hover:bg-[var(--color-primary-light)]/10 hover:text-[var(--color-primary-light)] dark:border-[var(--color-border-dark)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-primary-dark)]/15 dark:hover:text-[var(--color-primary-dark)]"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={`/projects/${project.id}`}
+                  class="ml-auto inline-flex items-center gap-1 text-sm font-medium text-[var(--color-accent)] transition-all hover:gap-2"
+                  data-astro-prefetch
                 >
-                  <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                    />
+                  View Details
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
-                  Live Demo
                 </a>
-              )}
-              <a
-                href={`/projects/${project.id}`}
-                class="ml-auto inline-flex items-center text-sm font-semibold text-[var(--color-primary-light)] transition-colors hover:text-[var(--color-primary-light-hover)] dark:text-[var(--color-primary-dark)] dark:hover:text-[var(--color-primary-dark-hover)]"
-                data-astro-prefetch
-              >
-                Learn More →
-              </a>
+              </div>
             </div>
-          </div>
+          </article>
         ))
       }
     </div>
   </main>
 </Layout>
+
+<style>
+  /* Light mode overrides */
+  :global(html.light) .project-card {
+    background: var(--color-surface-light);
+    border-color: var(--color-border-light);
+  }
+
+  :global(html.light) .project-card:hover {
+    border-color: var(--color-primary-light);
+  }
+
+  :global(html.light) .project-card h2 {
+    color: var(--color-text-light);
+  }
+
+  :global(html.light) .project-card:hover h2 {
+    color: var(--color-primary-light);
+  }
+
+  :global(html.light) .project-card p {
+    color: var(--color-text-secondary-light);
+  }
+
+  :global(html.light) section h1 {
+    color: var(--color-text-light);
+  }
+
+  :global(html.light) section p {
+    color: var(--color-text-secondary-light);
+  }
+
+  :global(html.light) .project-card a {
+    color: var(--color-text-secondary-light);
+    border-color: var(--color-border-light);
+  }
+
+  :global(html.light) .project-card a:hover {
+    color: var(--color-primary-light);
+    border-color: var(--color-primary-light);
+  }
+
+  :global(html.light) .project-card a[href^="/projects/"] {
+    color: var(--color-primary-light);
+  }
+</style>

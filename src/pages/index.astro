@@ -1,100 +1,353 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { socials } from '../config/socials';
-import SocialIcons from '../components/SocialIcons.astro';
 import { Picture } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import avatar from '../images/avatar.jpg';
+
+// Get latest blog posts
+const allPosts = await getCollection('blog');
+const latestPosts = allPosts
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 3);
+
+// Get projects if available
+const allProjects = await getCollection('projects').catch(() => []);
+const featuredProjects = allProjects.slice(0, 3);
 ---
 
 <Layout title="Soumyo Dey">
-  <main class="space-y-16">
-    <section class="reveal relative isolate overflow-hidden rounded-[28px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] px-4 py-16 text-center shadow-soft dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.92)] sm:px-6">
-      <div class="pointer-events-none absolute inset-x-0 -top-32 h-[420px] bg-[radial-gradient(circle_at_top,rgba(76,95,215,0.35),transparent_65%)] dark:bg-[radial-gradient(circle_at_top,rgba(142,162,255,0.35),transparent_60%)]" aria-hidden="true"></div>
-      <div class="relative mx-auto flex max-w-3xl flex-col items-center gap-10">
-        <p class="inline-flex items-center gap-3 rounded-full border border-[var(--color-border-light)]/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:border-[var(--color-border-dark)] dark:text-[var(--color-muted-dark)]">
-          Tech • Data & AI Products • Stories
-        </p>
-        <div class="relative">
-          <div class="gradient-ring absolute inset-0 rounded-full opacity-70 blur-[60px]"></div>
-          <div class="relative mx-auto h-32 w-32 rounded-full border-4 border-[var(--color-surface-light)] shadow-card dark:border-[rgba(19,26,42,0.92)]">
-            <Picture
-              src={avatar}
-              widths={[128, 256]}
-              sizes="128px"
-              formats={['avif', 'webp', 'jpeg']}
-              alt="Profile"
-              loading="eager"
-              fetchpriority="high"
-              class="h-full w-full rounded-full object-cover"
-            />
-          </div>
+  <!-- Hero Section -->
+  <section class="relative -mx-4 -mt-24 min-h-screen overflow-hidden px-4 pt-24 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+    <!-- Hero background glow -->
+    <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      <div
+        class="absolute left-1/2 top-1/4 h-[600px] w-[600px] -translate-x-1/2 rounded-full opacity-40 blur-[100px]"
+        style="background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%);"
+      ></div>
+      <div
+        class="absolute bottom-0 right-0 h-[400px] w-[400px] rounded-full opacity-30 blur-[80px]"
+        style="background: radial-gradient(circle, rgba(251, 113, 133, 0.15) 0%, transparent 70%);"
+      ></div>
+    </div>
+
+    <div class="relative flex min-h-[calc(100vh-6rem)] flex-col items-center justify-center py-20">
+      <!-- Eyebrow -->
+      <div class="gsap-fade-up mb-8">
+        <span class="inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.25em] text-[var(--color-muted-dark)]">
+          <span class="h-px w-8 bg-[var(--color-border-dark)]"></span>
+          Tech · AI · Product · Stories
+          <span class="h-px w-8 bg-[var(--color-border-dark)]"></span>
+        </span>
+      </div>
+
+      <!-- Avatar with glow ring -->
+      <div class="gsap-fade-up relative mb-10">
+        <div class="absolute -inset-4 rounded-full bg-gradient-to-r from-[var(--color-accent)] via-[var(--color-coral)] to-[var(--color-accent)] opacity-20 blur-2xl"></div>
+        <div class="relative h-32 w-32 overflow-hidden rounded-full border-2 border-[var(--color-border-dark)] shadow-lg">
+          <Picture
+            src={avatar}
+            widths={[128, 256]}
+            sizes="128px"
+            formats={['avif', 'webp', 'jpeg']}
+            alt="Soumyo Dey"
+            loading="eager"
+            fetchpriority="high"
+            class="h-full w-full object-cover"
+          />
         </div>
-        <div class="space-y-5">
-          <h1 class="text-4xl font-serif font-semibold tracking-tight text-[var(--color-text-light)] dark:text-[var(--color-text-dark)] sm:text-5xl">
-            Soumyo Dey
-          </h1>
-          <p class="text-lg text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
-            Tech, AI & data products, and the stories picked up along the way
+      </div>
+
+      <!-- Hero title -->
+      <div class="mb-6 text-center">
+        <h1
+          id="hero-title"
+          class="display-heading text-[var(--text-hero)] font-normal tracking-tight text-[var(--color-text-dark)]"
+          style="font-size: clamp(3rem, 8vw + 1rem, 7rem); line-height: 1;"
+        >
+          <span class="gsap-fade-up inline-block">Soumyo</span>
+          <span class="gsap-fade-up inline-block">Dey</span>
+        </h1>
+      </div>
+
+      <!-- Tagline -->
+      <p
+        class="gsap-fade-up mx-auto mb-12 max-w-xl text-center text-lg leading-relaxed text-[var(--color-text-secondary-dark)] sm:text-xl"
+      >
+        Building products at the intersection of technology, data, and human insight.
+        <span class="text-[var(--color-accent)]">20+ years</span> of stories along the way.
+      </p>
+
+      <!-- CTAs -->
+      <div class="gsap-fade-up flex flex-col gap-4 sm:flex-row">
+        <a
+          href="/projects"
+          class="btn btn-primary"
+          data-astro-prefetch
+        >
+          View my work
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </a>
+        <a
+          href="/blog"
+          class="btn btn-secondary"
+          data-astro-prefetch
+        >
+          Read my writing
+        </a>
+      </div>
+
+      <!-- Scroll indicator -->
+      <div class="gsap-fade-up absolute bottom-8 left-1/2 -translate-x-1/2">
+        <div class="flex flex-col items-center gap-2 text-[var(--color-muted-dark)]">
+          <span class="text-xs uppercase tracking-widest">Scroll</span>
+          <div class="h-8 w-px animate-pulse bg-gradient-to-b from-[var(--color-muted-dark)] to-transparent"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Preview Section -->
+  <section class="section-spacing">
+    <div class="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
+      <!-- Text content -->
+      <div class="reveal">
+        <div class="section-header">
+          <p class="section-eyebrow">About</p>
+          <h2 class="section-title">Building at the edge of what's possible</h2>
+        </div>
+        <div class="space-y-4 text-[var(--color-text-secondary-dark)]">
+          <p>
+            I've spent two decades building products that sit at the intersection of technology, data, and human insight.
+            From early-stage startups to scaled platforms, I've learned that the best products emerge from deep
+            understanding—of users, systems, and the messy reality between them.
+          </p>
+          <p>
+            Currently, I'm exploring how AI is reshaping the way we work, create, and make decisions.
+            I write about product intuition, engineering systems, and signals from the AI landscape.
           </p>
         </div>
-        <div class="flex flex-col items-center gap-3">
-          <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Connect</p>
-          <div class="flex flex-wrap justify-center gap-4">
-            {socials.map((social) => <SocialIcons {...social} />)}
-          </div>
-        </div>
-        <div class="flex w-full flex-col gap-4 sm:flex-row sm:justify-center">
+        <div class="mt-8">
           <a
-            href="/blog"
-            class="inline-flex items-center justify-center rounded-full bg-[var(--color-primary-light)] px-6 py-3 text-base font-semibold text-white shadow-button transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:bg-[var(--color-primary-light-hover)] hover:shadow-[0_20px_40px_rgba(76,95,215,0.4)] dark:bg-[var(--color-primary-dark)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-primary-dark-hover)]"
+            href="/about"
+            class="group inline-flex items-center gap-2 text-sm font-medium uppercase tracking-wider text-[var(--color-accent)] transition-colors hover:text-[var(--color-accent-glow)]"
+            data-astro-prefetch
           >
-            Explore writing
-          </a>
-          <a
-            href="#newsletter-section"
-            class="inline-flex items-center justify-center rounded-full border border-[var(--color-border-light)] bg-white/70 px-6 py-3 text-base font-semibold text-[var(--color-text-light)] transition-colors hover:border-transparent hover:bg-[var(--color-primary-light)]/10 hover:text-[var(--color-primary-light)] dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.7)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-primary-dark)]/15 dark:hover:text-[var(--color-primary-dark)]"
-          >
-            Come along for the ride!
+            Learn more about me
+            <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
           </a>
         </div>
       </div>
+
+      <!-- Stats/highlights card -->
+      <div class="reveal">
+        <div class="card-gradient p-8">
+          <div class="grid gap-8 sm:grid-cols-2">
+            <div>
+              <div class="mb-2 text-3xl font-semibold text-[var(--color-text-dark)]">20+</div>
+              <div class="text-sm text-[var(--color-muted-dark)]">Years building products</div>
+            </div>
+            <div>
+              <div class="mb-2 text-3xl font-semibold text-[var(--color-text-dark)]">AI/ML</div>
+              <div class="text-sm text-[var(--color-muted-dark)]">Data & Intelligence focus</div>
+            </div>
+            <div>
+              <div class="mb-2 text-3xl font-semibold text-[var(--color-text-dark)]">0→1</div>
+              <div class="text-sm text-[var(--color-muted-dark)]">Startup to scale experience</div>
+            </div>
+            <div>
+              <div class="mb-2 text-3xl font-semibold text-[var(--color-text-dark)]">Writing</div>
+              <div class="text-sm text-[var(--color-muted-dark)]">Sharing lessons learned</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Work Section -->
+  {featuredProjects.length > 0 && (
+    <section class="section-spacing border-t border-[var(--color-border-dark)]/30">
+      <div class="section-header reveal">
+        <p class="section-eyebrow">Selected Work</p>
+        <h2 class="section-title">Things I've built</h2>
+        <p class="section-description">
+          A selection of projects that showcase my approach to product and technology.
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3" data-animate-stagger>
+        {featuredProjects.map((project) => (
+          <a
+            href={`/projects/${project.id}`}
+            class="card-hover group block"
+            data-animate-item
+            data-astro-prefetch
+          >
+            {project.data.heroImage && (
+              <div class="mb-4 aspect-video overflow-hidden rounded-xl bg-[var(--color-surface-dark)]">
+                <Picture
+                  src={project.data.heroImage}
+                  widths={[400, 800]}
+                  sizes="(max-width: 768px) 100vw, 400px"
+                  formats={['avif', 'webp', 'jpeg']}
+                  alt={project.data.title}
+                  class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+            )}
+            <h3 class="mb-2 text-lg font-semibold text-[var(--color-text-dark)] transition-colors group-hover:text-[var(--color-accent)]">
+              {project.data.title}
+            </h3>
+            <p class="mb-4 text-sm text-[var(--color-text-secondary-dark)] line-clamp-2">
+              {project.data.description}
+            </p>
+            {project.data.tags && (
+              <div class="flex flex-wrap gap-2">
+                {project.data.tags.slice(0, 3).map((tag: string) => (
+                  <span class="pill text-xs">{tag}</span>
+                ))}
+              </div>
+            )}
+          </a>
+        ))}
+      </div>
+
+      <div class="mt-12 text-center reveal">
+        <a
+          href="/projects"
+          class="btn btn-secondary"
+          data-astro-prefetch
+        >
+          View all work
+        </a>
+      </div>
     </section>
+  )}
 
-    <!-- Newsletter section with premium morphing interaction -->
-    <section
-      id="newsletter-section"
-      class="relative isolate overflow-hidden rounded-[28px] border border-[var(--color-border-light)] bg-[var(--color-surface-light)] p-8 shadow-card transition-all duration-500 dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.92)] sm:p-12 lg:bg-transparent lg:border-none lg:shadow-none lg:px-0 lg:py-16"
-    >
-      <!-- Background Gradient -->
-      <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(76,95,215,0.08),transparent_50%)] dark:bg-[radial-gradient(circle_at_top_right,rgba(142,162,255,0.05),transparent_50%)] lg:hidden"></div>
+  <!-- Field Notes (Blog) Section -->
+  <section class="section-spacing border-t border-[var(--color-border-dark)]/30">
+    <div class="section-header reveal">
+      <p class="section-eyebrow">Field Notes</p>
+      <h2 class="section-title">Recent writing</h2>
+      <p class="section-description">
+        Observations, frameworks, and lessons from building products.
+      </p>
+    </div>
 
-      <div class="relative mx-auto text-center">
-        <!-- Initial Content -->
-        <div id="newsletter-content" class="mx-auto max-w-2xl transition-all duration-500">
-          <p class="mb-6 text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Newsletter</p>
-          <h2 class="mb-4 text-3xl font-serif font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)] sm:text-4xl">Stochastic Musings</h2>
-          <p class="mb-8 text-lg text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
-            Notes on product intuition, engineering systems, and signals from the AI landscape. Exploring the messy reality of how intelligence meets execution.
+    <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3" data-animate-stagger>
+      {latestPosts.map((post) => (
+        <a
+          href={`/blog/${post.id}`}
+          class="card-hover group block"
+          data-animate-item
+          data-astro-prefetch
+        >
+          {post.data.heroImage && (
+            <div class="mb-4 aspect-video overflow-hidden rounded-xl bg-[var(--color-surface-dark)]">
+              <Picture
+                src={post.data.heroImage}
+                widths={[400, 800]}
+                sizes="(max-width: 768px) 100vw, 400px"
+                formats={['avif', 'webp', 'jpeg']}
+                alt={post.data.title}
+                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+            </div>
+          )}
+          <div class="mb-3 flex items-center gap-3 text-xs text-[var(--color-muted-dark)]">
+            <time datetime={post.data.date}>
+              {new Date(post.data.date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+              })}
+            </time>
+          </div>
+          <h3 class="mb-2 text-lg font-semibold text-[var(--color-text-dark)] transition-colors group-hover:text-[var(--color-accent)]">
+            {post.data.title}
+          </h3>
+          {post.data.description && (
+            <p class="mb-4 text-sm text-[var(--color-text-secondary-dark)] line-clamp-2">
+              {post.data.description}
+            </p>
+          )}
+          {post.data.tags && (
+            <div class="flex flex-wrap gap-2">
+              {post.data.tags.slice(0, 3).map((tag: string) => (
+                <span class="pill text-xs">#{tag}</span>
+              ))}
+            </div>
+          )}
+        </a>
+      ))}
+    </div>
+
+    <div class="mt-12 text-center reveal">
+      <a
+        href="/blog"
+        class="btn btn-secondary"
+        data-astro-prefetch
+      >
+        Read all posts
+      </a>
+    </div>
+  </section>
+
+  <!-- Newsletter Section -->
+  <section
+    id="newsletter-section"
+    class="section-spacing border-t border-[var(--color-border-dark)]/30"
+  >
+    <div class="reveal mx-auto max-w-2xl text-center">
+      <div class="card-gradient relative overflow-hidden p-8 sm:p-12">
+        <!-- Gradient overlay -->
+        <div
+          class="pointer-events-none absolute inset-0 opacity-50"
+          style="background: radial-gradient(ellipse at top, rgba(139, 92, 246, 0.1) 0%, transparent 60%);"
+        ></div>
+
+        <div class="relative">
+          <p class="section-eyebrow mb-4">Newsletter</p>
+          <h2 class="display-heading mb-4 text-3xl text-[var(--color-text-dark)] sm:text-4xl">
+            Stochastic Musings
+          </h2>
+          <p class="mx-auto mb-8 max-w-md text-[var(--color-text-secondary-dark)]">
+            Notes on product intuition, engineering systems, and signals from the AI landscape.
+            Exploring the messy reality of how intelligence meets execution.
           </p>
-          
+
           <div class="flex flex-col items-center gap-4">
             <a
               href="https://stochasticmusings.substack.com/"
               target="_blank"
               rel="noopener noreferrer"
-              class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[var(--color-primary-light)] px-8 py-3 text-base font-semibold text-white shadow-button transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:bg-[var(--color-primary-light-hover)] hover:shadow-[0_20px_40px_rgba(76,95,215,0.4)] dark:bg-[var(--color-primary-dark)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-primary-dark-hover)]"
+              class="btn btn-primary"
             >
-              <span class="relative z-10 flex items-center gap-2">
-                Subscribe for free
-                <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </span>
+              Subscribe for free
+              <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
             </a>
-            <p class="text-sm text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">
+            <p class="text-sm text-[var(--color-muted-dark)]">
               Join the journey · No spam, ever.
             </p>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* Line clamp utility */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

@@ -12,6 +12,7 @@ import '../styles/globals.css';
 
 interface Props {
   title: string;
+  description?: string;
   analytics?: boolean;
   substack?: boolean;
   socialEmbed?: boolean;
@@ -19,9 +20,10 @@ interface Props {
 
 const {
   title,
-  analytics = false, // Disabled by default since not using Plausible
-  substack = false, // Enable only on pages that need it
-  socialEmbed = false, // Enable only on pages that need it
+  description = 'Tech, AI & data products, and the stories picked up along the way',
+  analytics = false,
+  substack = false,
+  socialEmbed = false,
 } = Astro.props;
 
 // Generate optimized image for preloading on homepage
@@ -30,53 +32,62 @@ const preloadImage = Astro.url.pathname === '/' ? await getImage({
   width: 256,
   format: 'webp'
 }) : null;
+
+const navLinks = [
+  { href: '/blog', label: 'Blog' },
+  { href: '/projects', label: 'Work' },
+  { href: '/about', label: 'About' },
+];
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Theme boot is inlined above; external preload removed -->
     <meta charset="UTF-8" />
-    <meta name="description" content="Tech, AI & data products, and the stories picked up along the way" />
+    <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width" />
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#0a0d14" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#fafbfc" media="(prefers-color-scheme: light)" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
 
-    
-    
+    <!-- Theme initialization (dark mode default, prevents FOUC) -->
     <script is:inline>
-      function getTheme() {
-        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-          return localStorage.getItem('theme');
-        }
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      (function() {
+        function getTheme() {
+          // Check localStorage first
+          if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+            return localStorage.getItem('theme');
+          }
+          // Default to dark mode (Editorial Noir)
           return 'dark';
         }
-        return 'light';
-      }
 
-      function applyTheme() {
-        const theme = getTheme();
-        if (theme === 'dark') {
-          document.documentElement.classList.add('dark');
-        } else {
-          document.documentElement.classList.remove('dark');
+        function applyTheme() {
+          const theme = getTheme();
+          const html = document.documentElement;
+
+          // Remove both classes first
+          html.classList.remove('light', 'dark');
+
+          // Add the appropriate class (we use 'light' class for light mode,
+          // default/no class or 'dark' class for dark mode)
+          if (theme === 'light') {
+            html.classList.add('light');
+          }
+          // Dark is default, no class needed but we add it for consistency
         }
-      }
 
-      applyTheme();
-      document.addEventListener('astro:after-swap', applyTheme);
+        applyTheme();
+        document.addEventListener('astro:after-swap', applyTheme);
+      })();
     </script>
 
-    <!-- Font optimization removed (using globals.css) -->
-
-    <!-- Inline critical CSS -->
+    <!-- Critical inline styles -->
     <style is:inline>
-      /* Add only the most critical styles here */
       :root {
-        color-scheme: light dark;
-        font-family: var(--font-sans);
+        color-scheme: dark light;
       }
       body {
         margin: 0;
@@ -88,17 +99,18 @@ const preloadImage = Astro.url.pathname === '/' ? await getImage({
         max-width: 100%;
         height: auto;
       }
+      /* Prevent FOUC */
+      html:not(.light) body {
+        background: #0a0d14;
+        color: #f0f2f7;
+      }
+      html.light body {
+        background: #fafbfc;
+        color: #111827;
+      }
     </style>
 
-    <!-- Theme boot is inlined above; external preload removed -->
-
-    <!-- Cache control -->
-    <!-- Cache is controlled via HTTP headers; meta tag removed -->
-
-    <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
-
-    <!-- Preload profile image on homepage using Astro's optimized image -->
+    <!-- Preload profile image on homepage -->
     {preloadImage && (
       <link
         rel="preload"
@@ -109,43 +121,85 @@ const preloadImage = Astro.url.pathname === '/' ? await getImage({
       />
     )}
 
-    <!-- Optimize third-party scripts -->
     <ScriptOptimizer analytics={analytics} substack={substack} socialEmbed={socialEmbed} />
     <PostHog />
     <ClientRouter />
   </head>
-  <body class="min-h-screen bg-[var(--color-bg-light)] font-sans text-[var(--color-text-light)] antialiased transition-colors duration-300 dark:bg-[var(--color-bg-dark)] dark:text-[var(--color-text-dark)]">
-    <!-- Noise Texture Overlay -->
-    <div class="pointer-events-none fixed inset-0 z-[100] opacity-[0.03] mix-blend-overlay" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');"></div>
-    <nav
-      class="fixed left-0 right-0 top-0 z-50 border-b border-transparent bg-[rgba(245,247,251,0.9)] shadow-[0_6px_25px_rgba(15,23,42,0.08)] backdrop-blur-xl transition-colors duration-300 dark:border-[rgba(255,255,255,0.08)] dark:bg-[rgba(15,23,42,0.85)]"
+
+  <body class="min-h-screen bg-[var(--color-bg-dark)] font-sans text-[var(--color-text-dark)] antialiased transition-colors duration-300">
+    <!-- Ambient glow effect -->
+    <div
+      class="pointer-events-none fixed inset-0 z-0"
+      aria-hidden="true"
     >
-      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <!-- Top glow -->
+      <div
+        class="absolute -top-1/2 left-1/4 h-[800px] w-[800px] rounded-full opacity-30 blur-[120px]"
+        style="background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);"
+      ></div>
+      <!-- Bottom right glow -->
+      <div
+        class="absolute -bottom-1/4 right-0 h-[600px] w-[600px] rounded-full opacity-20 blur-[100px]"
+        style="background: radial-gradient(circle, rgba(251, 113, 133, 0.1) 0%, transparent 70%);"
+      ></div>
+    </div>
+
+    <!-- Noise texture overlay -->
+    <div
+      class="pointer-events-none fixed inset-0 z-[100] opacity-[0.015] mix-blend-overlay"
+      aria-hidden="true"
+      style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');"
+    ></div>
+
+    <!-- Navigation -->
+    <nav
+      id="main-nav"
+      class="fixed left-0 right-0 top-0 z-50 border-b border-[var(--color-border-dark)]/50 transition-all duration-300"
+    >
+      <div
+        id="nav-backdrop"
+        class="absolute inset-0 backdrop-blur-xl"
+      ></div>
+
+      <div class="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 items-center justify-between">
-          <a href="/" class="text-lg font-semibold tracking-tight text-[var(--color-text-light)] transition-colors hover:text-[var(--color-primary-light)] dark:text-[var(--color-text-dark)] dark:hover:text-[var(--color-primary-dark)]"
-            >Soumyo Dey</a
+          <!-- Logo -->
+          <a
+            href="/"
+            class="group relative z-10 flex items-center gap-2 text-lg font-semibold tracking-tight text-[var(--color-text-dark)] transition-colors"
+            data-astro-prefetch
           >
+            <span class="transition-colors group-hover:text-[var(--color-accent)]">Soumyo Dey</span>
+          </a>
 
-          <div class="hidden items-center gap-8 text-sm font-medium uppercase tracking-[0.2em] text-[var(--color-muted-light)] md:flex">
-            <a href="/blog" class="transition-colors hover:text-[var(--color-primary-light)] dark:text-[var(--color-muted-dark)] dark:hover:text-[var(--color-primary-dark)]" data-astro-prefetch
-              >Blog</a
-            >
-
-            <a href="/about" class="transition-colors hover:text-[var(--color-primary-light)] dark:text-[var(--color-muted-dark)] dark:hover:text-[var(--color-primary-dark)]" data-astro-prefetch
-              >About</a
-            >
-
+          <!-- Desktop Navigation -->
+          <div class="hidden items-center gap-8 md:flex">
+            {navLinks.map((link) => (
+              <a
+                href={link.href}
+                class="relative py-1 text-sm font-medium uppercase tracking-[0.15em] text-[var(--color-muted-dark)] transition-colors hover:text-[var(--color-text-dark)]"
+                data-astro-prefetch
+              >
+                <span class="relative">
+                  {link.label}
+                  <span class="absolute -bottom-1 left-0 h-0.5 w-0 bg-[var(--color-accent)] transition-all duration-300 group-hover:w-full"></span>
+                </span>
+              </a>
+            ))}
           </div>
 
-          <div class="flex items-center gap-4">
+          <!-- Right side controls -->
+          <div class="flex items-center gap-3">
+            <!-- Theme Toggle -->
             <button
               id="theme-toggle"
-              aria-label="Toggle dark mode"
-              class="rounded-full border border-[var(--color-border-light)]/70 p-2 text-[var(--color-muted-light)] transition-colors hover:border-transparent hover:bg-[var(--color-primary-light)]/10 hover:text-[var(--color-primary-light)] focus:outline-none dark:border-[var(--color-border-dark)] dark:text-[var(--color-muted-dark)] dark:hover:bg-[var(--color-primary-dark)]/15 dark:hover:text-[var(--color-primary-dark)]"
+              aria-label="Toggle theme"
+              class="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border-dark)] text-[var(--color-muted-dark)] transition-all hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
             >
+              <!-- Moon icon (shown in dark mode, click to go light) -->
               <svg
-                id="theme-toggle-dark-icon"
-                class="block h-5 w-5 dark:hidden"
+                id="theme-icon-dark"
+                class="h-5 w-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -153,13 +207,14 @@ const preloadImage = Astro.url.pathname === '/' ? await getImage({
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  stroke-width="2"
+                  stroke-width="1.5"
                   d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
                 ></path>
               </svg>
+              <!-- Sun icon (shown in light mode, click to go dark) -->
               <svg
-                id="theme-toggle-light-icon"
-                class="hidden h-5 w-5 dark:block"
+                id="theme-icon-light"
+                class="hidden h-5 w-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -167,130 +222,302 @@ const preloadImage = Astro.url.pathname === '/' ? await getImage({
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  stroke-width="2"
+                  stroke-width="1.5"
                   d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
                 ></path>
               </svg>
             </button>
-            <button id="menu-toggle" aria-label="Toggle navigation menu" class="rounded-full border border-[var(--color-border-light)]/70 p-2 text-[var(--color-text-light)] transition-colors hover:border-transparent hover:bg-[var(--color-primary-light)]/10 hover:text-[var(--color-primary-light)] focus:outline-none md:hidden dark:border-[var(--color-border-dark)] dark:text-[var(--color-text-dark)] dark:hover:bg-[var(--color-primary-dark)]/15 dark:hover:text-[var(--color-primary-dark)]">
+
+            <!-- Mobile Menu Toggle -->
+            <button
+              id="menu-toggle"
+              aria-label="Toggle navigation menu"
+              class="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border-dark)] text-[var(--color-text-dark)] transition-all hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] md:hidden"
+            >
               <svg
-                class="h-6 w-6"
+                id="menu-icon-open"
+                class="h-5 w-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
               >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4 6h16M4 12h16M4 18h16"></path>
+                  stroke-width="1.5"
+                  d="M4 6h16M4 12h16M4 18h16"
+                ></path>
+              </svg>
+              <svg
+                id="menu-icon-close"
+                class="hidden h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
               </svg>
             </button>
           </div>
         </div>
       </div>
 
+      <!-- Mobile Menu -->
       <div
         id="mobile-menu"
-        class="hidden border-t border-[var(--color-border-light)] bg-[var(--color-surface-light)]/95 text-[var(--color-muted-light)] shadow-card dark:border-[var(--color-border-dark)] dark:bg-[var(--color-surface-dark)] dark:text-[var(--color-muted-dark)] md:hidden"
+        class="hidden border-t border-[var(--color-border-dark)]/50 md:hidden"
       >
-        <div class="flex flex-col space-y-4 px-4 py-2">
-          <a href="/blog" class="block text-sm font-medium uppercase tracking-[0.2em] transition-colors hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)]" data-astro-prefetch
-            >Blog</a
-          >
-
-          <a href="/about" class="block text-sm font-medium uppercase tracking-[0.2em] transition-colors hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)]" data-astro-prefetch
-            >About</a
-          >
-
+        <div
+          class="bg-[var(--color-bg-dark)]/95 px-4 py-6 backdrop-blur-xl"
+        >
+          <div class="flex flex-col space-y-4">
+            {navLinks.map((link) => (
+              <a
+                href={link.href}
+                class="text-base font-medium uppercase tracking-[0.15em] text-[var(--color-muted-dark)] transition-colors hover:text-[var(--color-accent)]"
+                data-astro-prefetch
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </nav>
 
-    <div class="mx-auto max-w-6xl px-4 pt-24 pb-16 sm:px-6 lg:px-8">
-      <slot />
-    </div>
+    <!-- Main Content -->
+    <main class="relative z-10">
+      <div class="mx-auto max-w-6xl px-4 pt-24 pb-16 sm:px-6 lg:px-8">
+        <slot />
+      </div>
+    </main>
 
-    <footer class="border-t border-[var(--color-border-light)]/70 bg-[var(--color-surface-light)]/70 py-12 text-[var(--color-muted-light)] dark:border-[var(--color-border-dark)] dark:bg-[rgba(19,26,42,0.8)] dark:text-[var(--color-muted-dark)]">
-      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div class="grid gap-10 text-sm sm:grid-cols-2 lg:grid-cols-3">
+    <!-- Footer -->
+    <footer class="relative z-10 border-t border-[var(--color-border-dark)]/50">
+      <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+        <div class="grid gap-12 md:grid-cols-3">
+          <!-- Brand -->
           <div>
-            <p class="mb-3 text-base font-semibold text-[var(--color-text-light)] dark:text-[var(--color-text-dark)]">Soumyo Dey</p>
-            <p>Tech, AI & data products, and the stories picked up along the way.</p>
+            <p class="mb-3 text-lg font-semibold text-[var(--color-text-dark)]">Soumyo Dey</p>
+            <p class="text-sm leading-relaxed text-[var(--color-muted-dark)]">
+              Tech, AI & data products, and the stories picked up along the way.
+            </p>
           </div>
-          <div class="space-y-2">
-            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Navigate</p>
-            <div class="flex flex-wrap gap-3">
-              <a class="transition-colors hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)]" href="/blog">Blog</a>
 
-              <a class="transition-colors hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)]" href="/about">About</a>
-
+          <!-- Navigation -->
+          <div>
+            <p class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-muted-dark)]">Navigate</p>
+            <div class="flex flex-col gap-2">
+              {navLinks.map((link) => (
+                <a
+                  href={link.href}
+                  class="text-sm text-[var(--color-text-secondary-dark)] transition-colors hover:text-[var(--color-accent)]"
+                >
+                  {link.label}
+                </a>
+              ))}
             </div>
           </div>
-          <div class="space-y-2">
-            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-light)] dark:text-[var(--color-muted-dark)]">Elsewhere</p>
-            <p>Email: <a class="underline decoration-dashed underline-offset-4 hover:text-[var(--color-primary-light)] dark:hover:text-[var(--color-primary-dark)]" href="mailto:heysoumyo@gmail.com">heysoumyo@gmail.com</a></p>
+
+          <!-- Connect -->
+          <div>
+            <p class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-muted-dark)]">Connect</p>
+            <div class="flex flex-col gap-2 text-sm">
+              <a
+                href="mailto:heysoumyo@gmail.com"
+                class="text-[var(--color-text-secondary-dark)] transition-colors hover:text-[var(--color-accent)]"
+              >
+                heysoumyo@gmail.com
+              </a>
+              <div class="mt-2 flex gap-4">
+                <a
+                  href="https://x.com/soumyo"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-[var(--color-muted-dark)] transition-colors hover:text-[var(--color-accent)]"
+                  aria-label="X (Twitter)"
+                >
+                  <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                </a>
+                <a
+                  href="https://linkedin.com/in/soumyo-dey"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-[var(--color-muted-dark)] transition-colors hover:text-[var(--color-accent)]"
+                  aria-label="LinkedIn"
+                >
+                  <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                  </svg>
+                </a>
+                <a
+                  href="https://github.com/ace139"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-[var(--color-muted-dark)] transition-colors hover:text-[var(--color-accent)]"
+                  aria-label="GitHub"
+                >
+                  <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
-        <p class="mt-10 text-center text-xs uppercase tracking-[0.3em]">© {new Date().getFullYear()} Soumyo Dey · Crafted with coffee & code.</p>
+
+        <div class="mt-12 border-t border-[var(--color-border-dark)]/30 pt-8 text-center">
+          <p class="text-xs uppercase tracking-[0.2em] text-[var(--color-muted-dark)]">
+            © {new Date().getFullYear()} Soumyo Dey · Crafted with care
+          </p>
+        </div>
       </div>
     </footer>
 
+    <!-- Scripts -->
     <script>
-      // Simple mobile menu toggle
+      // Mobile menu toggle
       function setupMobileMenu() {
         const menuToggle = document.getElementById('menu-toggle');
         const mobileMenu = document.getElementById('mobile-menu');
+        const menuIconOpen = document.getElementById('menu-icon-open');
+        const menuIconClose = document.getElementById('menu-icon-close');
 
-        if (menuToggle && mobileMenu) {
-          // Remove old listener if it exists to prevent duplicates (though Astro swaps body, so usually fine)
-          const newToggle = menuToggle.cloneNode(true);
+        if (menuToggle && mobileMenu && menuIconOpen && menuIconClose) {
+          const newToggle = menuToggle.cloneNode(true) as HTMLElement;
           if (menuToggle.parentNode) {
             menuToggle.parentNode.replaceChild(newToggle, menuToggle);
           }
-          
+
           newToggle.addEventListener('click', () => {
+            const isOpen = !mobileMenu.classList.contains('hidden');
             mobileMenu.classList.toggle('hidden');
+
+            const openIcon = newToggle.querySelector('#menu-icon-open');
+            const closeIcon = newToggle.querySelector('#menu-icon-close');
+
+            if (openIcon && closeIcon) {
+              if (isOpen) {
+                openIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+              } else {
+                openIcon.classList.add('hidden');
+                closeIcon.classList.remove('hidden');
+              }
+            }
           });
         }
       }
-      
-      // Initial load
+
       setupMobileMenu();
-      
-      // View Transitions load
       document.addEventListener('astro:page-load', setupMobileMenu);
     </script>
-    <!-- Theme boot is inlined above; external preload removed -->
+
     <script>
-      // Interactive toggle logic
+      // Theme toggle logic
       function setupThemeToggle() {
         const themeToggle = document.getElementById('theme-toggle');
-        
+        const darkIcon = document.getElementById('theme-icon-dark');
+        const lightIcon = document.getElementById('theme-icon-light');
+
+        function updateIcons() {
+          const isLight = document.documentElement.classList.contains('light');
+          if (darkIcon && lightIcon) {
+            if (isLight) {
+              darkIcon.classList.add('hidden');
+              lightIcon.classList.remove('hidden');
+            } else {
+              darkIcon.classList.remove('hidden');
+              lightIcon.classList.add('hidden');
+            }
+          }
+        }
+
+        // Initial icon state
+        updateIcons();
+
         if (themeToggle) {
-          // Clone to remove old listeners in case of re-execution
-          const newToggle = themeToggle.cloneNode(true);
+          const newToggle = themeToggle.cloneNode(true) as HTMLElement;
           themeToggle.parentNode?.replaceChild(newToggle, themeToggle);
 
           newToggle.addEventListener('click', () => {
-            const element = document.documentElement;
-            element.classList.toggle('dark');
+            const html = document.documentElement;
+            const isCurrentlyLight = html.classList.contains('light');
 
-            const isDark = element.classList.contains('dark');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            if (isCurrentlyLight) {
+              html.classList.remove('light');
+              localStorage.setItem('theme', 'dark');
+            } else {
+              html.classList.add('light');
+              localStorage.setItem('theme', 'light');
+            }
+
+            // Update icons after toggle
+            const updatedDarkIcon = newToggle.querySelector('#theme-icon-dark');
+            const updatedLightIcon = newToggle.querySelector('#theme-icon-light');
+
+            if (updatedDarkIcon && updatedLightIcon) {
+              if (html.classList.contains('light')) {
+                updatedDarkIcon.classList.add('hidden');
+                updatedLightIcon.classList.remove('hidden');
+              } else {
+                updatedDarkIcon.classList.remove('hidden');
+                updatedLightIcon.classList.add('hidden');
+              }
+            }
+          });
+        }
+      }
+
+      setupThemeToggle();
+      document.addEventListener('astro:page-load', setupThemeToggle);
+    </script>
+
+    <script>
+      // GSAP and ScrollTrigger setup
+      import { initGSAP, cleanupAnimations, animateStaggerGroup, animateFadeUp, prefersReducedMotion } from '../scripts/gsap-setup';
+
+      function setupAnimations() {
+        initGSAP();
+
+        // Animate reveal elements if not using reduced motion
+        if (!prefersReducedMotion()) {
+          // Fade up animations for elements with .gsap-fade-up class
+          const fadeUpElements = document.querySelectorAll('.gsap-fade-up');
+          if (fadeUpElements.length > 0) {
+            animateFadeUp(fadeUpElements, { stagger: 0.1 });
+          }
+
+          // Stagger animations for card grids
+          const cardGrids = document.querySelectorAll('[data-animate-stagger]');
+          cardGrids.forEach((grid) => {
+            animateStaggerGroup(grid, '[data-animate-item]', { stagger: 0.15 });
           });
         }
       }
 
       // Initial load
-      setupThemeToggle();
+      setupAnimations();
 
-      // Re-run on view transition
-      document.addEventListener('astro:page-load', setupThemeToggle);
+      // View Transitions
+      document.addEventListener('astro:page-load', () => {
+        cleanupAnimations();
+        setupAnimations();
+      });
+
+      // Cleanup on navigation
+      document.addEventListener('astro:before-swap', cleanupAnimations);
     </script>
+
     <script>
-      // Scroll Reveal Logic
+      // Scroll reveal fallback for non-GSAP elements
       function setupScrollReveal() {
         const observerOptions = {
           root: null,
@@ -302,7 +529,7 @@ const preloadImage = Astro.url.pathname === '/' ? await getImage({
           entries.forEach(entry => {
             if (entry.isIntersecting) {
               entry.target.classList.add('reveal-visible');
-              observer.unobserve(entry.target); // Only animate once
+              observer.unobserve(entry.target);
             }
           });
         }, observerOptions);
@@ -312,28 +539,81 @@ const preloadImage = Astro.url.pathname === '/' ? await getImage({
         });
       }
 
-      // Initial load
       setupScrollReveal();
-
-      // View Transitions load
       document.addEventListener('astro:page-load', setupScrollReveal);
     </script>
   </body>
 </html>
 
 <style is:global>
-  :root {
-    color-scheme: light dark;
+  /* Nav backdrop - dark mode default */
+  #nav-backdrop {
+    background: linear-gradient(180deg, rgba(10, 13, 20, 0.95) 0%, rgba(10, 13, 20, 0.8) 100%);
   }
 
-  html {
-    font-family: system-ui, sans-serif;
-    scroll-behavior: smooth;
+  /* Light mode body overrides */
+  html.light body {
+    background: var(--color-bg-light);
+    color: var(--color-text-light);
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    html {
-      scroll-behavior: auto;
-    }
+  /* Light mode nav */
+  html.light #main-nav {
+    border-color: var(--color-border-light);
+  }
+
+  html.light #nav-backdrop {
+    background: linear-gradient(180deg, rgba(250, 251, 252, 0.95) 0%, rgba(250, 251, 252, 0.8) 100%);
+  }
+
+  html.light #main-nav a {
+    color: var(--color-muted-light);
+  }
+
+  html.light #main-nav a:hover {
+    color: var(--color-text-light);
+  }
+
+  html.light #main-nav a[href="/"] {
+    color: var(--color-text-light);
+  }
+
+  html.light #main-nav a[href="/"]:hover {
+    color: var(--color-primary-light);
+  }
+
+  html.light #theme-toggle,
+  html.light #menu-toggle {
+    border-color: var(--color-border-light);
+    color: var(--color-muted-light);
+  }
+
+  html.light #theme-toggle:hover,
+  html.light #menu-toggle:hover {
+    border-color: var(--color-primary-light);
+    color: var(--color-primary-light);
+  }
+
+  /* Light mode ambient glow - more subtle */
+  html.light .pointer-events-none.fixed.inset-0.z-0 > div {
+    opacity: 0.1 !important;
+  }
+
+  /* Light mode footer */
+  html.light footer {
+    border-color: var(--color-border-light);
+  }
+
+  html.light footer p,
+  html.light footer a {
+    color: var(--color-text-secondary-light);
+  }
+
+  html.light footer a:hover {
+    color: var(--color-primary-light);
+  }
+
+  html.light footer .text-xs.uppercase {
+    color: var(--color-muted-light);
   }
 </style>

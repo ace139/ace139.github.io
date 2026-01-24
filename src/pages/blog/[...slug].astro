@@ -12,8 +12,15 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+
+// Merge frontmatter with a default reading time
+// (actual reading time can be calculated if needed)
+const frontmatter = {
+  ...post.data,
+  readingTime: 5, // Default estimate
+};
 ---
 
-<BlogPost frontmatter={post.data}>
+<BlogPost frontmatter={frontmatter}>
   <Content />
 </BlogPost>

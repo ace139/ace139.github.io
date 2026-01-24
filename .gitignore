@@ -27,3 +27,7 @@ pnpm-debug.log*
 # Playwright artifacts (if tests are added later)
 playwright-report/
 test-results/
+.playwright-mcp/
+
+# Development artifacts
+plans/
