@@ -111,6 +111,65 @@ graph TD
    bun run dev
    ```
 
+## 🔄 Development Workflow
+
+This site uses GitHub Actions for CI/CD with automatic preview and production deployments.
+
+### Making Changes
+
+1. **Create a feature branch**
+   ```bash
+   git checkout main && git pull origin main
+   git checkout -b feat/your-feature-name
+   ```
+
+2. **Make your changes and test locally**
+   ```bash
+   bun run dev          # Start dev server at localhost:4321
+   bun run build        # Verify production build works
+   bun run preview      # Preview production build locally
+   ```
+
+3. **Commit and push**
+   ```bash
+   git add .
+   git commit -m "feat: description of your changes"
+   git push -u origin feat/your-feature-name
+   ```
+
+4. **Create a Pull Request**
+   ```bash
+   gh pr create --title "feat: your feature" --body "Description of changes"
+   ```
+
+   Or create via GitHub web interface.
+
+### Preview Deployments
+
+When you open a PR, GitHub Actions automatically:
+- Builds the site
+- Deploys to a preview URL (e.g., `feat-your-feature.soumyo-com.pages.dev`)
+- Comments the preview URL on your PR
+
+This lets you (and reviewers) see changes before merging.
+
+### Production Deployment
+
+When a PR is merged to `main`:
+- GitHub Actions automatically builds and deploys to production
+- Site is live at https://soumyo.com within ~1 minute
+- Deployment URL is shown in the GitHub Actions summary
+
+### Quick Reference
+
+| Action | Command |
+|--------|---------|
+| Start dev server | `bun run dev` |
+| Build for production | `bun run build` |
+| Preview production build | `bun run preview` |
+| Create PR | `gh pr create` |
+| Check deployment status | `gh run list` |
+
 ## 📈 Analytics (PostHog)
 
 This site uses PostHog for privacy-friendly web analytics.
@@ -401,9 +460,38 @@ The website is designed to prevent common browser console errors:
 
 ## 🚀 Deployment
 
-- Hosted on Cloudflare Pages. Build command: `bun run build`; publish directory: `dist/`.
-- Cloudflare Pages automatically handles caching and CDN distribution.
-- For local preview: `bun run preview`.
+### CI/CD Pipeline
+
+This site uses GitHub Actions for automated deployments:
+
+- **Production** (`.github/workflows/deploy.yml`): Triggers on push to `main`
+- **Preview** (`.github/workflows/preview.yml`): Triggers on pull requests
+
+Both workflows:
+1. Set up Node.js 22 and Bun 1.1.42
+2. Install dependencies with caching
+3. Build the site (`bun run build`)
+4. Deploy to Cloudflare Pages
+
+### Infrastructure
+
+- **Hosting**: Cloudflare Pages
+- **CDN**: Cloudflare's global edge network
+- **Build**: `bun run build` → `dist/` directory
+
+### Security Headers
+
+The site includes security headers via `scripts/generate-headers.js`:
+- Content-Security-Policy (CSP)
+- Strict-Transport-Security (HSTS)
+- X-Content-Type-Options, X-Frame-Options, Referrer-Policy
+
+### Manual Deployment (if needed)
+
+```bash
+bun run build
+npx wrangler pages deploy dist --project-name=soumyo-com
+```
 
 ## 📊 Performance Metrics
 
@@ -514,10 +602,13 @@ module.exports = {
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+2. Create your feature branch (`git checkout -b feat/amazing-feature`)
+3. Make changes and test locally (`bun run dev`, `bun run build`)
+4. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+5. Push to the branch (`git push origin feat/amazing-feature`)
+6. Open a Pull Request - a preview deployment will be created automatically
+
+See [Development Workflow](#-development-workflow) for detailed instructions.
 
 ## 📝 License
 
