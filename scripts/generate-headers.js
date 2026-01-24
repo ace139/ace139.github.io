@@ -15,55 +15,43 @@ const __dirname = path.dirname(__filename);
 const distDir = path.join(__dirname, '../dist');
 
 // Create the _headers file content
-const headersContent = `# Security headers
-/*
-  X-Content-Type-Options: nosniff
-  X-Frame-Options: DENY
-  X-XSS-Protection: 1; mode=block
-  Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: camera=(), microphone=(), geolocation=()
-
-# Cache static assets
-/assets/*
-  Cache-Control: public, max-age=31536000, immutable
-
-# Cache hashed JS bundles
-/chunks/*.js
-  Cache-Control: public, max-age=31536000, immutable
-/entry.*.js
-  Cache-Control: public, max-age=31536000, immutable
-
-# Specific files flagged in PageSpeed Insights
+// Order: Most specific paths first, global rules last
+const headersContent = `# Font files - specific file first, then directory
 /fonts/inter-var.woff2
   Cache-Control: public, max-age=31536000, immutable
   Access-Control-Allow-Origin: *
   Access-Control-Allow-Methods: GET
   Access-Control-Allow-Headers: Content-Type
 
-# CORS headers for all font files
 /fonts/*
+  Cache-Control: public, max-age=31536000, immutable
   Access-Control-Allow-Origin: *
   Access-Control-Allow-Methods: GET
   Access-Control-Allow-Headers: Content-Type
 
-# Cache fonts
+# Hashed assets (immutable - Astro outputs to /_astro/)
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Legacy hashed JS bundles
+/chunks/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+# Font files at root level
 /*.woff2
   Cache-Control: public, max-age=31536000, immutable
   Access-Control-Allow-Origin: *
-  Access-Control-Allow-Methods: GET
-  Access-Control-Allow-Headers: Content-Type
 /*.woff
   Cache-Control: public, max-age=31536000, immutable
   Access-Control-Allow-Origin: *
-  Access-Control-Allow-Methods: GET
-  Access-Control-Allow-Headers: Content-Type
 /*.ttf
   Cache-Control: public, max-age=31536000, immutable
   Access-Control-Allow-Origin: *
-  Access-Control-Allow-Methods: GET
-  Access-Control-Allow-Headers: Content-Type
 
-# Cache images
+# Images - 30 day cache
 /*.jpg
   Cache-Control: public, max-age=2592000
 /*.jpeg
@@ -79,20 +67,22 @@ const headersContent = `# Security headers
 /*.ico
   Cache-Control: public, max-age=2592000
 
-# Cache JS and CSS
-/*.js
-  Cache-Control: public, max-age=2592000, must-revalidate
-/*.css
-  Cache-Control: public, max-age=2592000, must-revalidate
-
-# HTML - short cache time
+# HTML pages - no cache for fresh content
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
+
 /
   Cache-Control: public, max-age=0, must-revalidate
 
-# Everything else
+# Global rules (security headers + default cache)
 /*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://us.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://us.i.posthog.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
   Cache-Control: public, max-age=3600
 `;
 
