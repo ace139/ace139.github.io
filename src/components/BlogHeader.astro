@@ -24,9 +24,9 @@ const { title, subtitle, date, heroImage, readingTime } = Astro.props;
         fetchpriority="high"
         sizes="(min-width: 768px) 768px, 100vw"
       />
-      {/* Gradient overlay for readability */}
-      <div class="absolute inset-0 bg-gradient-to-r from-[var(--color-bg-dark)]/95 via-[var(--color-bg-dark)]/80 to-[var(--color-bg-dark)]/60" />
-      <div class="absolute inset-0 bg-gradient-to-t from-[var(--color-bg-dark)]/90 via-transparent to-transparent" />
+      {/* Gradient overlay for readability - theme-aware */}
+      <div class="hero-overlay-x absolute inset-0" />
+      <div class="hero-overlay-y absolute inset-0" />
     </div>
   ) : (
     <div class="absolute inset-0 bg-[var(--color-surface-dark)]">
@@ -41,8 +41,8 @@ const { title, subtitle, date, heroImage, readingTime } = Astro.props;
   {/* Content */}
   <div class="relative z-10 flex max-w-2xl flex-col items-start">
     {/* Meta info */}
-    <div class="mb-6 flex flex-wrap items-center gap-4 text-xs font-medium uppercase tracking-[0.2em] text-[var(--color-muted-dark)]">
-      <time datetime={date.toISOString()} class="flex items-center gap-2">
+    <div class="hero-meta mb-6 flex flex-wrap items-center gap-3 text-xs font-medium uppercase tracking-[0.2em]">
+      <time datetime={date.toISOString()} class="hero-meta-item flex items-center gap-2">
         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
@@ -54,8 +54,8 @@ const { title, subtitle, date, heroImage, readingTime } = Astro.props;
       </time>
       {readingTime && (
         <>
-          <span class="h-1 w-1 rounded-full bg-[var(--color-muted-dark)]" />
-          <span class="flex items-center gap-2">
+          <span class="hero-meta-separator h-1 w-1 rounded-full" />
+          <span class="hero-meta-item flex items-center gap-2">
             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
@@ -80,25 +80,75 @@ const { title, subtitle, date, heroImage, readingTime } = Astro.props;
 </header>
 
 <style>
+  /* Hero image gradient overlays - subtle dark overlay for both themes */
+  .hero-overlay-x {
+    background: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.40) 0%,
+      rgba(0, 0, 0, 0.25) 50%,
+      rgba(0, 0, 0, 0.15) 100%
+    );
+  }
+
+  .hero-overlay-y {
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.35) 0%,
+      transparent 100%
+    );
+  }
+
+  /* Meta info styling - prominent pill with backdrop */
+  .hero-meta-item {
+    color: rgba(255, 255, 255, 0.95);
+    background: rgba(0, 0, 0, 0.4);
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    backdrop-filter: blur(4px);
+  }
+
+  .hero-meta-separator {
+    background: rgba(255, 255, 255, 0.6);
+  }
+
+  /* Title and subtitle text shadows for better readability */
+  header:has(.hero-overlay-x) h1 {
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  header:has(.hero-overlay-x) p {
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  }
+
   /* Light mode overrides */
   html.light header {
     background: var(--color-surface-light);
   }
 
-  html.light header .absolute.inset-0:not(:has(img)) {
+  /* Fallback background for posts without hero image - exclude overlay elements */
+  html.light header .absolute.inset-0:not(:has(img)):not(.hero-overlay-x):not(.hero-overlay-y) {
     background: var(--color-surface-light);
   }
 
-  html.light header time,
-  html.light header span {
+  /* Light mode text colors for posts without hero image */
+  html.light header:not(:has(.hero-overlay-x)) .hero-meta-item {
     color: var(--color-muted-light);
+    background: transparent;
+    padding: 0;
+    backdrop-filter: none;
   }
 
-  html.light header h1 {
+  html.light header:not(:has(.hero-overlay-x)) .hero-meta-separator {
+    background: var(--color-muted-light);
+  }
+
+  html.light header:not(:has(.hero-overlay-x)) h1 {
     color: var(--color-text-light);
+    text-shadow: none;
   }
 
-  html.light header p {
+  html.light header:not(:has(.hero-overlay-x)) p {
     color: var(--color-text-secondary-light);
+    text-shadow: none;
   }
 </style>
