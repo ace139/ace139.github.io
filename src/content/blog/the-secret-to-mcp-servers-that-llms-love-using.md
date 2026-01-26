@@ -29,6 +29,10 @@ This approach creates technically excellent APIs that LLMs struggle to use effec
 
 When an LLM agent encounters an engineer-designed API toolkit, it experiences friction that human developers never face.
 
+### The Choice Paralysis Problem
+
+LLMs suffer from "long-context degradation"—performance diminishes when presented with too many options. Microsoft's research shows that AI agents actually perform worse when given extensive tool options.
+
 ### The Documentation Mismatch Crisis
 
 Research highlights a critical gap: existing API documentation is "often ambiguous" for LLMs. Human developers can:
