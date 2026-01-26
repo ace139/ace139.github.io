@@ -12,14 +12,15 @@ interface Props {
 const { title, subtitle, date, heroImage, readingTime } = Astro.props;
 ---
 
-<header class="relative mb-12 overflow-hidden rounded-2xl py-10 px-6 sm:py-14 lg:px-12">
+<header class="relative mb-12 overflow-hidden rounded-2xl py-12 px-6 sm:py-20 lg:py-28 lg:px-12 min-h-[360px] sm:min-h-[480px] flex flex-col justify-end">
   {/* Background with hero image or gradient */}
   {heroImage ? (
     <div class="absolute inset-0">
       <ResponsiveImage
         src={heroImage}
         alt=""
-        class="h-full w-full object-cover"
+        class="h-full w-full"
+        imageClass="object-cover object-right"
         loading="eager"
         fetchpriority="high"
         sizes="(min-width: 768px) 768px, 100vw"

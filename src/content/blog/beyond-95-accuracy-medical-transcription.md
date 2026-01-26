@@ -2,7 +2,8 @@
 title: 'Beyond 95% Accuracy'
 subtitle: "What I've Learned Building SoTA Production-Grade Medical Transcription"
 description: 'The engineering lessons from building voice agents for healthcare - where benchmarks fail, context hints unlock accuracy, and your production failures become your most valuable training data'
-date: '2025-01-06'
+date: '2026-01-06'
+heroImage: './beyond-95-accuracy-medical-transcription-hero.png'
 tags: ['ai', 'healthcare', 'speech-recognition', 'machine-learning', 'voice-agents']
 ---
 
