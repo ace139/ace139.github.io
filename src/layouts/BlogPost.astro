@@ -31,11 +31,11 @@ const readingTime = frontmatter.readingTime || 5;
     </div>
 
     <!-- Article Footer -->
-    <footer class="mt-20 border-t border-[var(--color-border-dark)]/30 pt-12">
+    <footer class="mt-20 border-t border-[var(--color-border)]/30 pt-12">
       <div class="flex flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
         <a
           href="/blog"
-          class="group inline-flex items-center gap-2 text-sm font-medium uppercase tracking-[0.15em] text-[var(--color-muted-dark)] transition-colors hover:text-[var(--color-accent)]"
+          class="group inline-flex items-center gap-2 text-sm font-medium uppercase tracking-[0.15em] text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-primary)]"
         >
           <svg class="h-4 w-4 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -45,13 +45,13 @@ const readingTime = frontmatter.readingTime || 5;
 
         <!-- Share Section -->
         <div class="flex items-center gap-4">
-          <span class="text-xs uppercase tracking-[0.15em] text-[var(--color-muted-dark)]">Share</span>
+          <span class="text-xs uppercase tracking-[0.15em] text-[var(--color-text-muted)]">Share</span>
           <div class="flex gap-3">
             <a
               href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(frontmatter.title)}&url=${encodeURIComponent(Astro.url.href)}`}
               target="_blank"
               rel="noopener noreferrer"
-              class="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-border-dark)] text-[var(--color-muted-dark)] transition-all hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)]"
+              class="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-text-muted)] transition-all hover:border-[var(--color-primary)]/50 hover:text-[var(--color-primary)]"
               aria-label="Share on Twitter"
             >
               <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
@@ -62,7 +62,7 @@ const readingTime = frontmatter.readingTime || 5;
               href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(Astro.url.href)}`}
               target="_blank"
               rel="noopener noreferrer"
-              class="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-border-dark)] text-[var(--color-muted-dark)] transition-all hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)]"
+              class="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-text-muted)] transition-all hover:border-[var(--color-primary)]/50 hover:text-[var(--color-primary)]"
               aria-label="Share on LinkedIn"
             >
               <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">

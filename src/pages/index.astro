@@ -33,7 +33,7 @@ const featuredProjects = allProjects.slice(0, 3);
     <div class="relative flex min-h-[calc(100vh-6rem)] flex-col items-center justify-center py-20">
       <!-- Eyebrow -->
       <div class="gsap-fade-up mb-8">
-        <span class="inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.25em] text-[var(--color-muted-dark)]">
+        <span class="inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.25em] text-[var(--color-text-muted)]">
           <span class="h-px w-8 bg-[var(--color-border-dark)]"></span>
           Tech · AI · Product · Stories
           <span class="h-px w-8 bg-[var(--color-border-dark)]"></span>
@@ -43,7 +43,7 @@ const featuredProjects = allProjects.slice(0, 3);
       <!-- Avatar with glow ring -->
       <div class="gsap-fade-up relative mb-10">
         <div class="absolute -inset-4 rounded-full bg-gradient-to-r from-[var(--color-accent)] via-[var(--color-coral)] to-[var(--color-accent)] opacity-20 blur-2xl"></div>
-        <div class="relative h-32 w-32 overflow-hidden rounded-full border-2 border-[var(--color-border-dark)] shadow-lg">
+        <div class="relative h-32 w-32 overflow-hidden rounded-full border-2 border-[var(--color-border)] shadow-lg">
           <Picture
             src={avatar}
             widths={[128, 256]}
@@ -61,7 +61,7 @@ const featuredProjects = allProjects.slice(0, 3);
       <div class="mb-6 text-center">
         <h1
           id="hero-title"
-          class="display-heading text-[var(--text-hero)] font-normal tracking-tight text-[var(--color-text-dark)]"
+          class="display-heading text-[var(--text-hero)] font-normal tracking-tight text-[var(--color-text)]"
           style="font-size: clamp(3rem, 8vw + 1rem, 7rem); line-height: 1;"
         >
           <span class="gsap-fade-up inline-block">Soumyo</span>
@@ -71,7 +71,7 @@ const featuredProjects = allProjects.slice(0, 3);
 
       <!-- Tagline -->
       <p
-        class="gsap-fade-up mx-auto mb-12 max-w-xl text-center text-lg leading-relaxed text-[var(--color-text-secondary-dark)] sm:text-xl"
+        class="gsap-fade-up mx-auto mb-12 max-w-xl text-center text-lg leading-relaxed text-[var(--color-text-secondary)] sm:text-xl"
       >
         Building products at the intersection of technology, data, and human insight.
         <span class="text-[var(--color-accent)]">20+ years</span> of stories along the way.
@@ -100,7 +100,7 @@ const featuredProjects = allProjects.slice(0, 3);
 
       <!-- Scroll indicator -->
       <div class="gsap-fade-up absolute bottom-8 left-1/2 -translate-x-1/2">
-        <div class="flex flex-col items-center gap-2 text-[var(--color-muted-dark)]">
+        <div class="flex flex-col items-center gap-2 text-[var(--color-text-muted)]">
           <span class="text-xs uppercase tracking-widest">Scroll</span>
           <div class="h-8 w-px animate-pulse bg-gradient-to-b from-[var(--color-muted-dark)] to-transparent"></div>
         </div>
@@ -117,7 +117,7 @@ const featuredProjects = allProjects.slice(0, 3);
           <p class="section-eyebrow">About</p>
           <h2 class="section-title">Building at the edge of what's possible</h2>
         </div>
-        <div class="space-y-4 text-[var(--color-text-secondary-dark)]">
+        <div class="space-y-4 text-[var(--color-text-secondary)]">
           <p>
             I've spent two decades building products that sit at the intersection of technology, data, and human insight.
             From early-stage startups to scaled platforms, I've learned that the best products emerge from deep
@@ -147,20 +147,20 @@ const featuredProjects = allProjects.slice(0, 3);
         <div class="card-gradient p-8">
           <div class="grid gap-8 sm:grid-cols-2">
             <div>
-              <div class="mb-2 text-3xl font-semibold text-[var(--color-text-dark)]">20+</div>
-              <div class="text-sm text-[var(--color-muted-dark)]">Years building products</div>
+              <div class="mb-2 text-3xl font-semibold text-[var(--color-text)]">20+</div>
+              <div class="text-sm text-[var(--color-text-muted)]">Years building products</div>
             </div>
             <div>
-              <div class="mb-2 text-3xl font-semibold text-[var(--color-text-dark)]">AI/ML</div>
-              <div class="text-sm text-[var(--color-muted-dark)]">Data & Intelligence focus</div>
+              <div class="mb-2 text-3xl font-semibold text-[var(--color-text)]">AI/ML</div>
+              <div class="text-sm text-[var(--color-text-muted)]">Data & Intelligence focus</div>
             </div>
             <div>
-              <div class="mb-2 text-3xl font-semibold text-[var(--color-text-dark)]">0→1</div>
-              <div class="text-sm text-[var(--color-muted-dark)]">Startup to scale experience</div>
+              <div class="mb-2 text-3xl font-semibold text-[var(--color-text)]">0→1</div>
+              <div class="text-sm text-[var(--color-text-muted)]">Startup to scale experience</div>
             </div>
             <div>
-              <div class="mb-2 text-3xl font-semibold text-[var(--color-text-dark)]">Writing</div>
-              <div class="text-sm text-[var(--color-muted-dark)]">Sharing lessons learned</div>
+              <div class="mb-2 text-3xl font-semibold text-[var(--color-text)]">Writing</div>
+              <div class="text-sm text-[var(--color-text-muted)]">Sharing lessons learned</div>
             </div>
           </div>
         </div>
@@ -170,7 +170,7 @@ const featuredProjects = allProjects.slice(0, 3);
 
   <!-- Featured Work Section -->
   {featuredProjects.length > 0 && (
-    <section class="section-spacing border-t border-[var(--color-border-dark)]/30">
+    <section class="section-spacing border-t border-[var(--color-border)]/30">
       <div class="section-header reveal">
         <p class="section-eyebrow">Selected Work</p>
         <h2 class="section-title">Things I've built</h2>
@@ -188,7 +188,7 @@ const featuredProjects = allProjects.slice(0, 3);
             data-astro-prefetch
           >
             {project.data.heroImage && (
-              <div class="mb-4 aspect-video overflow-hidden rounded-xl bg-[var(--color-surface-dark)]">
+              <div class="mb-4 aspect-video overflow-hidden rounded-xl bg-[var(--color-surface)]">
                 <Picture
                   src={project.data.heroImage}
                   widths={[400, 800]}
@@ -199,10 +199,10 @@ const featuredProjects = allProjects.slice(0, 3);
                 />
               </div>
             )}
-            <h3 class="mb-2 text-lg font-semibold text-[var(--color-text-dark)] transition-colors group-hover:text-[var(--color-accent)]">
+            <h3 class="mb-2 text-lg font-semibold text-[var(--color-text)] transition-colors group-hover:text-[var(--color-accent)]">
               {project.data.title}
             </h3>
-            <p class="mb-4 text-sm text-[var(--color-text-secondary-dark)] line-clamp-2">
+            <p class="mb-4 text-sm text-[var(--color-text-secondary)] line-clamp-2">
               {project.data.description}
             </p>
             {project.data.tags && (
@@ -229,7 +229,7 @@ const featuredProjects = allProjects.slice(0, 3);
   )}
 
   <!-- Field Notes (Blog) Section -->
-  <section class="section-spacing border-t border-[var(--color-border-dark)]/30">
+  <section class="section-spacing border-t border-[var(--color-border)]/30">
     <div class="section-header reveal">
       <p class="section-eyebrow">Field Notes</p>
       <h2 class="section-title">Recent writing</h2>
@@ -247,7 +247,7 @@ const featuredProjects = allProjects.slice(0, 3);
           data-astro-prefetch
         >
           {post.data.heroImage && (
-            <div class="mb-4 aspect-video overflow-hidden rounded-xl bg-[var(--color-surface-dark)]">
+            <div class="mb-4 aspect-video overflow-hidden rounded-xl bg-[var(--color-surface)]">
               <Picture
                 src={post.data.heroImage}
                 widths={[400, 800]}
@@ -258,7 +258,7 @@ const featuredProjects = allProjects.slice(0, 3);
               />
             </div>
           )}
-          <div class="mb-3 flex items-center gap-3 text-xs text-[var(--color-muted-dark)]">
+          <div class="mb-3 flex items-center gap-3 text-xs text-[var(--color-text-muted)]">
             <time datetime={post.data.date}>
               {new Date(post.data.date).toLocaleDateString('en-US', {
                 year: 'numeric',
@@ -267,11 +267,11 @@ const featuredProjects = allProjects.slice(0, 3);
               })}
             </time>
           </div>
-          <h3 class="mb-2 text-lg font-semibold text-[var(--color-text-dark)] transition-colors group-hover:text-[var(--color-accent)]">
+          <h3 class="mb-2 text-lg font-semibold text-[var(--color-text)] transition-colors group-hover:text-[var(--color-accent)]">
             {post.data.title}
           </h3>
           {post.data.description && (
-            <p class="mb-4 text-sm text-[var(--color-text-secondary-dark)] line-clamp-2">
+            <p class="mb-4 text-sm text-[var(--color-text-secondary)] line-clamp-2">
               {post.data.description}
             </p>
           )}
@@ -300,7 +300,7 @@ const featuredProjects = allProjects.slice(0, 3);
   <!-- Newsletter Section -->
   <section
     id="newsletter-section"
-    class="section-spacing border-t border-[var(--color-border-dark)]/30"
+    class="section-spacing border-t border-[var(--color-border)]/30"
   >
     <div class="reveal mx-auto max-w-2xl text-center">
       <div class="card-gradient relative overflow-hidden p-8 sm:p-12">
@@ -312,10 +312,10 @@ const featuredProjects = allProjects.slice(0, 3);
 
         <div class="relative">
           <p class="section-eyebrow mb-4">Newsletter</p>
-          <h2 class="display-heading mb-4 text-3xl text-[var(--color-text-dark)] sm:text-4xl">
+          <h2 class="display-heading mb-4 text-3xl text-[var(--color-text)] sm:text-4xl">
             Stochastic Musings
           </h2>
-          <p class="mx-auto mb-8 max-w-md text-[var(--color-text-secondary-dark)]">
+          <p class="mx-auto mb-8 max-w-md text-[var(--color-text-secondary)]">
             Notes on product intuition, engineering systems, and signals from the AI landscape.
             Exploring the messy reality of how intelligence meets execution.
           </p>
@@ -332,7 +332,7 @@ const featuredProjects = allProjects.slice(0, 3);
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
             </a>
-            <p class="text-sm text-[var(--color-muted-dark)]">
+            <p class="text-sm text-[var(--color-text-muted)]">
               Join the journey · No spam, ever.
             </p>
           </div>

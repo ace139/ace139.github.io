@@ -68,6 +68,33 @@
   /* Primary (adjusted for light mode contrast) */
   --color-primary-light: #7c3aed;
   --color-primary-light-hover: #6d28d9;
+
+  /* ========================================================================
+     SEMANTIC TOKENS (auto-switch with theme)
+     These tokens are used in components and automatically adapt to the theme
+     ======================================================================== */
+
+  /* Backgrounds */
+  --color-bg: var(--color-bg-dark);
+  --color-bg-elevated: var(--color-bg-elevated-dark);
+  --color-surface: var(--color-surface-dark);
+
+  /* Text */
+  --color-text: var(--color-text-dark);
+  --color-text-secondary: var(--color-text-secondary-dark);
+  --color-text-muted: #6b7a8a; /* Improved contrast from #5a6478 - now passes WCAG AA */
+
+  /* Borders */
+  --color-border: var(--color-border-dark);
+
+  /* Brand colors */
+  --color-primary: var(--color-accent);
+  --color-primary-hover: var(--color-accent-glow);
+  --color-secondary: var(--color-coral);
+
+  /* Backwards compatibility aliases */
+  --color-primary-dark: var(--color-accent);
+  --color-primary-dark-hover: var(--color-accent-glow);
 }
 
 /* ==========================================================================
@@ -94,6 +121,21 @@ body {
 .light body {
   background: var(--color-bg-light);
   color: var(--color-text-light);
+}
+
+/* Light mode semantic token overrides */
+.light {
+  --color-bg: var(--color-bg-light);
+  --color-bg-elevated: var(--color-bg-elevated-light);
+  --color-surface: var(--color-surface-light);
+  --color-text: var(--color-text-light);
+  --color-text-secondary: var(--color-text-secondary-light);
+  --color-text-muted: var(--color-muted-light);
+  --color-border: var(--color-border-light);
+  --color-primary: var(--color-primary-light);
+  --color-primary-hover: var(--color-primary-light-hover);
+  --color-primary-dark: var(--color-primary-light);
+  --color-primary-dark-hover: var(--color-primary-light-hover);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -196,6 +238,19 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+
+  /* Light mode gradient variants */
+  .light .gradient-hero {
+    background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 50%, #fb7185 100%);
+  }
+
+  .light .gradient-glow {
+    background: radial-gradient(ellipse at center, rgba(124, 58, 237, 0.08) 0%, transparent 70%);
+  }
+
+  .light .gradient-card {
+    background: linear-gradient(180deg, rgba(124, 58, 237, 0.03) 0%, transparent 100%);
   }
 
   /* Glow effects */

@@ -14,24 +14,24 @@ const { url, title, description, date, tags } = Astro.props;
 ---
 
 <article
-  class="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-white/10 dark:bg-white/5"
+  class="group relative overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
 >
   <div>
     {
       date && (
         <div class="mb-3 flex items-center justify-between">
-          <time datetime={date} class="text-sm font-medium text-gray-500 dark:text-gray-400">
+          <time datetime={date} class="text-sm font-medium text-[var(--color-text-muted)]">
             {format(new Date(date), 'MMMM d, yyyy')}
           </time>
         </div>
       )
     }
-    <h2 class="mb-3 text-2xl font-bold font-serif text-slate-900 group-hover:text-violet-600 dark:text-white dark:group-hover:text-violet-400 transition-colors">
+    <h2 class="mb-3 text-2xl font-bold font-serif text-[var(--color-text)] group-hover:text-[var(--color-primary)] transition-colors">
       <a href={url}>
         {title}
       </a>
     </h2>
-    <p class="mb-4 leading-relaxed text-slate-600 dark:text-slate-400">
+    <p class="mb-4 leading-relaxed text-[var(--color-text-secondary)]">
       {description}
     </p>
     <Tags tags={tags} />

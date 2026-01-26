@@ -21,8 +21,8 @@ const { frontmatter } = Astro.props;
           />
         )
       }
-      <h1 class="mb-4 text-4xl font-bold font-serif text-slate-900 dark:text-white">{frontmatter.title}</h1>
-      <p class="mb-6 text-xl text-slate-600 dark:text-slate-400">
+      <h1 class="mb-4 text-4xl font-bold font-serif text-[var(--color-text)]">{frontmatter.title}</h1>
+      <p class="mb-6 text-xl text-[var(--color-text-secondary)]">
         {frontmatter.description}
       </p>
 
@@ -35,7 +35,7 @@ const { frontmatter } = Astro.props;
           frontmatter.github && (
             <a
               href={frontmatter.github}
-              class="inline-flex items-center gap-2 text-violet-600 hover:text-violet-500"
+              class="inline-flex items-center gap-2 text-[var(--color-primary)] hover:text-[var(--color-primary-hover)]"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -50,7 +50,7 @@ const { frontmatter } = Astro.props;
           frontmatter.demo && (
             <a
               href={frontmatter.demo}
-              class="inline-flex items-center gap-2 text-violet-600 hover:text-violet-500"
+              class="inline-flex items-center gap-2 text-[var(--color-primary)] hover:text-[var(--color-primary-hover)]"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -69,12 +69,12 @@ const { frontmatter } = Astro.props;
       </div>
     </div>
 
-    <div class="prose dark:prose-invert max-w-none">
+    <div class="prose max-w-none">
       <slot />
     </div>
 
-    <div class="mt-12 border-t border-gray-200 pt-8 dark:border-white/10">
-      <a href="/projects" class="inline-flex items-center text-violet-600 hover:text-violet-500">
+    <div class="mt-12 border-t border-[var(--color-border)]/30 pt-8">
+      <a href="/projects" class="inline-flex items-center text-[var(--color-primary)] hover:text-[var(--color-primary-hover)]">
         <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             stroke-linecap="round"
