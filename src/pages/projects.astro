@@ -12,9 +12,9 @@ projects.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).
   <main class="space-y-12">
     <!-- Header Section -->
     <section class="gsap-fade-up">
-      <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-muted-dark)]">Build log</p>
-      <h1 class="mt-4 text-4xl font-semibold text-[var(--color-text-dark)] sm:text-5xl">Selected Work</h1>
-      <p class="mt-4 max-w-2xl text-lg text-[var(--color-text-secondary-dark)]">
+      <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-text-muted)]">Build log</p>
+      <h1 class="mt-4 text-4xl font-semibold text-[var(--color-text)] sm:text-5xl">Selected Work</h1>
+      <p class="mt-4 max-w-2xl text-lg text-[var(--color-text-secondary)]">
         Experiments, shipping stories, and products that bend AI, strategy, and delightful UI into something useful.
       </p>
     </section>
@@ -24,7 +24,7 @@ projects.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).
       {
         projects.map((project) => (
           <article
-            class="project-card group relative flex flex-col rounded-2xl border border-[var(--color-border-dark)] bg-[var(--color-surface-dark)] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-accent)]/30"
+            class="group relative flex flex-col rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-primary)]/30"
             data-animate-item
           >
             {project.data.heroImage && (
@@ -36,18 +36,18 @@ projects.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).
                   loading="lazy"
                   sizes="(min-width: 768px) 50vw, 100vw"
                 />
-                <div class="absolute inset-0 bg-gradient-to-t from-[var(--color-surface-dark)]/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <div class="absolute inset-0 bg-gradient-to-t from-[var(--color-surface)]/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               </div>
             )}
 
             <div class="flex flex-col flex-grow">
-              <p class="text-xs font-medium uppercase tracking-[0.2em] text-[var(--color-muted-dark)]">
+              <p class="text-xs font-medium uppercase tracking-[0.2em] text-[var(--color-text-muted)]">
                 {project.data.date?.toLocaleDateString?.('en-US', { year: 'numeric', month: 'short' }) ?? 'Project'}
               </p>
-              <h2 class="mt-2 text-xl font-semibold text-[var(--color-text-dark)] transition-colors group-hover:text-[var(--color-accent)]">
+              <h2 class="mt-2 text-xl font-semibold text-[var(--color-text)] transition-colors group-hover:text-[var(--color-primary)]">
                 {project.data.title}
               </h2>
-              <p class="mt-3 flex-grow text-[var(--color-text-secondary-dark)] leading-relaxed">
+              <p class="mt-3 flex-grow text-[var(--color-text-secondary)] leading-relaxed">
                 {project.data.description}
               </p>
 
@@ -57,11 +57,11 @@ projects.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).
                 </div>
               )}
 
-              <div class="mt-6 flex flex-wrap items-center gap-3 pt-4 border-t border-[var(--color-border-dark)]/50">
+              <div class="mt-6 flex flex-wrap items-center gap-3 pt-4 border-t border-[var(--color-border)]/50">
                 {project.data.github && (
                   <a
                     href={project.data.github}
-                    class="inline-flex items-center gap-2 rounded-full border border-[var(--color-border-dark)] px-4 py-2 text-sm font-medium text-[var(--color-text-secondary-dark)] transition-all hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)]"
+                    class="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] px-4 py-2 text-sm font-medium text-[var(--color-text-secondary)] transition-all hover:border-[var(--color-primary)]/50 hover:text-[var(--color-primary)]"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -74,7 +74,7 @@ projects.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).
                 {project.data.demo && (
                   <a
                     href={project.data.demo}
-                    class="inline-flex items-center gap-2 rounded-full border border-[var(--color-border-dark)] px-4 py-2 text-sm font-medium text-[var(--color-text-secondary-dark)] transition-all hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)]"
+                    class="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] px-4 py-2 text-sm font-medium text-[var(--color-text-secondary)] transition-all hover:border-[var(--color-primary)]/50 hover:text-[var(--color-primary)]"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -86,7 +86,7 @@ projects.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).
                 )}
                 <a
                   href={`/projects/${project.id}`}
-                  class="ml-auto inline-flex items-center gap-1 text-sm font-medium text-[var(--color-accent)] transition-all hover:gap-2"
+                  class="ml-auto inline-flex items-center gap-1 text-sm font-medium text-[var(--color-primary)] transition-all hover:gap-2"
                   data-astro-prefetch
                 >
                   View Details
@@ -102,49 +102,3 @@ projects.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).
     </div>
   </main>
 </Layout>
-
-<style>
-  /* Light mode overrides */
-  :global(html.light) .project-card {
-    background: var(--color-surface-light);
-    border-color: var(--color-border-light);
-  }
-
-  :global(html.light) .project-card:hover {
-    border-color: var(--color-primary-light);
-  }
-
-  :global(html.light) .project-card h2 {
-    color: var(--color-text-light);
-  }
-
-  :global(html.light) .project-card:hover h2 {
-    color: var(--color-primary-light);
-  }
-
-  :global(html.light) .project-card p {
-    color: var(--color-text-secondary-light);
-  }
-
-  :global(html.light) section h1 {
-    color: var(--color-text-light);
-  }
-
-  :global(html.light) section p {
-    color: var(--color-text-secondary-light);
-  }
-
-  :global(html.light) .project-card a {
-    color: var(--color-text-secondary-light);
-    border-color: var(--color-border-light);
-  }
-
-  :global(html.light) .project-card a:hover {
-    color: var(--color-primary-light);
-    border-color: var(--color-primary-light);
-  }
-
-  :global(html.light) .project-card a[href^="/projects/"] {
-    color: var(--color-primary-light);
-  }
-</style>
