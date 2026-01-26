@@ -39,14 +39,14 @@
   /* Borders */
   --color-border-dark: #252a38;
 
-  /* Accent: Electric Violet */
-  --color-accent: #8b5cf6;
-  --color-accent-glow: #a78bfa;
-  --color-accent-deep: #6d28d9;
+  /* Accent: Rose/Coral (Primary) */
+  --color-accent: #f43f5e;
+  --color-accent-glow: #fb7185;
+  --color-accent-deep: #e11d48;
 
-  /* Accent: Warm Coral (Secondary) */
-  --color-coral: #fb7185;
-  --color-coral-glow: #fda4af;
+  /* Secondary: Warm Amber */
+  --color-coral: #f59e0b;
+  --color-coral-glow: #fbbf24;
 
   /* ========================================================================
      LIGHT MODE COLORS
@@ -66,8 +66,8 @@
   --color-border-light: #e5e7eb;
 
   /* Primary (adjusted for light mode contrast) */
-  --color-primary-light: #7c3aed;
-  --color-primary-light-hover: #6d28d9;
+  --color-primary-light: #e11d48;
+  --color-primary-light-hover: #be123c;
 
   /* ========================================================================
      SEMANTIC TOKENS (auto-switch with theme)
@@ -205,12 +205,12 @@ body {
 
   /* Selection */
   ::selection {
-    background: rgba(139, 92, 246, 0.3);
+    background: rgba(244, 63, 94, 0.3);
     color: var(--color-text-dark);
   }
 
   .light ::selection {
-    background: rgba(124, 58, 237, 0.2);
+    background: rgba(225, 29, 72, 0.2);
     color: var(--color-text-light);
   }
 }
@@ -222,19 +222,19 @@ body {
 @layer utilities {
   /* Gradient utilities */
   .gradient-hero {
-    background: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 50%, #fb7185 100%);
+    background: linear-gradient(135deg, #e11d48 0%, #f43f5e 50%, #f59e0b 100%);
   }
 
   .gradient-glow {
-    background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+    background: radial-gradient(ellipse at center, rgba(244, 63, 94, 0.15) 0%, transparent 70%);
   }
 
   .gradient-card {
-    background: linear-gradient(180deg, rgba(139, 92, 246, 0.05) 0%, transparent 100%);
+    background: linear-gradient(180deg, rgba(244, 63, 94, 0.05) 0%, transparent 100%);
   }
 
   .gradient-text {
-    background: linear-gradient(135deg, #8b5cf6 0%, #fb7185 100%);
+    background: linear-gradient(135deg, #f43f5e 0%, #f59e0b 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -242,25 +242,25 @@ body {
 
   /* Light mode gradient variants */
   .light .gradient-hero {
-    background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 50%, #fb7185 100%);
+    background: linear-gradient(135deg, #be123c 0%, #e11d48 50%, #f59e0b 100%);
   }
 
   .light .gradient-glow {
-    background: radial-gradient(ellipse at center, rgba(124, 58, 237, 0.08) 0%, transparent 70%);
+    background: radial-gradient(ellipse at center, rgba(225, 29, 72, 0.08) 0%, transparent 70%);
   }
 
   .light .gradient-card {
-    background: linear-gradient(180deg, rgba(124, 58, 237, 0.03) 0%, transparent 100%);
+    background: linear-gradient(180deg, rgba(225, 29, 72, 0.03) 0%, transparent 100%);
   }
 
   /* Glow effects */
   .glow-accent {
-    box-shadow: 0 0 40px rgba(139, 92, 246, 0.3),
-                0 0 80px rgba(139, 92, 246, 0.15);
+    box-shadow: 0 0 40px rgba(244, 63, 94, 0.3),
+                0 0 80px rgba(244, 63, 94, 0.15);
   }
 
   .glow-accent-soft {
-    box-shadow: 0 0 60px rgba(139, 92, 246, 0.1);
+    box-shadow: 0 0 60px rgba(244, 63, 94, 0.1);
   }
 
   /* Glass panel with blur */
@@ -286,7 +286,7 @@ body {
   }
 
   .shadow-button {
-    box-shadow: 0 15px 30px rgba(139, 92, 246, 0.25);
+    box-shadow: 0 15px 30px rgba(244, 63, 94, 0.25);
   }
 
   .light .shadow-soft {
@@ -586,12 +586,12 @@ body {
   .btn-primary {
     background: var(--color-accent);
     color: white;
-    box-shadow: 0 15px 30px rgba(139, 92, 246, 0.25);
+    box-shadow: 0 15px 30px rgba(244, 63, 94, 0.25);
   }
 
   .btn-primary:hover {
     transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.35);
+    box-shadow: 0 20px 40px rgba(244, 63, 94, 0.35);
     background: var(--color-accent-glow);
   }
 
@@ -612,7 +612,7 @@ body {
   .btn-secondary:hover {
     border-color: var(--color-accent);
     color: var(--color-accent);
-    background: rgba(139, 92, 246, 0.1);
+    background: rgba(244, 63, 94, 0.1);
   }
 
   .light .btn-secondary {
@@ -623,7 +623,7 @@ body {
   .light .btn-secondary:hover {
     border-color: var(--color-primary-light);
     color: var(--color-primary-light);
-    background: rgba(124, 58, 237, 0.1);
+    background: rgba(225, 29, 72, 0.1);
   }
 
   .btn-ghost {
@@ -671,9 +671,9 @@ body {
 
   .card-hover:hover {
     transform: translateY(-8px);
-    border-color: rgba(139, 92, 246, 0.3);
+    border-color: rgba(244, 63, 94, 0.3);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3),
-                0 0 40px rgba(139, 92, 246, 0.1);
+                0 0 40px rgba(244, 63, 94, 0.1);
   }
 
   .light .card-hover {
@@ -682,13 +682,13 @@ body {
   }
 
   .light .card-hover:hover {
-    border-color: rgba(124, 58, 237, 0.3);
+    border-color: rgba(225, 29, 72, 0.3);
     box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
   }
 
   .card-gradient {
     background: linear-gradient(180deg,
-      rgba(139, 92, 246, 0.05) 0%,
+      rgba(244, 63, 94, 0.05) 0%,
       var(--color-bg-elevated-dark) 100%);
     border: 1px solid var(--color-border-dark);
     border-radius: 1.5rem;
@@ -697,7 +697,7 @@ body {
 
   .light .card-gradient {
     background: linear-gradient(180deg,
-      rgba(124, 58, 237, 0.03) 0%,
+      rgba(225, 29, 72, 0.03) 0%,
       var(--color-bg-elevated-light) 100%);
     border-color: var(--color-border-light);
   }
@@ -737,7 +737,7 @@ body {
   .pill-interactive:hover {
     border-color: var(--color-accent);
     color: var(--color-accent);
-    background: rgba(139, 92, 246, 0.1);
+    background: rgba(244, 63, 94, 0.1);
   }
 
   .light .pill-interactive {
@@ -748,7 +748,7 @@ body {
   .light .pill-interactive:hover {
     border-color: var(--color-primary-light);
     color: var(--color-primary-light);
-    background: rgba(124, 58, 237, 0.1);
+    background: rgba(225, 29, 72, 0.1);
   }
 
   .pill-active {
@@ -877,7 +877,7 @@ body {
   .input:focus {
     outline: none;
     border-color: var(--color-accent);
-    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+    box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.15);
   }
 
   .input::placeholder {
@@ -892,7 +892,7 @@ body {
 
   .light .input:focus {
     border-color: var(--color-primary-light);
-    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+    box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.1);
   }
 
   .light .input::placeholder {
