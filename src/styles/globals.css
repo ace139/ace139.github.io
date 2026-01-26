@@ -82,7 +82,8 @@
   /* Text */
   --color-text: var(--color-text-dark);
   --color-text-secondary: var(--color-text-secondary-dark);
-  --color-text-muted: #6b7a8a; /* Improved contrast from #5a6478 - now passes WCAG AA */
+  --color-text-muted: #6b7a8a;
+  /* Improved contrast from #5a6478 - now passes WCAG AA */
 
   /* Borders */
   --color-border: var(--color-border-dark);
@@ -167,7 +168,13 @@ body {
    ========================================================================== */
 
 @layer base {
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-sans);
     font-weight: 600;
     letter-spacing: -0.02em;
@@ -220,6 +227,7 @@ body {
    ========================================================================== */
 
 @layer utilities {
+
   /* Gradient utilities */
   .gradient-hero {
     background: linear-gradient(135deg, #e11d48 0%, #f43f5e 50%, #f59e0b 100%);
@@ -256,7 +264,7 @@ body {
   /* Glow effects */
   .glow-accent {
     box-shadow: 0 0 40px rgba(244, 63, 94, 0.3),
-                0 0 80px rgba(244, 63, 94, 0.15);
+      0 0 80px rgba(244, 63, 94, 0.15);
   }
 
   .glow-accent-soft {
@@ -334,7 +342,7 @@ body {
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
-                transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
     will-change: opacity, transform;
   }
 
@@ -386,6 +394,7 @@ body {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -393,18 +402,24 @@ body {
 }
 
 @keyframes pulse-glow {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.6;
   }
+
   50% {
     opacity: 1;
   }
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-10px);
   }
@@ -673,7 +688,7 @@ body {
     transform: translateY(-8px);
     border-color: rgba(244, 63, 94, 0.3);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3),
-                0 0 40px rgba(244, 63, 94, 0.1);
+      0 0 40px rgba(244, 63, 94, 0.1);
   }
 
   .light .card-hover {
@@ -688,8 +703,8 @@ body {
 
   .card-gradient {
     background: linear-gradient(180deg,
-      rgba(244, 63, 94, 0.05) 0%,
-      var(--color-bg-elevated-dark) 100%);
+        rgba(244, 63, 94, 0.05) 0%,
+        var(--color-bg-elevated-dark) 100%);
     border: 1px solid var(--color-border-dark);
     border-radius: 1.5rem;
     padding: 2rem;
@@ -697,8 +712,8 @@ body {
 
   .light .card-gradient {
     background: linear-gradient(180deg,
-      rgba(225, 29, 72, 0.03) 0%,
-      var(--color-bg-elevated-light) 100%);
+        rgba(225, 29, 72, 0.03) 0%,
+        var(--color-bg-elevated-light) 100%);
     border-color: var(--color-border-light);
   }
 
@@ -898,4 +913,127 @@ body {
   .light .input::placeholder {
     color: var(--color-muted-light);
   }
+}
+
+/* ==========================================================================
+   CUSTOM SCROLLBAR
+   A modern, minimal scrollbar that complements the Editorial Noir aesthetic
+   ========================================================================== */
+
+/* Webkit browsers (Chrome, Safari, Edge) - Dark mode (default) */
+html:not(.light) ::-webkit-scrollbar,
+html:not(.light)::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+html:not(.light) ::-webkit-scrollbar-track,
+html:not(.light)::-webkit-scrollbar-track {
+  background: var(--color-bg-elevated-dark);
+  border-radius: 8px;
+}
+
+html:not(.light) ::-webkit-scrollbar-thumb,
+html:not(.light)::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--color-accent) 0%, var(--color-accent-deep) 100%);
+  border-radius: 8px;
+  border: 2px solid var(--color-bg-elevated-dark);
+}
+
+html:not(.light) ::-webkit-scrollbar-thumb:hover,
+html:not(.light)::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--color-accent-glow) 0%, var(--color-accent) 100%);
+}
+
+html:not(.light) ::-webkit-scrollbar-thumb:active,
+html:not(.light)::-webkit-scrollbar-thumb:active {
+  background: var(--color-accent-deep);
+}
+
+html:not(.light) ::-webkit-scrollbar-corner,
+html:not(.light)::-webkit-scrollbar-corner {
+  background: var(--color-bg-elevated-dark);
+}
+
+/* Light mode scrollbar */
+html.light ::-webkit-scrollbar,
+html.light::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+html.light ::-webkit-scrollbar-track,
+html.light::-webkit-scrollbar-track {
+  background: #e5e7eb;
+  border-radius: 8px;
+}
+
+html.light ::-webkit-scrollbar-thumb,
+html.light::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--color-primary-light) 0%, var(--color-primary-light-hover) 100%);
+  border-radius: 8px;
+  border: 2px solid #e5e7eb;
+}
+
+html.light ::-webkit-scrollbar-thumb:hover,
+html.light::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--color-primary-light-hover) 0%, #9f1239 100%);
+}
+
+html.light ::-webkit-scrollbar-thumb:active,
+html.light::-webkit-scrollbar-thumb:active {
+  background: #9f1239;
+}
+
+html.light ::-webkit-scrollbar-corner,
+html.light::-webkit-scrollbar-corner {
+  background: #e5e7eb;
+}
+
+/* Firefox - Dark mode */
+html:not(.light) {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-accent) var(--color-bg-elevated-dark);
+}
+
+/* Firefox - Light mode */
+html.light {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary-light) #e5e7eb;
+}
+
+/* Horizontal scrollbar for code blocks - Dark mode */
+html:not(.light) pre::-webkit-scrollbar,
+html:not(.light) .overflow-x-auto::-webkit-scrollbar {
+  height: 6px;
+}
+
+html:not(.light) pre::-webkit-scrollbar-thumb,
+html:not(.light) .overflow-x-auto::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+  border-radius: 4px;
+}
+
+html:not(.light) pre::-webkit-scrollbar-track,
+html:not(.light) .overflow-x-auto::-webkit-scrollbar-track {
+  background: var(--color-surface-dark);
+  border-radius: 4px;
+}
+
+/* Horizontal scrollbar for code blocks - Light mode */
+html.light pre::-webkit-scrollbar,
+html.light .overflow-x-auto::-webkit-scrollbar {
+  height: 6px;
+}
+
+html.light pre::-webkit-scrollbar-track,
+html.light .overflow-x-auto::-webkit-scrollbar-track {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+html.light pre::-webkit-scrollbar-thumb,
+html.light .overflow-x-auto::-webkit-scrollbar-thumb {
+  background: var(--color-primary-light);
+  border-radius: 4px;
 }

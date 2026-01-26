@@ -4,6 +4,8 @@ subtitle: 'Rethinking LLM Evaluations'
 description: 'Why effective LLM evaluation goes beyond simple metrics—addressing trustworthiness, safety, reliability, and continuous improvement for truly valuable AI applications'
 date: '2025-07-07'
 heroImage: './beyond-accuracy-rethinking-llm-evaluations-hero.png'
+heroConfig:
+  position: 'center'
 tags: ['ai', 'llm', 'machine-learning', 'product-management', 'evaluation']
 ---
 

@@ -1,154 +1,379 @@
 ---
 import ResponsiveImage from './ResponsiveImage.astro';
 
+interface HeroConfig {
+  position?:
+    | 'center'
+    | 'top'
+    | 'bottom'
+    | 'left'
+    | 'right'
+    | 'top-left'
+    | 'top-right'
+    | 'bottom-left'
+    | 'bottom-right';
+  aspectRatio?: 'cinematic' | 'wide' | 'standard' | 'square';
+  overlay?: 'gradient' | 'dark' | 'light' | 'none';
+}
+
 interface Props {
   title: string;
   subtitle?: string;
   date: Date;
   heroImage?: string;
+  heroConfig?: HeroConfig;
   readingTime?: number;
 }
 
-const { title, subtitle, date, heroImage, readingTime } = Astro.props;
+const { title, subtitle, date, heroImage, heroConfig, readingTime } = Astro.props;
+
+// Smart defaults with per-post overrides
+const config = {
+  position: heroConfig?.position ?? 'center',
+  aspectRatio: heroConfig?.aspectRatio ?? 'cinematic',
+  overlay: heroConfig?.overlay ?? 'gradient',
+};
+
+// Map aspect ratio keywords to CSS values
+const aspectRatioMap: Record<string, { desktop: string; mobile: string }> = {
+  cinematic: { desktop: '21/9', mobile: '16/9' },
+  wide: { desktop: '2/1', mobile: '16/9' },
+  standard: { desktop: '16/9', mobile: '4/3' },
+  square: { desktop: '4/3', mobile: '1/1' },
+};
+
+// Map position keywords to object-position values
+const positionMap: Record<string, string> = {
+  center: 'center center',
+  top: 'center top',
+  bottom: 'center bottom',
+  left: 'left center',
+  right: 'right center',
+  'top-left': 'left top',
+  'top-right': 'right top',
+  'bottom-left': 'left bottom',
+  'bottom-right': 'right bottom',
+};
+
+const aspectDesktop = aspectRatioMap[config.aspectRatio].desktop;
+const aspectMobile = aspectRatioMap[config.aspectRatio].mobile;
+const objectPosition = positionMap[config.position];
 ---
 
-<header class="relative mb-12 overflow-hidden rounded-2xl py-12 px-6 sm:py-20 lg:py-28 lg:px-12 min-h-[360px] sm:min-h-[480px] flex flex-col justify-end">
-  {/* Background with hero image or gradient */}
+<header
+  class="blog-hero relative mb-12 overflow-hidden rounded-2xl"
+  style={`--hero-aspect-desktop: ${aspectDesktop}; --hero-aspect-mobile: ${aspectMobile}; --hero-position: ${objectPosition};`}
+  data-overlay={config.overlay}
+>
+  {/* Hero Image Section */}
   {heroImage ? (
-    <div class="absolute inset-0">
+    <div class="hero-image-wrapper relative">
       <ResponsiveImage
         src={heroImage}
         alt=""
         class="h-full w-full"
-        imageClass="object-cover object-right"
+        imageClass="object-cover"
+        objectPosition={objectPosition}
         loading="eager"
         fetchpriority="high"
         sizes="(min-width: 768px) 768px, 100vw"
       />
-      {/* Gradient overlay for readability - theme-aware */}
-      <div class="hero-overlay-x absolute inset-0" />
-      <div class="hero-overlay-y absolute inset-0" />
+      {/* Gradient overlay for desktop readability */}
+      {config.overlay !== 'none' && (
+        <>
+          <div class={`hero-overlay-x absolute inset-0 overlay-${config.overlay}`} />
+          <div class={`hero-overlay-y absolute inset-0 overlay-${config.overlay}`} />
+        </>
+      )}
+      
+      {/* Desktop: Content overlaid on image */}
+      <div class="hero-content-overlay absolute inset-0 flex flex-col justify-end">
+        <div class="relative z-10 flex max-w-2xl flex-col items-start p-6 sm:p-12">
+          {/* Meta info */}
+          <div class="hero-meta mb-4 flex flex-wrap items-center gap-2 text-xs font-medium uppercase tracking-[0.15em]">
+            <time datetime={date.toISOString()} class="hero-meta-item flex items-center gap-1.5">
+              <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              {date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+              })}
+            </time>
+            {readingTime && (
+              <>
+                <span class="hero-meta-separator">·</span>
+                <span class="hero-meta-item flex items-center gap-1.5">
+                  <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  {readingTime} min
+                </span>
+              </>
+            )}
+          </div>
+
+          {/* Title */}
+          <h1 class="display-heading text-3xl font-normal tracking-tight text-[var(--color-text-dark)] sm:text-4xl lg:text-5xl" style="line-height: 1.2;">
+            {title}
+          </h1>
+
+          {/* Subtitle */}
+          {subtitle && (
+            <p class="mt-3 text-base text-[var(--color-text-secondary-dark)] sm:text-lg lg:text-xl" style="line-height: 1.5;">
+              {subtitle}
+            </p>
+          )}
+        </div>
+      </div>
     </div>
   ) : (
-    <div class="absolute inset-0 bg-[var(--color-surface-dark)]">
+    <div class="hero-no-image relative bg-[var(--color-surface-dark)]">
       {/* Subtle gradient for posts without hero image */}
       <div
         class="absolute inset-0 opacity-30"
         style="background: radial-gradient(ellipse at top right, rgba(139, 92, 246, 0.15) 0%, transparent 60%);"
       />
+      {/* Content for no-image state */}
+      <div class="relative z-10 flex max-w-2xl flex-col items-start p-6 sm:p-12">
+        <div class="hero-meta mb-4 flex flex-wrap items-center gap-2 text-xs font-medium uppercase tracking-[0.15em]">
+          <time datetime={date.toISOString()} class="hero-meta-item flex items-center gap-1.5">
+            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            {date.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            })}
+          </time>
+          {readingTime && (
+            <>
+              <span class="hero-meta-separator">·</span>
+              <span class="hero-meta-item flex items-center gap-1.5">
+                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {readingTime} min
+              </span>
+            </>
+          )}
+        </div>
+        <h1 class="display-heading text-3xl font-normal tracking-tight text-[var(--color-text-dark)] sm:text-4xl lg:text-5xl" style="line-height: 1.2;">
+          {title}
+        </h1>
+        {subtitle && (
+          <p class="mt-3 text-base text-[var(--color-text-secondary-dark)] sm:text-lg lg:text-xl" style="line-height: 1.5;">
+            {subtitle}
+          </p>
+        )}
+      </div>
     </div>
   )}
 
-  {/* Content */}
-  <div class="relative z-10 flex max-w-2xl flex-col items-start">
-    {/* Meta info */}
-    <div class="hero-meta mb-6 flex flex-wrap items-center gap-3 text-xs font-medium uppercase tracking-[0.2em]">
-      <time datetime={date.toISOString()} class="hero-meta-item flex items-center gap-2">
-        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-        </svg>
-        {date.toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-        })}
-      </time>
-      {readingTime && (
-        <>
-          <span class="hero-meta-separator h-1 w-1 rounded-full" />
-          <span class="hero-meta-item flex items-center gap-2">
-            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            {readingTime} min read
-          </span>
-        </>
+  {/* Mobile: Content below image */}
+  {heroImage && (
+    <div class="hero-content-mobile">
+      <div class="hero-meta mb-3 flex flex-wrap items-center gap-2 text-xs font-medium uppercase tracking-[0.12em]">
+        <time datetime={date.toISOString()} class="hero-meta-item-mobile flex items-center gap-1.5">
+          <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          {date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          })}
+        </time>
+        {readingTime && (
+          <>
+            <span class="hero-meta-separator-mobile">·</span>
+            <span class="hero-meta-item-mobile flex items-center gap-1.5">
+              <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              {readingTime} min
+            </span>
+          </>
+        )}
+      </div>
+      <h1 class="display-heading text-2xl font-normal tracking-tight sm:text-3xl" style="line-height: 1.25;">
+        {title}
+      </h1>
+      {subtitle && (
+        <p class="mt-2 text-base leading-relaxed" style="opacity: 0.8;">
+          {subtitle}
+        </p>
       )}
     </div>
-
-    {/* Title */}
-    <h1 class="display-heading text-4xl font-normal tracking-tight text-[var(--color-text-dark)] sm:text-5xl lg:text-5xl" style="line-height: 1.15;">
-      {title}
-    </h1>
-
-    {/* Subtitle */}
-    {subtitle && (
-      <p class="mt-4 text-lg text-[var(--color-text-secondary-dark)] sm:text-xl" style="line-height: 1.6;">
-        {subtitle}
-      </p>
-    )}
-  </div>
+  )}
 </header>
 
 <style>
-  /* Hero image gradient overlays - subtle dark overlay for both themes */
-  .hero-overlay-x {
+  /* Desktop: Hero with overlaid content */
+  .blog-hero {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-image-wrapper {
+    aspect-ratio: var(--hero-aspect-desktop, 21/9);
+    max-height: 500px;
+  }
+
+  .hero-image-wrapper :global(img) {
+    object-position: var(--hero-position, center center);
+  }
+
+  /* Hide mobile content on desktop */
+  .hero-content-mobile {
+    display: none;
+  }
+
+  /* No-image hero styling */
+  .hero-no-image {
+    min-height: 280px;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  /* Mobile: Stack image and content */
+  @media (max-width: 768px) {
+    .hero-image-wrapper {
+      aspect-ratio: var(--hero-aspect-mobile, 16/9);
+      max-height: 280px;
+    }
+
+    /* Hide overlaid content on mobile */
+    .hero-content-overlay {
+      display: none !important;
+      visibility: hidden;
+    }
+
+    /* Show mobile content */
+    .hero-content-mobile {
+      display: block !important;
+      padding: 1.25rem 1rem;
+      color: var(--color-text-dark);
+    }
+
+    .hero-no-image {
+      min-height: 200px;
+    }
+  }
+
+  /* Gradient overlay - default */
+  .hero-overlay-x.overlay-gradient {
     background: linear-gradient(
       to right,
-      rgba(0, 0, 0, 0.40) 0%,
+      rgba(0, 0, 0, 0.45) 0%,
       rgba(0, 0, 0, 0.25) 50%,
-      rgba(0, 0, 0, 0.15) 100%
+      rgba(0, 0, 0, 0.10) 100%
     );
   }
 
-  .hero-overlay-y {
+  .hero-overlay-y.overlay-gradient {
     background: linear-gradient(
       to top,
-      rgba(0, 0, 0, 0.35) 0%,
+      rgba(0, 0, 0, 0.50) 0%,
+      rgba(0, 0, 0, 0.20) 40%,
       transparent 100%
     );
   }
 
-  /* Meta info styling - prominent pill with backdrop */
+  /* Dark overlay */
+  .hero-overlay-x.overlay-dark,
+  .hero-overlay-y.overlay-dark {
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  /* Light overlay */
+  .hero-overlay-x.overlay-light,
+  .hero-overlay-y.overlay-light {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  /* Desktop meta info styling - pill with backdrop */
   .hero-meta-item {
     color: rgba(255, 255, 255, 0.95);
-    background: rgba(0, 0, 0, 0.4);
-    padding: 0.35rem 0.75rem;
+    background: rgba(0, 0, 0, 0.45);
+    padding: 0.3rem 0.6rem;
     border-radius: 9999px;
     backdrop-filter: blur(4px);
   }
 
   .hero-meta-separator {
-    background: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 700;
   }
 
-  /* Title and subtitle text shadows for better readability */
-  header:has(.hero-overlay-x) h1 {
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  /* Mobile meta info styling - simple text */
+  .hero-meta-item-mobile {
+    color: var(--color-text-muted);
   }
 
-  header:has(.hero-overlay-x) p {
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  .hero-meta-separator-mobile {
+    color: var(--color-text-muted);
+    opacity: 0.5;
+  }
+
+  /* Title and subtitle text shadows for desktop readability */
+  .hero-content-overlay h1 {
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  }
+
+  .hero-content-overlay p {
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
   }
 
   /* Light mode overrides */
-  html.light header {
+  html.light .blog-hero {
     background: var(--color-surface-light);
   }
 
-  /* Fallback background for posts without hero image - exclude overlay elements */
-  html.light header .absolute.inset-0:not(:has(img)):not(.hero-overlay-x):not(.hero-overlay-y) {
+  html.light .hero-content-mobile {
+    color: var(--color-text-light);
+  }
+
+  html.light .hero-content-mobile h1 {
+    color: var(--color-text-light);
+  }
+
+  html.light .hero-content-mobile p {
+    color: var(--color-text-secondary-light);
+  }
+
+  html.light .hero-meta-item-mobile {
+    color: var(--color-muted-light);
+  }
+
+  html.light .hero-meta-separator-mobile {
+    color: var(--color-muted-light);
+  }
+
+  /* Light mode for no-image state */
+  html.light .hero-no-image {
     background: var(--color-surface-light);
   }
 
-  /* Light mode text colors for posts without hero image */
-  html.light header:not(:has(.hero-overlay-x)) .hero-meta-item {
+  html.light .hero-no-image .hero-meta-item {
     color: var(--color-muted-light);
     background: transparent;
     padding: 0;
     backdrop-filter: none;
   }
 
-  html.light header:not(:has(.hero-overlay-x)) .hero-meta-separator {
-    background: var(--color-muted-light);
+  html.light .hero-no-image .hero-meta-separator {
+    color: var(--color-muted-light);
   }
 
-  html.light header:not(:has(.hero-overlay-x)) h1 {
+  html.light .hero-no-image h1 {
     color: var(--color-text-light);
     text-shadow: none;
   }
 
-  html.light header:not(:has(.hero-overlay-x)) p {
+  html.light .hero-no-image p {
     color: var(--color-text-secondary-light);
     text-shadow: none;
   }

@@ -4,6 +4,8 @@ subtitle: "What I've Learned Building SoTA Production-Grade Medical Transcriptio
 description: 'The engineering lessons from building voice agents for healthcare - where benchmarks fail, context hints unlock accuracy, and your production failures become your most valuable training data'
 date: '2026-01-06'
 heroImage: './beyond-95-accuracy-medical-transcription-hero.png'
+heroConfig:
+  position: 'right'
 tags: ['ai', 'healthcare', 'speech-recognition', 'machine-learning', 'voice-agents']
 ---
 

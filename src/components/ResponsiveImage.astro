@@ -15,6 +15,7 @@ interface Props {
   widths?: number[];
   formats?: ('avif' | 'webp' | 'jpeg' | 'png')[];
   imageClass?: string;
+  objectPosition?: string;
 }
 
 const {
@@ -29,7 +30,11 @@ const {
   widths: widthsProp,
   formats: formatsProp,
   imageClass = 'object-cover',
+  objectPosition,
 } = Astro.props;
+
+// Build style object for object-position
+const objectPositionStyle = objectPosition ? { objectPosition } : {};
 
 const isComponent = typeof src === 'function';
 const isMeta = !isComponent && typeof src === 'object';
@@ -81,6 +86,7 @@ if (fallbackFormat && !formatsFinal.includes(fallbackFormat as any)) {
           loading={loading}
           fetchpriority={fetchpriority}
           class={`h-full w-full ${imageClass}`}
+          style={objectPositionStyle}
         />
       ) : isComponent ? (
         // Handle imported SVGs as components
@@ -97,6 +103,7 @@ if (fallbackFormat && !formatsFinal.includes(fallbackFormat as any)) {
           fetchpriority={fetchpriority}
           decoding="async"
           class={`h-full w-full ${imageClass}`}
+          style={objectPositionStyle}
         />
       )
     }
