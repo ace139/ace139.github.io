@@ -1,5 +1,5 @@
-import { defineCollection, z, type SchemaContext } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { defineCollection, z, type SchemaContext } from 'astro:content';
 
 const blog = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
@@ -11,6 +11,26 @@ const blog = defineCollection({
       heroImage: image().optional(),
       tags: z.array(z.string()).optional(),
       description: z.string().optional(),
+      // Hero image display configuration
+      heroConfig: z
+        .object({
+          position: z
+            .enum([
+              'center',
+              'top',
+              'bottom',
+              'left',
+              'right',
+              'top-left',
+              'top-right',
+              'bottom-left',
+              'bottom-right',
+            ])
+            .default('center'),
+          aspectRatio: z.enum(['cinematic', 'wide', 'standard', 'square']).default('cinematic'),
+          overlay: z.enum(['gradient', 'dark', 'light', 'none']).default('gradient'),
+        })
+        .optional(),
     }),
 });
 

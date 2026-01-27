@@ -4,7 +4,7 @@
 
 ## About
 
-I’ve always gravitated toward problems where engineering, intelligence, and real-world constraints intersect. What started as a curiosity for how things work turned into a career spent building products and platforms that make complex systems feel simple.
+I've always gravitated toward problems where engineering, intelligence, and real-world constraints intersect. What started as a curiosity for how things work turned into a career spent building products and platforms that make complex systems feel simple.
 
 ## Site Structure
 
@@ -16,10 +16,16 @@ I’ve always gravitated toward problems where engineering, intelligence, and re
 
 ## Recent Blog Posts
 
+- [Beyond 95% Accuracy](https://soumyo.com/blog/beyond-95-accuracy-medical-transcription)
+  The engineering lessons from building voice agents for healthcare - where benchmarks fail, context hints unlock accuracy, and your production failures become your most valuable training data
+- [Beyond Accuracy](https://soumyo.com/blog/beyond-accuracy-rethinking-llm-evaluations)
+  Why effective LLM evaluation goes beyond simple metrics—addressing trustworthiness, safety, reliability, and continuous improvement for truly valuable AI applications
 - [Beyond the Vacuum](https://soumyo.com/blog/beyond-the-vacuum)
   Exploring how original ideas emerge not from isolation, but from the rich interplay of diverse knowledge and experiences
 - [Facts, Hypotheses, and the Art of Writing PRDs](https://soumyo.com/blog/facts-hypotheses-and-the-art-of-writing-prds)
   Every sentence in a PRD should either be a Fact or a Hypothesis. Avoid making Statements at all costs.
+- [The Secret to MCP Servers That LLMs Love Using](https://soumyo.com/blog/the-secret-to-mcp-servers-that-llms-love-using)
+  The Model Context Protocol revolution requires a shift from engineering to product design thinking—building experiences that transform how work gets done, not just tools that LLMs can use
 
 ## Newsletter
 
@@ -35,4 +41,4 @@ Subscribe to "Stochastic Musings" - Notes on product intuition, engineering syst
 
 ---
 
-This site is built with Astro, optimized for performance and accessibility. Last updated: 2026-01-24
+This site is built with Astro, optimized for performance and accessibility. Last updated: 2026-01-26

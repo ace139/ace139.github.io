@@ -4,6 +4,8 @@ subtitle: 'A simple framework for writing effective Product Requirement Document
 description: 'Every sentence in a PRD should either be a Fact or a Hypothesis. Avoid making Statements at all costs.'
 date: '2025-11-29'
 heroImage: './facts-hypotheses-and-the-art-of-writing-prds-hero.png'
+heroConfig:
+  position: 'right'
 tags: ['product-management', 'writing', 'mentorship', 'prds']
 ---
 
