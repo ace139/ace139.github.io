@@ -1,102 +1,112 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Get blog posts
 function getBlogPosts() {
-    const blogDir = path.join(__dirname, '../src/content/blog');
-    const posts = [];
+	const blogDir = path.join(__dirname, "../src/content/blog");
+	const posts = [];
 
-    try {
-        const files = fs.readdirSync(blogDir);
+	try {
+		const files = fs.readdirSync(blogDir);
 
-        for (const file of files) {
-            // Only process .md and .mdx files
-            if (!file.endsWith('.md') && !file.endsWith('.mdx')) {
-                continue;
-            }
+		for (const file of files) {
+			// Only process .md and .mdx files
+			if (!file.endsWith(".md") && !file.endsWith(".mdx")) {
+				continue;
+			}
 
-            const filePath = path.join(blogDir, file);
-            const content = fs.readFileSync(filePath, 'utf-8');
-            const frontmatterMatch = content.match(/^---\s*\n([\s\S]*?)\n---/);
+			const filePath = path.join(blogDir, file);
+			const content = fs.readFileSync(filePath, "utf-8");
+			const frontmatterMatch = content.match(/^---\s*\n([\s\S]*?)\n---/);
 
-            if (frontmatterMatch) {
-                const frontmatter = frontmatterMatch[1];
-                const titleMatch = frontmatter.match(/title:\s*(.+)/);
-                const descMatch = frontmatter.match(/description:\s*(.+)/);
+			if (frontmatterMatch) {
+				const frontmatter = frontmatterMatch[1];
+				const titleMatch = frontmatter.match(/title:\s*(.+)/);
+				const descMatch = frontmatter.match(/description:\s*(.+)/);
 
-                if (titleMatch) {
-                    // Clean title and description (remove quotes if present)
-                    let title = titleMatch[1].trim().replace(/^["']|["']$/g, '');
-                    let description = descMatch ? descMatch[1].trim().replace(/^["']|["']$/g, '') : '';
+				if (titleMatch) {
+					// Clean title and description (remove quotes if present)
+					const title = titleMatch[1].trim().replace(/^["']|["']$/g, "");
+					const description = descMatch
+						? descMatch[1].trim().replace(/^["']|["']$/g, "")
+						: "";
 
-                    // Get slug from filename (remove extension)
-                    const slug = file.replace(/\.(md|mdx)$/, '');
+					// Get slug from filename (remove extension)
+					const slug = file.replace(/\.(md|mdx)$/, "");
 
-                    posts.push({
-                        title,
-                        description,
-                        url: `/blog/${slug}`,
-                    });
-                }
-            }
-        }
-    } catch (error) {
-        console.error('Error reading blog posts:', error);
-    }
+					posts.push({
+						title,
+						description,
+						url: `/blog/${slug}`,
+					});
+				}
+			}
+		}
+	} catch (_error) {
+		console.error("Error reading blog posts:", _error);
+	}
 
-    return posts;
+	return posts;
 }
 
 // Extract About content from about.astro
 function getAboutContent() {
-    const aboutPath = path.join(__dirname, '../src/pages/about.astro');
-    let aboutText = "I'm a Senior Product Manager working on AI and data products."; // fallback
+	const aboutPath = path.join(__dirname, "../src/pages/about.astro");
+	let aboutText =
+		"I'm a Senior Product Manager working on AI and data products."; // fallback
 
-    try {
-        const content = fs.readFileSync(aboutPath, 'utf-8');
+	try {
+		const content = fs.readFileSync(aboutPath, "utf-8");
 
-        // Look for the first main paragraph after the h1 heading in the Origin section
-        const originMatch = content.match(/<h1[^>]*>A systems thinker[^<]*<\/h1>\s*<p[^>]*>([\s\S]*?)<\/p>/);
-        if (originMatch) {
-            // Clean HTML and get text
-            aboutText = originMatch[1]
-                .replace(/<[^>]+>/g, '') // Remove HTML tags
-                .replace(/\s+/g, ' ')     // Normalize whitespace
-                .trim();
-        }
-    } catch (error) {
-        console.warn('Could not read About content from about.astro, using fallback');
-    }
+		// Look for the first main paragraph after the h1 heading in the Origin section
+		const originMatch = content.match(
+			/<h1[^>]*>A systems thinker[^<]*<\/h1>\s*<p[^>]*>([\s\S]*?)<\/p>/,
+		);
+		if (originMatch) {
+			// Clean HTML and get text
+			aboutText = originMatch[1]
+				.replace(/<[^>]+>/g, "") // Remove HTML tags
+				.replace(/\s+/g, " ") // Normalize whitespace
+				.trim();
+		}
+	} catch (_error) {
+		console.warn(
+			"Could not read About content from about.astro, using fallback",
+		);
+	}
 
-    return aboutText;
+	return aboutText;
 }
 
 // Generate llms.txt
 function generateLLMsTxt() {
-    // Read site URL from astro.config.mjs
-    let siteUrl = 'https://ace139.github.io'; // fallback
-    try {
-        const configPath = path.join(__dirname, '../astro.config.mjs');
-        const configContent = fs.readFileSync(configPath, 'utf-8');
-        const siteMatch = configContent.match(/site:\s*['"]([^'"]+)['"]/);
-        if (siteMatch) {
-            siteUrl = siteMatch[1];
-        }
-    } catch (error) {
-        console.warn('Could not read site URL from astro.config.mjs, using fallback');
-    }
+	// Read site URL from astro.config.mjs
+	let siteUrl = "https://ace139.github.io"; // fallback
+	try {
+		const configPath = path.join(__dirname, "../astro.config.mjs");
+		const configContent = fs.readFileSync(configPath, "utf-8");
+		const siteMatch = configContent.match(/site:\s*['"]([^'"]+)['"]/);
+		if (siteMatch) {
+			siteUrl = siteMatch[1];
+		}
+	} catch (_error) {
+		console.warn(
+			"Could not read site URL from astro.config.mjs, using fallback",
+		);
+	}
 
-    const siteName = 'Soumyo Dey';
-    const tagline = 'Tech, AI & data products, and the stories picked up along the way';
+	const siteName = "Soumyo Dey";
+	const tagline =
+		"Tech, AI & data products, and the stories picked up along the way";
 
-    const blogPosts = getBlogPosts();
-    const aboutContent = getAboutContent();
+	const blogPosts = getBlogPosts();
+	const aboutContent = getAboutContent();
 
-    let content = `# ${siteName}
+	let content = `# ${siteName}
 
 > ${tagline}
 
@@ -114,14 +124,14 @@ ${aboutContent}
 
 ## Recent Blog Posts\n\n`;
 
-    blogPosts.forEach(post => {
-        content += `- [${post.title}](${siteUrl}${post.url})\n`;
-        if (post.description) {
-            content += `  ${post.description}\n`;
-        }
-    });
+	blogPosts.forEach((post) => {
+		content += `- [${post.title}](${siteUrl}${post.url})\n`;
+		if (post.description) {
+			content += `  ${post.description}\n`;
+		}
+	});
 
-    content += `\n## Newsletter
+	content += `\n## Newsletter
 
 Subscribe to "Stochastic Musings" - Notes on product intuition, engineering systems, and signals from the AI landscape.
 - https://stochasticmusings.substack.com/
@@ -135,22 +145,22 @@ Subscribe to "Stochastic Musings" - Notes on product intuition, engineering syst
 
 ---
 
-This site is built with Astro, optimized for performance and accessibility. Last updated: ${new Date().toISOString().split('T')[0]}
+This site is built with Astro, optimized for performance and accessibility. Last updated: ${new Date().toISOString().split("T")[0]}
 `;
 
-    return content;
+	return content;
 }
 
 // Write to public directory
 const llmsTxtContent = generateLLMsTxt();
-const publicDir = path.join(__dirname, '../public');
-const llmsTxtPath = path.join(publicDir, 'llms.txt');
+const publicDir = path.join(__dirname, "../public");
+const llmsTxtPath = path.join(publicDir, "llms.txt");
 
 try {
-  fs.writeFileSync(llmsTxtPath, llmsTxtContent, 'utf-8');
-  console.log('✓ Generated llms.txt');
-  console.log(`  Location: ${llmsTxtPath}`);
+	fs.writeFileSync(llmsTxtPath, llmsTxtContent, "utf-8");
+	console.log("✓ Generated llms.txt");
+	console.log(`  Location: ${llmsTxtPath}`);
 } catch (err) {
-  console.error('Failed to write llms.txt:', err.message);
-  process.exit(1);
+	console.error("Failed to write llms.txt:", err.message);
+	process.exit(1);
 }

@@ -1,0 +1,9 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.3.13/schema.json",
+  "extends": ["ultracite/biome/astro"],
+  "css": {
+    "parser": {
+      "cssModules": true
+    }
+  }
+}

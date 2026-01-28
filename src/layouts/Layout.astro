@@ -1,8 +1,11 @@
 ---
-import ScriptOptimizer from '../components/ScriptOptimizer.astro';
-import PostHog from '../components/posthog.astro';
-import { ClientRouter } from 'astro:transitions';
+
+
+
 import { getImage } from 'astro:assets';
+import { ClientRouter } from 'astro:transitions';
+import PostHog from '../components/posthog.astro';
+import ScriptOptimizer from '../components/ScriptOptimizer.astro';
 import avatar from '../images/avatar.jpg';
 import '@fontsource/playfair-display';
 import '@fontsource/playfair-display/400-italic.css';
@@ -54,7 +57,7 @@ const navLinks = [
 
     <!-- Theme initialization (dark mode default, prevents FOUC) -->
     <script is:inline>
-      (function() {
+      (() => {
         function getTheme() {
           // Check localStorage first
           if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
@@ -482,7 +485,7 @@ const navLinks = [
 
     <script>
       // GSAP and ScrollTrigger setup
-      import { initGSAP, cleanupAnimations, animateStaggerGroup, animateFadeUp, prefersReducedMotion } from '../scripts/gsap-setup';
+      import { animateFadeUp, animateStaggerGroup, cleanupAnimations, initGSAP, prefersReducedMotion } from '../scripts/gsap-setup';
 
       function setupAnimations() {
         initGSAP();

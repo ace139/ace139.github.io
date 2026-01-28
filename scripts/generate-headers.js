@@ -3,16 +3,16 @@
  * for different types of static assets.
  */
 
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 // Get the directory name using ES modules approach
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Path to the dist directory
-const distDir = path.join(__dirname, '../dist');
+const distDir = path.join(__dirname, "../dist");
 
 // Create the _headers file content
 // Order: Most specific paths first, global rules last
@@ -88,9 +88,9 @@ const headersContent = `# Font files - specific file first, then directory
 
 // Write the _headers file to the dist directory
 try {
-  fs.writeFileSync(path.join(distDir, '_headers'), headersContent);
-  console.log('Generated _headers file with cache control directives');
+	fs.writeFileSync(path.join(distDir, "_headers"), headersContent);
+	console.log("Generated _headers file with cache control directives");
 } catch (err) {
-  console.error('Failed to write _headers:', err.message);
-  process.exit(1);
+	console.error("Failed to write _headers:", err.message);
+	process.exit(1);
 }

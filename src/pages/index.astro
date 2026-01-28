@@ -1,17 +1,20 @@
 ---
-import Layout from '../layouts/Layout.astro';
+
+
+
 import { Picture } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import avatar from '../images/avatar.jpg';
+import Layout from '../layouts/Layout.astro';
 
-// Get latest blog posts
-const allPosts = await getCollection('blog');
+// Get latest blog posts (excluding drafts)
+const allPosts = await getCollection('blog', ({ data }) => data.draft !== true);
 const latestPosts = allPosts
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
   .slice(0, 3);
 
-// Get projects if available
-const allProjects = await getCollection('projects').catch(() => []);
+// Get projects if available (excluding drafts)
+const allProjects = await getCollection('projects', ({ data }) => data.draft !== true).catch(() => []);
 const featuredProjects = allProjects.slice(0, 3);
 ---
 

@@ -1,4 +1,7 @@
 ---
+
+
+
 // Font loading strategy component
 ---
 
@@ -65,7 +68,7 @@
 
   <!-- Font loading detection script -->
   <script is:inline>
-    (function () {
+    (() => {
       // Check if fonts loading state is already stored
       if (localStorage.fontsLoaded) {
         document.documentElement.classList.add('fonts-loaded');

@@ -1,4 +1,7 @@
 ---
+
+
+
 interface Props {
   // Define which third-party scripts to load
   analytics?: boolean;
@@ -124,7 +127,7 @@ if (socialEmbed) {
   <!-- Low priority scripts - Load when user becomes inactive -->
   <script is:inline define:vars={{ lowPriorityScripts }}>
     // Load low priority scripts when user becomes inactive
-    (function () {
+    (() => {
       // Define low priority scripts array
       const lowPriorityScriptsArray = [];
 
