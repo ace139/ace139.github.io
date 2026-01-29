@@ -6,9 +6,9 @@ import { getCollection } from 'astro:content';
 import ResponsiveImage from '../components/ResponsiveImage.astro';
 import Tags from '../components/Tags.astro';
 import Layout from '../layouts/Layout.astro';
+import { isPublished, sortByDateDesc } from '../utils/content';
 
-const projects = await getCollection('projects', ({ data }) => data.draft !== true);
-projects.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+const projects = (await getCollection('projects', isPublished)).sort(sortByDateDesc);
 ---
 
 <Layout title="Work | Soumyo Dey">

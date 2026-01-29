@@ -147,12 +147,12 @@ const skills = [
 
 <Layout title="Resume | Soumyo Dey">
   <main class="space-y-12 pt-24">
-    <div class="mx-auto max-w-4xl space-y-10">
-      <header class="reveal rounded-[28px] border border-[var(--color-border)] bg-[var(--color-surface)] p-8 shadow-card">
+    <div class="mx-auto max-w-4xl space-y-10 px-4 sm:px-6 lg:px-8">
+      <header class="reveal rounded-[28px] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 sm:p-8 shadow-card">
         <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-text-muted)]">Résumé</p>
         <div class="mt-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 class="text-4xl font-serif font-semibold text-[var(--color-text)]">Soumyo Dey</h1>
+            <h1 class="text-3xl sm:text-4xl font-serif font-semibold text-[var(--color-text)]">Soumyo Dey</h1>
             <p class="mt-2 text-[var(--color-text-muted)]">Product leader · AI strategist · Storyteller of delightful experiences</p>
           </div>
           <a
@@ -165,23 +165,23 @@ const skills = [
         </div>
       </header>
 
-      <section class="reveal space-y-6 rounded-[28px] border border-[var(--color-border)] bg-[var(--color-surface)] p-8 shadow-card">
-        <h2 class="text-3xl font-serif font-semibold text-[var(--color-text)]">Experience</h2>
-        <div class="space-y-8">
+      <section class="reveal space-y-6 rounded-[28px] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 sm:p-8 shadow-card">
+        <h2 class="text-2xl sm:text-3xl font-serif font-semibold text-[var(--color-text)]">Experience</h2>
+        <div class="space-y-6 sm:space-y-8">
           {
             experience.map((job) => (
-              <div class="relative rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6 shadow-card">
-                <div class="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
+              <div class="relative rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-4 sm:p-6 shadow-card">
+                <div class="flex flex-col gap-2">
                   <div>
                     <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-text-muted)]">{job.period}</p>
-                    <h3 class="text-xl font-semibold text-[var(--color-text)]">{job.title}</h3>
-                    <p class="text-[var(--color-primary)]">{job.company} · {job.location}</p>
+                    <h3 class="text-lg sm:text-xl font-semibold text-[var(--color-text)]">{job.title}</h3>
+                    <p class="text-[var(--color-primary)] text-sm sm:text-base">{job.company} · {job.location}</p>
                   </div>
                 </div>
-                <p class="mt-4 text-[var(--color-text-muted)]">{job.description}</p>
+                <p class="mt-4 text-[var(--color-text-muted)] text-sm sm:text-base">{job.description}</p>
                 <div class="mt-4 flex flex-wrap gap-2">
                   {job.skills.map((skill) => (
-                    <span class="rounded-full border border-[var(--color-border)] px-3 py-1 text-sm text-[var(--color-text-muted)]">
+                    <span class="rounded-full border border-[var(--color-border)] px-2 sm:px-3 py-1 text-xs sm:text-sm text-[var(--color-text-muted)]">
                       {skill}
                     </span>
                   ))}
@@ -192,26 +192,26 @@ const skills = [
         </div>
       </section>
 
-      <section class="reveal rounded-[28px] border border-[var(--color-border)] bg-[var(--color-surface)] p-8 shadow-card">
-        <h2 class="text-3xl font-serif font-semibold text-[var(--color-text)]">Education</h2>
-        <div class="mt-6 space-y-6">
+      <section class="reveal rounded-[28px] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 sm:p-8 shadow-card">
+        <h2 class="text-2xl sm:text-3xl font-serif font-semibold text-[var(--color-text)]">Education</h2>
+        <div class="mt-6 space-y-4 sm:space-y-6">
           {
             education.map((edu) => (
-              <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-6">
-                <h3 class="text-xl font-semibold text-[var(--color-text)]">{edu.degree}</h3>
-                <p class="text-[var(--color-text-muted)]">{edu.school} · {edu.period}</p>
+              <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-4 sm:p-6">
+                <h3 class="text-lg sm:text-xl font-semibold text-[var(--color-text)]">{edu.degree}</h3>
+                <p class="text-[var(--color-text-muted)] text-sm sm:text-base">{edu.school} · {edu.period}</p>
               </div>
             ))
           }
         </div>
       </section>
 
-      <section class="reveal rounded-[28px] border border-[var(--color-border)] bg-[var(--color-surface)] p-8 shadow-card">
-        <h2 class="text-3xl font-serif font-semibold text-[var(--color-text)]">Skills</h2>
+      <section class="reveal rounded-[28px] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 sm:p-8 shadow-card">
+        <h2 class="text-2xl sm:text-3xl font-serif font-semibold text-[var(--color-text)]">Skills</h2>
         <div class="mt-6 flex flex-wrap gap-2">
           {
             skills.map((skill) => (
-              <span class="rounded-full border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-3 py-1 text-sm text-[var(--color-text-muted)]">
+              <span class="rounded-full border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-2 sm:px-3 py-1 text-xs sm:text-sm text-[var(--color-text-muted)]">
                 {skill}
               </span>
             ))

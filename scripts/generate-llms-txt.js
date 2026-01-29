@@ -25,6 +25,14 @@ function getBlogPosts() {
 
 			if (frontmatterMatch) {
 				const frontmatter = frontmatterMatch[1];
+
+				// Skip draft posts
+				const draftMatch = frontmatter.match(/draft:\s*(true|false)/);
+				const isDraft = draftMatch && draftMatch[1] === "true";
+				if (isDraft) {
+					continue;
+				}
+
 				const titleMatch = frontmatter.match(/title:\s*(.+)/);
 				const descMatch = frontmatter.match(/description:\s*(.+)/);
 
@@ -51,6 +59,62 @@ function getBlogPosts() {
 	}
 
 	return posts;
+}
+
+// Get projects
+function getProjects() {
+	const projectsDir = path.join(__dirname, "../src/content/projects");
+	const projects = [];
+
+	try {
+		const files = fs.readdirSync(projectsDir);
+
+		for (const file of files) {
+			// Only process .md and .mdx files
+			if (!file.endsWith(".md") && !file.endsWith(".mdx")) {
+				continue;
+			}
+
+			const filePath = path.join(projectsDir, file);
+			const content = fs.readFileSync(filePath, "utf-8");
+			const frontmatterMatch = content.match(/^---\s*\n([\s\S]*?)\n---/);
+
+			if (frontmatterMatch) {
+				const frontmatter = frontmatterMatch[1];
+
+				// Skip draft projects
+				const draftMatch = frontmatter.match(/draft:\s*(true|false)/);
+				const isDraft = draftMatch && draftMatch[1] === "true";
+				if (isDraft) {
+					continue;
+				}
+
+				const titleMatch = frontmatter.match(/title:\s*(.+)/);
+				const descMatch = frontmatter.match(/description:\s*(.+)/);
+
+				if (titleMatch) {
+					// Clean title and description (remove quotes if present)
+					const title = titleMatch[1].trim().replace(/^["']|["']$/g, "");
+					const description = descMatch
+						? descMatch[1].trim().replace(/^["']|["']$/g, "")
+						: "";
+
+					// Get slug from filename (remove extension)
+					const slug = file.replace(/\.(md|mdx)$/, "");
+
+					projects.push({
+						title,
+						description,
+						url: `/projects/${slug}`,
+					});
+				}
+			}
+		}
+	} catch (_error) {
+		console.error("Error reading projects:", _error);
+	}
+
+	return projects;
 }
 
 // Extract About content from about.astro
@@ -104,6 +168,7 @@ function generateLLMsTxt() {
 		"Tech, AI & data products, and the stories picked up along the way";
 
 	const blogPosts = getBlogPosts();
+	const projects = getProjects();
 	const aboutContent = getAboutContent();
 
 	let content = `# ${siteName}
@@ -128,6 +193,15 @@ ${aboutContent}
 		content += `- [${post.title}](${siteUrl}${post.url})\n`;
 		if (post.description) {
 			content += `  ${post.description}\n`;
+		}
+	});
+
+	content += `\n## Projects\n\n`;
+
+	projects.forEach((project) => {
+		content += `- [${project.title}](${siteUrl}${project.url})\n`;
+		if (project.description) {
+			content += `  ${project.description}\n`;
 		}
 	});
 

@@ -6,15 +6,14 @@ import { Picture } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import avatar from '../images/avatar.jpg';
 import Layout from '../layouts/Layout.astro';
+import { isPublished, sortByDateDesc } from '../utils/content';
 
 // Get latest blog posts (excluding drafts)
-const allPosts = await getCollection('blog', ({ data }) => data.draft !== true);
-const latestPosts = allPosts
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, 3);
+const allPosts = (await getCollection('blog', isPublished)).sort(sortByDateDesc);
+const latestPosts = allPosts.slice(0, 3);
 
 // Get projects if available (excluding drafts)
-const allProjects = await getCollection('projects', ({ data }) => data.draft !== true).catch(() => []);
+const allProjects = (await getCollection('projects', isPublished).catch(() => [])).sort(sortByDateDesc);
 const featuredProjects = allProjects.slice(0, 3);
 ---
 

@@ -5,9 +5,9 @@
 import { getCollection } from 'astro:content';
 import Tags from '../components/Tags.astro';
 import Layout from '../layouts/Layout.astro';
+import { isPublished, sortByDateDesc } from '../utils/content';
 
-const posts = await getCollection('blog', ({ data }) => data.draft !== true);
-posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+const posts = (await getCollection('blog', isPublished)).sort(sortByDateDesc);
 ---
 
 <Layout title="Blog | Soumyo Dey">

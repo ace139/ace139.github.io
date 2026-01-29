@@ -27,6 +27,11 @@ I've always gravitated toward problems where engineering, intelligence, and real
 - [The Secret to MCP Servers That LLMs Love Using](https://soumyo.com/blog/the-secret-to-mcp-servers-that-llms-love-using)
   The Model Context Protocol revolution requires a shift from engineering to product design thinking—building experiences that transform how work gets done, not just tools that LLMs can use
 
+## Projects
+
+- [Food Blog Platform](https://soumyo.com/projects/food-blog-platform)
+  A modern food blog platform built with Next.js
+
 ## Newsletter
 
 Subscribe to "Stochastic Musings" - Notes on product intuition, engineering systems, and signals from the AI landscape.
@@ -41,4 +46,4 @@ Subscribe to "Stochastic Musings" - Notes on product intuition, engineering syst
 
 ---
 
-This site is built with Astro, optimized for performance and accessibility. Last updated: 2026-01-26
+This site is built with Astro, optimized for performance and accessibility. Last updated: 2026-01-29

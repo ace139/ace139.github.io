@@ -14,9 +14,9 @@ bun run preview          # Preview production build locally
 bun run build            # Production build to ./dist/
 
 # Quality
-bun run lint             # ESLint check (.js, .ts, .astro files)
-bun run lint:fix         # Auto-fix lint issues
-bun run format           # Prettier format all files
+bun run lint             # Biome check (lint + format) all files
+bun run lint:fix         # Auto-fix lint and format issues
+bun run format           # Biome format all files
 bun run format:check     # Check formatting without writing
 
 # Analysis
