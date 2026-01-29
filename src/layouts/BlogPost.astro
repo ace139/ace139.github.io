@@ -1,7 +1,10 @@
 ---
-import Layout from './Layout.astro';
+
+
+
 import BlogHeader from '../components/BlogHeader.astro';
 import Tags from '../components/Tags.astro';
+import Layout from './Layout.astro';
 
 const { frontmatter } = Astro.props;
 const readingTime = frontmatter.readingTime || 5;

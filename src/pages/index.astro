@@ -1,17 +1,19 @@
 ---
-import Layout from '../layouts/Layout.astro';
+
+
+
 import { Picture } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import avatar from '../images/avatar.jpg';
+import Layout from '../layouts/Layout.astro';
+import { isPublished, sortByDateDesc } from '../utils/content';
 
-// Get latest blog posts
-const allPosts = await getCollection('blog');
-const latestPosts = allPosts
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, 3);
+// Get latest blog posts (excluding drafts)
+const allPosts = (await getCollection('blog', isPublished)).sort(sortByDateDesc);
+const latestPosts = allPosts.slice(0, 3);
 
-// Get projects if available
-const allProjects = await getCollection('projects').catch(() => []);
+// Get projects if available (excluding drafts)
+const allProjects = (await getCollection('projects', isPublished).catch(() => [])).sort(sortByDateDesc);
 const featuredProjects = allProjects.slice(0, 3);
 ---
 
@@ -33,7 +35,7 @@ const featuredProjects = allProjects.slice(0, 3);
     <div class="relative flex min-h-[calc(100vh-6rem)] flex-col items-center justify-center py-20">
       <!-- Eyebrow -->
       <div class="gsap-fade-up mb-8">
-        <span class="inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.25em] text-[var(--color-text-muted)]">
+        <span class="inline-flex items-center justify-center gap-3 text-center text-xs font-semibold uppercase tracking-[0.25em] text-[var(--color-text-muted)]">
           <span class="h-px w-8 bg-[var(--color-border-dark)]"></span>
           Tech · AI · Product · Stories
           <span class="h-px w-8 bg-[var(--color-border-dark)]"></span>
