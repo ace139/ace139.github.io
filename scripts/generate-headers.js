@@ -68,11 +68,14 @@ const headersContent = `# Font files - specific file first, then directory
   Cache-Control: public, max-age=2592000
 
 # HTML pages - no cache for fresh content
+# Vary: Accept so caches distinguish HTML from the text/markdown agent variant
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
+  Vary: Accept
 
 /
   Cache-Control: public, max-age=0, must-revalidate
+  Vary: Accept
 
 # Global rules (security headers + default cache)
 /*
@@ -83,6 +86,7 @@ const headersContent = `# Font files - specific file first, then directory
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://us.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://us.i.posthog.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
   Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Link: </llms.txt>; rel="describedby"; type="text/markdown", </sitemap-index.xml>; rel="sitemap"; type="application/xml"
   Cache-Control: public, max-age=3600
 `;
 

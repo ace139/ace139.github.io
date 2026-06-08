@@ -161,7 +161,7 @@ if (socialEmbed) {
       }
 
       // Check user inactivity
-      let inactivityTimer;
+      let inactivityTimer: ReturnType<typeof setTimeout>;
       function resetInactivityTimer() {
         clearTimeout(inactivityTimer);
         inactivityTimer = setTimeout(() => {

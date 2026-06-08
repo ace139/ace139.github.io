@@ -379,6 +379,7 @@ const navLinks = [
 
   /* Light mode ambient glow - more subtle */
   html.light .pointer-events-none.fixed.inset-0.z-0 > div {
+    /* biome-ignore lint/complexity/noImportantStyles: overrides the inline opacity set on the glow element by GSAP/utility classes */
     opacity: 0.1 !important;
   }
 
@@ -387,11 +388,16 @@ const navLinks = [
     border-color: var(--color-border-light);
   }
 
-  html.light footer p,
+  html.light footer p {
+    color: var(--color-text-secondary-light);
+  }
+
+  /* biome-ignore lint/style/noDescendingSpecificity: footer links are disjoint from the higher-specificity #main-nav link rules above — no real cascade conflict */
   html.light footer a {
     color: var(--color-text-secondary-light);
   }
 
+  /* biome-ignore lint/style/noDescendingSpecificity: footer links are disjoint from the higher-specificity #main-nav link rules above — no real cascade conflict */
   html.light footer a:hover {
     color: var(--color-primary-light);
   }

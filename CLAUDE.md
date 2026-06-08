@@ -23,9 +23,25 @@ bun run format:check     # Check formatting without writing
 bun run analyze          # Build with bundle analysis
 ```
 
+## Code Quality & Linting
+
+Linting and formatting are handled by **Biome** (via the **Ultracite** preset, `extends: ["ultracite/biome/astro"]` in `biome.json`). `bun run lint` must pass with **zero errors** before committing.
+
+### `biome-ignore` policy
+
+Do **not** add a `biome-ignore` (or `biome-ignore-all`, or a `biome.json` rule override) just to turn a check green. Always prefer fixing the underlying code. A suppression is only acceptable when there is a *genuine, specific reason* the rule does not apply, and that reason **must be written as the suppression's justification** (the text after the `:`), not left blank or generic.
+
+Legitimate reasons look like:
+
+- **Third-party / vendor code kept verbatim** — e.g. the official PostHog loader snippet in `src/components/posthog.astro` (`biome-ignore-all` for `noAssignInExpressions`, `noCommaOperator`, etc.).
+- **Accessibility requirements that need `!important`** — e.g. the `prefers-reduced-motion` overrides in `src/styles/globals.css` must beat any animation rule regardless of specificity.
+- **Verified false positives** — e.g. `noDescendingSpecificity` on selectors that target disjoint elements (`#main-nav a` vs `footer a`), where no real cascade conflict exists.
+
+If you cannot articulate a concrete reason like the above, fix the code instead. "Saves time" or "makes CI pass" is never a valid reason.
+
 ## Architecture Overview
 
-This is an Astro 6 (beta) static site with TailwindCSS v4 and TypeScript. Deployed to Cloudflare Pages.
+This is an Astro 6 static site with TailwindCSS v4 and TypeScript. Deployed to Cloudflare Pages.
 
 ### Content System
 
@@ -54,7 +70,16 @@ Content uses Astro's Content Layer API with glob loaders:
 
 - `scripts/sync-public-env.js` - Copies `.env.public` → `.env` (runs pre-dev/start/build)
 - `scripts/generate-llms-txt.js` - Generates `public/llms.txt` (runs pre-build)
-- `scripts/generate-headers.js` - Creates `dist/_headers` for caching (runs post-build)
+- `scripts/generate-markdown.js` - Generates a `*.html.md` sibling for every built page (runs post-build)
+- `scripts/generate-headers.js` - Creates `dist/_headers` for caching + security/Link headers (runs post-build)
+
+### Markdown for Agents (content negotiation)
+
+Requests with `Accept: text/markdown` receive a Markdown version of the page; browsers keep getting HTML. Implemented without paid Cloudflare features:
+
+- `scripts/generate-markdown.js` converts each page's `<main>` content to Markdown at build time (`dist/<route>/index.html.md`).
+- `functions/_middleware.js` is a Cloudflare Pages middleware that, on `Accept: text/markdown` page requests, serves the pre-generated `.md` with `Content-Type: text/markdown; charset=utf-8` and an `x-markdown-tokens` estimate. Non-page assets (`.css`, `.js`, `.txt`, `.xml`, images) and non-markdown requests pass through untouched. `Vary: Accept` is set on HTML pages so caches distinguish the two variants.
+- Functions middleware is used (not a `dist/_worker.js`) specifically so the `_headers` file keeps applying. Verify changes locally with `bunx wrangler pages dev dist`.
 
 ### Third-Party Integrations
 

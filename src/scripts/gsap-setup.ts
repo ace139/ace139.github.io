@@ -62,13 +62,8 @@ export function animateFadeUp(
 		duration?: number;
 		y?: number;
 	} = {},
-): gsap.core.Tween | void {
-	const {
-		delay = 0,
-		stagger = 0.1,
-		duration = defaultDuration,
-		y: yOffset = 40,
-	} = options;
+): gsap.core.Tween | undefined {
+	const { delay = 0, stagger = 0.1, duration = defaultDuration } = options;
 
 	if (prefersReducedMotion()) {
 		// Immediately show elements for reduced motion users
@@ -101,7 +96,7 @@ export function animateFadeIn(
 		stagger?: number;
 		duration?: number;
 	} = {},
-): gsap.core.Tween | void {
+): gsap.core.Tween | undefined {
 	const { delay = 0, stagger = 0.1, duration = defaultDuration } = options;
 
 	if (prefersReducedMotion()) {
@@ -133,7 +128,7 @@ export function animateScaleIn(
 		duration?: number;
 		scale?: number;
 	} = {},
-): gsap.core.Tween | void {
+): gsap.core.Tween | undefined {
 	const {
 		delay = 0,
 		stagger = 0.1,
@@ -172,7 +167,7 @@ export function animateStaggerGroup(
 		duration?: number;
 		y?: number;
 	} = {},
-): gsap.core.Timeline | void {
+): gsap.core.Timeline | undefined {
 	const {
 		delay = 0,
 		stagger = 0.15,
@@ -227,7 +222,7 @@ export function animateHeroText(
 		stagger?: number;
 		duration?: number;
 	} = {},
-): gsap.core.Timeline | void {
+): gsap.core.Timeline | undefined {
 	const { type = "chars", delay = 0, stagger = 0.03, duration = 0.5 } = options;
 
 	const element =
@@ -289,7 +284,7 @@ export function createParallax(
 		start?: string;
 		end?: string;
 	} = {},
-): ScrollTrigger | void {
+): ScrollTrigger | undefined {
 	const { speed = 0.5, start = "top bottom", end = "bottom top" } = options;
 
 	if (prefersReducedMotion()) return;
@@ -316,7 +311,9 @@ export function createParallax(
  * Call this when navigating away
  */
 export function cleanupAnimations(): void {
-	ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+	for (const trigger of ScrollTrigger.getAll()) {
+		trigger.kill();
+	}
 }
 
 // Export GSAP and ScrollTrigger for direct use

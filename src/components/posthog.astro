@@ -8,6 +8,12 @@ const posthogHost = import.meta.env.PUBLIC_POSTHOG_HOST || 'https://us.i.posthog
 
 <script is:inline type="text/javascript" id="posthog-js" define:vars={{ posthogKey, posthogHost }}>
   /* global posthog */
+  // biome-ignore-all lint/suspicious/noAssignInExpressions: Official PostHog loader snippet (vendor code) — kept verbatim so analytics matches upstream; not refactored.
+  // biome-ignore-all lint/complexity/noCommaOperator: Official PostHog loader snippet (vendor code) — kept verbatim.
+  // biome-ignore-all lint/complexity/noArguments: Official PostHog loader snippet (vendor code) — kept verbatim.
+  // biome-ignore-all lint/style/useTemplate: Official PostHog loader snippet (vendor code) — kept verbatim.
+  // biome-ignore-all lint/suspicious/noDoubleEquals: Official PostHog loader snippet (vendor code) — kept verbatim.
+  // biome-ignore-all lint/suspicious/noImplicitAnyLet: Official PostHog loader snippet (vendor code) — kept verbatim.
   !((t, e) => {
     var o, n, p, r;
     e.__SV ||

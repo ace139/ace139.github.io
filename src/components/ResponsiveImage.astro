@@ -3,7 +3,7 @@
 
 
 import { Picture } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
+import type { ImageMetadata, ImageOutputFormat } from 'astro';
 
 interface Props {
   // Accept string paths, ImageMetadata from astro:assets, or an imported SVG component
@@ -65,8 +65,10 @@ const fallbackFormat = metaFormat === 'jpg' ? 'jpeg' : metaFormat;
 // Compute final responsive widths and formats
 const defaultWidths = [320, 480, 768, 1024, 1280];
 const widthsFinal = widthsProp?.length ? widthsProp : defaultWidths;
-const defaultFormats: ('avif' | 'webp')[] = ['avif', 'webp'];
-let formatsFinal = (formatsProp?.length ? formatsProp : defaultFormats).slice();
+const defaultFormats: ImageOutputFormat[] = ['avif', 'webp'];
+let formatsFinal: ImageOutputFormat[] = (
+  formatsProp?.length ? formatsProp : defaultFormats
+).slice();
 if (fallbackFormat && !formatsFinal.includes(fallbackFormat)) {
   formatsFinal = [...formatsFinal, fallbackFormat];
 }
@@ -84,7 +86,7 @@ if (fallbackFormat && !formatsFinal.includes(fallbackFormat)) {
           src={src as ImageMetadata}
           widths={widthsFinal}
           sizes={sizes}
-          formats={formatsFinal as any}
+          formats={formatsFinal}
           alt={alt}
           loading={loading}
           fetchpriority={fetchpriority}

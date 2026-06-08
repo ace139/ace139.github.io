@@ -51,6 +51,7 @@ const { navLinks } = Astro.props;
       <div class="flex items-center gap-3">
         <!-- Theme Toggle -->
         <button
+          type="button"
           id="theme-toggle"
           aria-label="Toggle theme"
           class="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border-dark)] text-[var(--color-muted-dark)] transition-all hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
@@ -58,6 +59,7 @@ const { navLinks } = Astro.props;
           <!-- Moon icon (shown in dark mode, click to go light) -->
           <svg
             id="theme-icon-dark"
+            aria-hidden="true"
             class="h-5 w-5"
             fill="none"
             stroke="currentColor"
@@ -73,6 +75,7 @@ const { navLinks } = Astro.props;
           <!-- Sun icon (shown in light mode, click to go dark) -->
           <svg
             id="theme-icon-light"
+            aria-hidden="true"
             class="hidden h-5 w-5"
             fill="none"
             stroke="currentColor"
@@ -89,12 +92,14 @@ const { navLinks } = Astro.props;
 
         <!-- Mobile Menu Toggle -->
         <button
+          type="button"
           id="menu-toggle"
           aria-label="Toggle navigation menu"
           class="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border-dark)] text-[var(--color-text-dark)] transition-all hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] md:hidden"
         >
           <svg
             id="menu-icon-open"
+            aria-hidden="true"
             class="h-5 w-5"
             fill="none"
             stroke="currentColor"
@@ -109,6 +114,7 @@ const { navLinks } = Astro.props;
           </svg>
           <svg
             id="menu-icon-close"
+            aria-hidden="true"
             class="hidden h-5 w-5"
             fill="none"
             stroke="currentColor"

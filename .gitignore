@@ -4,6 +4,9 @@ node_modules
 dist
 .astro
 
+# Cloudflare Wrangler local cache
+.wrangler
+
 # Local Netlify folder
 .netlify
 
