@@ -3,22 +3,39 @@
 
 
 interface Props {
-  tags: string[];
-  class?: string;
+	tags: string[];
+	class?: string;
+	variant?: "default" | "scrim";
+	linked?: boolean;
+	hashPrefix?: boolean;
+	limit?: number;
 }
 
-const { tags, class: className = '' } = Astro.props;
+const {
+	tags,
+	class: className = "",
+	variant = "default",
+	linked = true,
+	hashPrefix = true,
+	limit,
+} = Astro.props;
+
+const visibleTags = limit ? tags.slice(0, limit) : tags;
+const pillClass =
+	variant === "scrim" ? "pill pill-scrim text-xs" : "pill text-xs transition-all hover:-translate-y-0.5";
 ---
 
 <div class={`flex flex-wrap gap-2 ${className}`}>
-  {
-    tags.map((tag) => (
-      <a
-        href={`/tags/${tag}`}
-        class="pill text-xs transition-all hover:-translate-y-0.5"
-      >
-        #{tag}
-      </a>
-    ))
-  }
+	{
+		visibleTags.map((tag) => {
+			const label = hashPrefix ? `#${tag}` : tag;
+			return linked ? (
+				<a href={`/tags/${tag}`} class={pillClass}>
+					{label}
+				</a>
+			) : (
+				<span class={pillClass}>{label}</span>
+			);
+		})
+	}
 </div>

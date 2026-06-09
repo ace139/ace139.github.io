@@ -1,0 +1,31 @@
+---
+import { getBentoMode, getBentoPlacements } from "../utils/bento-layout";
+import type { BentoItem } from "../utils/content";
+import ContentCardOverlay from "./ContentCardOverlay.astro";
+
+interface Props {
+	items: BentoItem[];
+	animate?: boolean;
+	class?: string;
+}
+
+const { items, animate = false, class: className = "" } = Astro.props;
+
+const mode = getBentoMode(items.length);
+const placements = getBentoPlacements(items.length);
+---
+
+<div
+	class:list={["content-bento", `content-bento--${mode}`, className]}
+	data-animate-stagger
+>
+	{
+		items.map((item, index) => (
+			<ContentCardOverlay
+				{...item}
+				featured={placements[index].featured}
+				animate={animate}
+			/>
+		))
+	}
+</div>

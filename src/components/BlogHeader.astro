@@ -2,22 +2,9 @@
 
 
 
+import type { HeroConfig } from '../utils/hero-config';
+import { resolveHeroConfig } from '../utils/hero-config';
 import ResponsiveImage from './ResponsiveImage.astro';
-
-interface HeroConfig {
-  position?:
-    | 'center'
-    | 'top'
-    | 'bottom'
-    | 'left'
-    | 'right'
-    | 'top-left'
-    | 'top-right'
-    | 'bottom-left'
-    | 'bottom-right';
-  aspectRatio?: 'cinematic' | 'wide' | 'standard' | 'square';
-  overlay?: 'gradient' | 'dark' | 'light' | 'none';
-}
 
 interface Props {
   title: string;
@@ -30,37 +17,10 @@ interface Props {
 
 const { title, subtitle, date, heroImage, heroConfig, readingTime } = Astro.props;
 
-// Smart defaults with per-post overrides
-const config = {
-  position: heroConfig?.position ?? 'center',
-  aspectRatio: heroConfig?.aspectRatio ?? 'cinematic',
-  overlay: heroConfig?.overlay ?? 'gradient',
-};
-
-// Map aspect ratio keywords to CSS values
-const aspectRatioMap: Record<string, { desktop: string; mobile: string }> = {
-  cinematic: { desktop: '21/9', mobile: '16/9' },
-  wide: { desktop: '2/1', mobile: '16/9' },
-  standard: { desktop: '16/9', mobile: '4/3' },
-  square: { desktop: '4/3', mobile: '1/1' },
-};
-
-// Map position keywords to object-position values
-const positionMap: Record<string, string> = {
-  center: 'center center',
-  top: 'center top',
-  bottom: 'center bottom',
-  left: 'left center',
-  right: 'right center',
-  'top-left': 'left top',
-  'top-right': 'right top',
-  'bottom-left': 'left bottom',
-  'bottom-right': 'right bottom',
-};
-
-const aspectDesktop = aspectRatioMap[config.aspectRatio].desktop;
-const aspectMobile = aspectRatioMap[config.aspectRatio].mobile;
-const objectPosition = positionMap[config.position];
+const config = resolveHeroConfig(heroConfig);
+const aspectDesktop = config.aspectDesktop;
+const aspectMobile = config.aspectMobile;
+const objectPosition = config.objectPosition;
 ---
 
 <header

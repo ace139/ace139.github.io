@@ -1,0 +1,104 @@
+---
+import { Picture } from "astro:assets";
+import type { BentoItem } from "../utils/content";
+import { formatCardMeta } from "../utils/content";
+import { resolveHeroConfig } from "../utils/hero-config";
+import CardCta from "./CardCta.astro";
+import Tags from "./Tags.astro";
+
+interface Props extends BentoItem {
+	featured?: boolean;
+	animate?: boolean;
+}
+
+const {
+	href,
+	title,
+	description,
+	subtitle,
+	date,
+	tags = [],
+	heroImage,
+	heroConfig,
+	kind = "blog",
+	featured = false,
+	animate = false,
+} = Astro.props;
+
+const heroSettings = resolveHeroConfig(heroConfig);
+const meta = formatCardMeta(kind, date);
+const cardTeaser = featured
+	? (description ?? subtitle)
+	: (subtitle ?? description);
+const imageSizes = featured
+	? "(max-width: 1024px) 100vw, 100vw"
+	: "(max-width: 768px) 100vw, 400px";
+---
+
+<a
+	href={href}
+	class:list={[
+		"content-card content-card--overlay group relative h-full",
+		featured && "content-card--featured",
+	]}
+	data-astro-prefetch
+	{...(animate && { "data-animate-item": true })}
+>
+	<div class="content-card-overlay-media">
+		{
+			heroImage ? (
+				<Picture
+					src={heroImage}
+					alt=""
+					widths={[400, 800, 1200]}
+					sizes={imageSizes}
+					formats={["avif", "webp", "jpeg"]}
+					class="content-card-image"
+					style={`object-position: ${heroSettings.objectPosition}`}
+				/>
+			) : (
+				<div class="content-card-placeholder" aria-hidden="true" />
+			)
+		}
+		<div class="content-card-overlay-scrim" aria-hidden="true" />
+	</div>
+	<div class="content-card-overlay-body">
+		{meta && <p class="content-card-meta content-card-meta--overlay">{meta}</p>}
+		<h3
+			class:list={[
+				"content-card-title content-card-title--overlay tracking-tight",
+				featured ? "font-display text-2xl font-normal" : "text-lg font-semibold",
+			]}
+		>
+			{title}
+		</h3>
+		{
+			cardTeaser && (
+				<p
+					class:list={[
+						"content-card-description content-card-description--overlay",
+						featured
+							? "content-card-description--featured"
+							: "content-card-description--compact",
+					]}
+				>
+					{cardTeaser}
+				</p>
+			)
+		}
+		{
+			tags.length > 0 && (
+				<div class="content-card-tags content-card-tags--overlay">
+					<Tags
+						tags={tags}
+						variant="scrim"
+						linked={false}
+						hashPrefix={kind === "blog"}
+						limit={3}
+					/>
+				</div>
+			)
+		}
+		<CardCta label={kind === "project" ? "View" : "Read"} overlay />
+	</div>
+</a>
