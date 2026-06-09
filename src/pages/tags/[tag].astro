@@ -1,51 +1,41 @@
 ---
 
-
-
 import { getCollection } from 'astro:content';
-import BlogPost from '../../components/BlogPost.astro';
+import ContentBentoGrid from '../../components/ContentBentoGrid.astro';
 import Layout from '../../layouts/Layout.astro';
-import { isPublished } from '../../utils/content';
+import { isPublished, toBentoItem } from '../../utils/content';
 
 export async function getStaticPaths() {
   const allPosts = await getCollection('blog', isPublished);
   const allProjects = await getCollection('projects', isPublished);
 
-  // Combine all content items
   const allContent = [...allPosts, ...allProjects];
 
-  // Get unique tags (filter out undefined/null tags)
   const uniqueTags = [...new Set(allContent.flatMap((item) => item.data.tags).filter(Boolean))];
 
-  // Return params for each tag
   return uniqueTags.map((tag) => {
     const filteredContent = allContent.filter((item) => item.data.tags?.includes(tag));
     return {
       params: { tag },
-      props: { posts: filteredContent },
+      props: { items: filteredContent },
     };
   });
 }
 
 const { tag } = Astro.params;
-const { posts } = Astro.props;
+const { items } = Astro.props;
 ---
 
 <Layout title={`Posts tagged with ${tag}`}>
-  <div class="container mx-auto px-4 py-8">
-    <h1 class="mb-8 text-4xl font-bold">Posts tagged with "{tag}"</h1>
-    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-      {
-        posts.map((post) => (
-          <BlogPost
-            url={`/${post.collection}/${post.id}/`}
-            title={post.data.title}
-            description={post.data.description}
-            date={post.data.date}
-            tags={post.data.tags}
-          />
-        ))
-      }
-    </div>
-  </div>
+  <main class="space-y-12 pt-24">
+    <section class="reveal border-b border-[var(--color-border)] pb-12">
+      <p class="section-eyebrow">Tagged</p>
+      <h1 class="section-title mt-4">#{tag}</h1>
+      <p class="section-description mt-4">
+        {items.length} {items.length === 1 ? 'item' : 'items'} tagged with this topic.
+      </p>
+    </section>
+
+    <ContentBentoGrid animate items={items.map(toBentoItem)} />
+  </main>
 </Layout>

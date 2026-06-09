@@ -1,0 +1,55 @@
+---
+import { Picture } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+interface Props {
+	src: ImageMetadata;
+	alt: string;
+	sizes: string;
+	widths: number[];
+	formats?: ("avif" | "webp" | "jpeg")[];
+	class?: string;
+	style?: string;
+	loading?: "lazy" | "eager";
+}
+
+const {
+	src,
+	alt,
+	sizes,
+	widths,
+	formats = ["avif", "webp", "jpeg"],
+	class: className = "content-card-image",
+	style,
+	loading = "lazy",
+} = Astro.props;
+
+const isSvg = src.format === "svg";
+---
+
+{
+	isSvg ? (
+		<img
+			src={src.src}
+			alt={alt}
+			width={src.width}
+			height={src.height}
+			sizes={sizes}
+			loading={loading}
+			decoding="async"
+			class={className}
+			style={style}
+		/>
+	) : (
+		<Picture
+			src={src}
+			alt={alt}
+			widths={widths}
+			sizes={sizes}
+			formats={formats}
+			loading={loading}
+			class={className}
+			style={style}
+		/>
+	)
+}
