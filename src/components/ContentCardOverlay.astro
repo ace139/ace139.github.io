@@ -1,9 +1,9 @@
 ---
-import { Picture } from "astro:assets";
 import type { BentoItem } from "../utils/content";
 import { formatCardMeta } from "../utils/content";
 import { resolveHeroConfig } from "../utils/hero-config";
 import CardCta from "./CardCta.astro";
+import ContentCardImage from "./ContentCardImage.astro";
 import Tags from "./Tags.astro";
 
 interface Props extends BentoItem {
@@ -47,13 +47,11 @@ const imageSizes = featured
 	<div class="content-card-overlay-media">
 		{
 			heroImage ? (
-				<Picture
+				<ContentCardImage
 					src={heroImage}
 					alt=""
 					widths={[400, 800, 1200]}
 					sizes={imageSizes}
-					formats={["avif", "webp", "jpeg"]}
-					class="content-card-image"
 					style={`object-position: ${heroSettings.objectPosition}`}
 				/>
 			) : (

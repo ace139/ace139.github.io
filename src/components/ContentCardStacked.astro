@@ -1,8 +1,8 @@
 ---
-import { Picture } from "astro:assets";
 import type { StackedProjectProps } from "../utils/content";
 import { formatCardMeta } from "../utils/content";
 import CardCta from "./CardCta.astro";
+import ContentCardImage from "./ContentCardImage.astro";
 import Tags from "./Tags.astro";
 
 interface Props extends StackedProjectProps {
@@ -31,13 +31,11 @@ const meta = formatCardMeta("project", date);
 	{
 		heroImage && (
 			<div class="content-card-media content-card-media--stacked">
-				<Picture
+				<ContentCardImage
 					src={heroImage}
 					alt={title}
 					widths={[400, 800, 1200]}
 					sizes="(max-width: 768px) 100vw, 400px"
-					formats={["avif", "webp", "jpeg"]}
-					class="content-card-image"
 				/>
 			</div>
 		)
