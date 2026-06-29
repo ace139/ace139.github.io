@@ -11,6 +11,9 @@ const readingTime = frontmatter.readingTime || 5;
 ---
 
 <Layout title={frontmatter.title}>
+  <!-- Reading progress: mirrors scroll position through the article -->
+  <div class="reading-progress" data-reading-progress aria-hidden="true"></div>
+
   <article class="mx-auto max-w-3xl pt-4 md:pt-8">
     <BlogHeader
       title={frontmatter.title}
@@ -78,14 +81,61 @@ const readingTime = frontmatter.readingTime || 5;
       </div>
     </footer>
   </article>
+
+  <script>
+    // Reading progress bar. Drives transform scaleX (off the layout path)
+    // from the reader's own scroll position. Mirrors the scrollbar, so it is
+    // safe under reduced motion (no autonomous animation).
+    let progressEls: { bar: HTMLElement; article: HTMLElement } | null = null;
+    let ticking = false;
+
+    function updateReadingProgress() {
+      ticking = false;
+      if (!progressEls) return;
+      const { bar, article } = progressEls;
+      const scrollable = article.offsetHeight - window.innerHeight;
+      const scrolled = Math.min(
+        Math.max(-article.getBoundingClientRect().top, 0),
+        Math.max(scrollable, 0),
+      );
+      const progress = scrollable > 0 ? scrolled / scrollable : 0;
+      bar.style.transform = `scaleX(${progress})`;
+    }
+
+    function requestReadingProgress() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(updateReadingProgress);
+      }
+    }
+
+    function setupReadingProgress() {
+      const bar = document.querySelector<HTMLElement>('[data-reading-progress]');
+      const article = document.querySelector('article');
+      progressEls = bar && article ? { bar, article } : null;
+      updateReadingProgress();
+    }
+
+    // Window listeners attach once and persist across view transitions; the
+    // element references are refreshed on each page load.
+    window.addEventListener('scroll', requestReadingProgress, { passive: true });
+    window.addEventListener('resize', requestReadingProgress, { passive: true });
+
+    setupReadingProgress();
+    document.addEventListener('astro:page-load', setupReadingProgress);
+  </script>
 </Layout>
 
 <style>
-  /* Editorial prose styling - optimized for reading */
+  /* Editorial prose styling - optimized for reading.
+     Roboto Slab is the reading body per DESIGN.md; headings below switch to
+     the sans face for structural contrast. */
   .prose-editorial {
     color: var(--color-text-secondary-dark);
+    font-family: var(--font-serif);
     font-size: 1.125rem;
     line-height: 1.8;
+    text-wrap: pretty;
   }
 
   .prose-editorial > :global(* + *) {
@@ -114,7 +164,7 @@ const readingTime = frontmatter.readingTime || 5;
   .prose-editorial :global(a) {
     color: var(--color-accent);
     text-decoration: underline;
-    text-decoration-color: rgba(139, 92, 246, 0.3);
+    text-decoration-color: rgba(244, 63, 94, 0.35);
     text-underline-offset: 2px;
     transition: text-decoration-color 0.2s;
   }
@@ -153,7 +203,7 @@ const readingTime = frontmatter.readingTime || 5;
   .prose-editorial :global(code) {
     background: var(--color-surface-dark);
     padding: 0.125rem 0.375rem;
-    border-radius: 0.25rem;
+    border-radius: 0.375rem;
     font-size: 0.875rem;
     font-family: var(--font-mono, monospace);
     color: var(--color-coral);

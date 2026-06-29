@@ -2,6 +2,20 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Design Context
+
+Strategic design context lives in [`PRODUCT.md`](PRODUCT.md) (read it before UI work). In short:
+
+- **Register**: brand. A personal site where design *is* the product (portfolio + long-form blog).
+- **Who/why**: Soumyo Dey's personal brand home: a builder/systems thinker, a decade across AI, data, systems, and product, who writes about what holds up. Primary job is personal credibility in his own right; the site reflects more than any one company. He's currently Founder & CEO of [Oogway Labs](https://oogwaylabs.com/) (AI consulting/engineering), a present role surfaced on the About page and in the writing, but **not** the homepage headline.
+- **Personality**: authoritative, direct, and quietly funny (*grounded, direct, wry*). Execution over hype, claims grounded in shipped work; a practitioner sharing understanding, never selling.
+- **Anti-references**: AI-agency/consultancy hype (the headline one), generic SaaS landing, AI-slop/templated looks (no per-section tracked eyebrows, no cream-paper default), corporate/clinical sterility, loud hype marketing.
+
+> Note: the earlier Cornet Health / dentist-burnout content (6 draft posts + `content-strategy/`) is a closed chapter being retired; the About page and résumé still reference Cornet and need updating.
+- **Accessibility**: WCAG 2.2 AA across both dark (default) and light themes; reduced-motion alternatives for all GSAP/scroll animation.
+
+When DESIGN.md is generated (via `/impeccable document`), it captures the visual system (palette, type, components).
+
 ## Build & Development Commands
 
 ```bash

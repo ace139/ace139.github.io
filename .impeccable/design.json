@@ -1,0 +1,250 @@
+{
+	"schemaVersion": 2,
+	"generatedAt": "2026-06-29T00:00:00Z",
+	"title": "Design System: Editorial Noir",
+	"extensions": {
+		"colorMeta": {
+			"accent": {
+				"role": "primary",
+				"displayName": "Rose Coral",
+				"canonical": "oklch(65.6% 0.214 13.5)",
+				"tonalRamp": [
+					"oklch(20% 0.08 14)",
+					"oklch(30% 0.12 14)",
+					"oklch(40% 0.16 14)",
+					"oklch(50% 0.19 14)",
+					"oklch(60% 0.21 13.5)",
+					"oklch(70% 0.18 13.5)",
+					"oklch(82% 0.11 13)",
+					"oklch(94% 0.04 13)"
+				]
+			},
+			"amber": {
+				"role": "secondary",
+				"displayName": "Warm Amber",
+				"canonical": "oklch(76.9% 0.166 70)",
+				"tonalRamp": [
+					"oklch(25% 0.06 70)",
+					"oklch(35% 0.09 70)",
+					"oklch(45% 0.12 70)",
+					"oklch(56% 0.14 70)",
+					"oklch(66% 0.16 70)",
+					"oklch(77% 0.166 70)",
+					"oklch(87% 0.11 75)",
+					"oklch(95% 0.05 78)"
+				]
+			},
+			"bg-dark": {
+				"role": "neutral",
+				"displayName": "Base Dark",
+				"canonical": "oklch(17.5% 0.018 265)",
+				"tonalRamp": [
+					"oklch(8% 0.012 265)",
+					"oklch(13% 0.016 265)",
+					"oklch(17.5% 0.018 265)",
+					"oklch(24% 0.02 265)",
+					"oklch(34% 0.018 265)",
+					"oklch(52% 0.016 262)",
+					"oklch(72% 0.012 260)",
+					"oklch(95% 0.006 255)"
+				]
+			},
+			"text": {
+				"role": "neutral",
+				"displayName": "Cool White",
+				"canonical": "oklch(95.5% 0.006 270)",
+				"tonalRamp": [
+					"oklch(20% 0.01 265)",
+					"oklch(34% 0.012 265)",
+					"oklch(48% 0.014 263)",
+					"oklch(60% 0.014 261)",
+					"oklch(70% 0.012 260)",
+					"oklch(80% 0.01 258)",
+					"oklch(88% 0.008 256)",
+					"oklch(95.5% 0.006 270)"
+				]
+			}
+		},
+		"typographyMeta": {
+			"display": {
+				"displayName": "Display",
+				"purpose": "Playfair Display. Hero and feature moments and pull quotes only — reserved."
+			},
+			"headline": {
+				"displayName": "Headline",
+				"purpose": "Plus Jakarta Sans 600. Page H1s and section titles."
+			},
+			"body": {
+				"displayName": "Body",
+				"purpose": "Roboto Slab. Long-form article prose at 1.8 line-height, 65ch measure."
+			},
+			"label": {
+				"displayName": "Label / Eyebrow",
+				"purpose": "Plus Jakarta Sans 600 uppercase 0.2em tracking. Deliberate, not on every section."
+			}
+		},
+		"shadows": [
+			{
+				"name": "card",
+				"value": "0 12px 40px rgba(0,0,0,0.25)",
+				"purpose": "Resting elevation for content cards (dark)."
+			},
+			{
+				"name": "soft",
+				"value": "0 20px 60px rgba(0,0,0,0.3)",
+				"purpose": "Larger panels and hovered cards (dark)."
+			},
+			{
+				"name": "button",
+				"value": "0 15px 30px rgba(244,63,94,0.25)",
+				"purpose": "Rose-tinted lift under primary buttons."
+			},
+			{
+				"name": "accent-glow",
+				"value": "0 0 40px rgba(244,63,94,0.3), 0 0 80px rgba(244,63,94,0.15)",
+				"purpose": "Cinematic spotlight for hero / signature moments only."
+			}
+		],
+		"motion": [
+			{
+				"name": "ease-signature",
+				"value": "cubic-bezier(0.2, 0.8, 0.2, 1)",
+				"purpose": "Default ease-out for state transitions, hovers, and reveals."
+			},
+			{
+				"name": "duration-fast",
+				"value": "200ms",
+				"purpose": "Color and small state changes."
+			},
+			{
+				"name": "duration-base",
+				"value": "300ms",
+				"purpose": "Button/card hover lifts."
+			},
+			{
+				"name": "duration-reveal",
+				"value": "800ms",
+				"purpose": "Scroll-reveal entrances (with reduced-motion fallback)."
+			}
+		],
+		"breakpoints": [
+			{ "name": "sm", "value": "640px" },
+			{ "name": "md", "value": "768px" },
+			{ "name": "lg", "value": "1024px" },
+			{ "name": "xl", "value": "1280px" }
+		]
+	},
+	"components": [
+		{
+			"name": "Primary Button",
+			"kind": "button",
+			"refersTo": "button-primary",
+			"description": "The single high-emphasis action — rose-coral pill with a tinted lift on hover.",
+			"html": "<button class=\"ds-btn-primary\">Read the essay</button>",
+			"css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; background: #f43f5e; color: #fff; border: none; border-radius: 9999px; padding: 0.875rem 1.75rem; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 0.9375rem; font-weight: 600; cursor: pointer; box-shadow: 0 15px 30px rgba(244,63,94,0.25); transition: all 300ms cubic-bezier(0.2,0.8,0.2,1); } .ds-btn-primary:hover { transform: translateY(-3px) scale(1.02); background: #fb7185; box-shadow: 0 20px 40px rgba(244,63,94,0.35); } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(244,63,94,0.4); }"
+		},
+		{
+			"name": "Secondary Button",
+			"kind": "button",
+			"refersTo": "button-secondary",
+			"description": "Low-emphasis action — ghosted outline that takes the accent on hover.",
+			"html": "<button class=\"ds-btn-secondary\">All writing</button>",
+			"css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; background: transparent; color: #f0f2f7; border: 1px solid #252a38; border-radius: 9999px; padding: 0.875rem 1.75rem; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 0.9375rem; font-weight: 600; cursor: pointer; transition: all 300ms cubic-bezier(0.2,0.8,0.2,1); } .ds-btn-secondary:hover { border-color: #f43f5e; color: #f43f5e; background: rgba(244,63,94,0.1); } .ds-btn-secondary:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(244,63,94,0.3); }"
+		},
+		{
+			"name": "Content Card",
+			"kind": "card",
+			"refersTo": "card",
+			"description": "Elevated content container — flat at rest, cinematic lift on hover.",
+			"html": "<article class=\"ds-card\"><h3 class=\"ds-card-title\">82% of Dentists Are Burning Out</h3><p class=\"ds-card-body\">The profession has a documentation problem — and the hours after the last patient leaves are where it hides.</p></article>",
+			"css": ".ds-card { background: #12161f; border: 1px solid #252a38; border-radius: 24px; padding: 2rem; transition: all 300ms cubic-bezier(0.2,0.8,0.2,1); } .ds-card:hover { transform: translateY(-8px); border-color: rgba(244,63,94,0.3); box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 40px rgba(244,63,94,0.1); } .ds-card-title { margin: 0 0 0.5rem; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; color: #f0f2f7; } .ds-card-body { margin: 0; font-family: 'Roboto Slab', Georgia, serif; font-size: 1rem; line-height: 1.7; color: #a0a8b8; }"
+		},
+		{
+			"name": "Filter Pill (active)",
+			"kind": "chip",
+			"refersTo": "pill-active",
+			"description": "Tag/filter pill in its selected state — rose fill, white text.",
+			"html": "<span class=\"ds-pill-active\">dentistry</span>",
+			"css": ".ds-pill-active { display: inline-flex; align-items: center; background: #f43f5e; border: 1px solid #f43f5e; border-radius: 9999px; padding: 0.25rem 0.75rem; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 0.8125rem; color: #fff; }"
+		},
+		{
+			"name": "Filter Pill (interactive)",
+			"kind": "chip",
+			"refersTo": "pill",
+			"description": "Unselected tag/filter pill — hairline outline that takes the accent on hover.",
+			"html": "<span class=\"ds-pill\">healthcare</span>",
+			"css": ".ds-pill { display: inline-flex; align-items: center; background: transparent; border: 1px solid #252a38; border-radius: 9999px; padding: 0.25rem 0.75rem; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 0.8125rem; color: #6b7a8a; cursor: pointer; transition: all 200ms; } .ds-pill:hover { border-color: #f43f5e; color: #f43f5e; background: rgba(244,63,94,0.1); }"
+		},
+		{
+			"name": "Text Input",
+			"kind": "input",
+			"refersTo": "input",
+			"description": "Form field on the surface tone with a rose focus ring.",
+			"html": "<input class=\"ds-input\" type=\"email\" placeholder=\"you@practice.com\" />",
+			"css": ".ds-input { width: 100%; background: #1a1f2b; border: 1px solid #252a38; border-radius: 12px; padding: 0.875rem 1rem; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 1rem; color: #f0f2f7; transition: all 200ms; } .ds-input::placeholder { color: #8893a5; } .ds-input:focus { outline: none; border-color: #f43f5e; box-shadow: 0 0 0 3px rgba(244,63,94,0.15); }"
+		},
+		{
+			"name": "Pull Quote",
+			"kind": "custom",
+			"refersTo": "card",
+			"description": "Signature editorial pull quote — centered Playfair framed by hairline rules.",
+			"html": "<blockquote class=\"ds-pullquote\">When the last patient leaves, the dentist sits down — alone — and starts typing.</blockquote>",
+			"css": ".ds-pullquote { margin: 2rem 0; padding: 2rem 0; border-top: 1px solid #252a38; border-bottom: 1px solid #252a38; font-family: 'Playfair Display', Georgia, serif; font-size: 1.5rem; font-weight: 400; text-align: center; color: #f0f2f7; }"
+		}
+	],
+	"narrative": {
+		"northStar": "Editorial Noir",
+		"overview": "A dark-first editorial system that reads like a well-set magazine shot under cinematic lighting. The default surface is a near-black blue-undertoned void, against which crisp cool-white text and a single rose-coral accent carry the page. Depth comes from soft, diffuse shadow and the occasional accent glow, not from heavy chrome. The personality is rigorous, grounded, assured: a practitioner's notebook with the production values of a print feature. Long-form reading is the product, so the type does the heavy lifting — Playfair Display for display moments, Roboto Slab for article bodies, Plus Jakarta Sans for interface and headings. It rejects the generic SaaS landing, corporate-healthcare sterility, and AI-slop sameness; the cream/paper editorial default is forbidden — the void IS the paper.",
+		"keyCharacteristics": [
+			"Dark-first, with a fully-equal light theme (both clear WCAG 2.2 AA).",
+			"One accent voice: rose-coral, with warm amber as a rare secondary.",
+			"Serif display + serif reading body + sans interface — a tri-family editorial stack.",
+			"Cinematic depth: soft shadows and accent glow, never hard chrome.",
+			"Generous, fluid spacing and a 65ch reading measure."
+		],
+		"rules": [
+			{
+				"name": "The One Voice Rule",
+				"body": "Rose-coral is the only accent that speaks on its own. Amber may accompany it in a gradient, never replace it and never appear as a competing standalone color.",
+				"section": "colors"
+			},
+			{
+				"name": "The Void-Is-Paper Rule",
+				"body": "The reading surface is dark by default. A warm cream/sand/parchment background is forbidden. Warmth lives in the amber accent and the typography, never in the body background.",
+				"section": "colors"
+			},
+			{
+				"name": "The Reserved-Display Rule",
+				"body": "Playfair appears only where an editorial moment earns it. Default headings are Plus Jakarta Sans. Setting every heading in Playfair cheapens the display voice.",
+				"section": "typography"
+			},
+			{
+				"name": "The Earned-Eyebrow Rule",
+				"body": "The uppercase tracked label is real but not scaffolding for every section. One named eyebrow where it carries meaning is voice; an eyebrow above every heading is AI grammar. Default to no eyebrow.",
+				"section": "typography"
+			},
+			{
+				"name": "The Diffuse-Glow Rule",
+				"body": "Shadows are large, soft, and low-opacity — cinematic ambient light, never a hard drop shadow. If the shadow has a visible hard edge or tight blur, widen the blur and lower the opacity.",
+				"section": "elevation"
+			}
+		],
+		"dos": [
+			"Do keep the void as the reading surface. Dark is the default; the light theme is a true near-white (#fafbfc), never a warm cream.",
+			"Do let rose-coral (#f43f5e) be the single accent voice, used sparingly so its appearances mean something.",
+			"Do set long-form body in Roboto Slab at 1.8 line-height, capped at 65ch.",
+			"Do reserve Playfair Display for display moments and pull quotes.",
+			"Do ease motion on cubic-bezier(0.2, 0.8, 0.2, 1) (ease-out), 200-300ms, with a prefers-reduced-motion alternative for every animation.",
+			"Do use large, diffuse, low-opacity shadows for cinematic depth."
+		],
+		"donts": [
+			"Don't ship a generic SaaS landing — no hero-metric template, no identical icon-heading-text card grids, no gradient-on-navy.",
+			"Don't drift into corporate-healthcare sterility — no clinical blue-and-white, no stock-photo-clinician tone.",
+			"Don't lean on AI-slop tells: no uppercase tracked eyebrow above every section, and never a cream/sand/parchment body background.",
+			"Don't use .gradient-text / background-clip: text for emphasis; use weight, size, or the solid accent instead.",
+			"Don't use a colored border-left greater than 1px as a side-stripe accent (the prose blockquote is the single allowed exception).",
+			"Don't reach for .glass-panel decoratively; blur/glass is rare and purposeful, or absent.",
+			"Don't set every heading in Playfair, or let amber compete with rose as a second standalone accent."
+		]
+	}
+}

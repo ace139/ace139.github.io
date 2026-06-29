@@ -8,6 +8,7 @@ import ScriptOptimizer from '../components/ScriptOptimizer.astro';
 import avatar from '../images/avatar.jpg';
 import '@fontsource/playfair-display';
 import '@fontsource/playfair-display/400-italic.css';
+import '@fontsource/playfair-display/700.css';
 import '@fontsource/roboto-slab';
 import '@fontsource/plus-jakarta-sans';
 import '../styles/globals.css';
@@ -47,7 +48,7 @@ const navLinks = [
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0a0d14" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#fafbfc" media="(prefers-color-scheme: light)" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -83,6 +84,19 @@ const navLinks = [
 
         applyTheme();
         document.addEventListener('astro:after-swap', applyTheme);
+      })();
+    </script>
+
+    <!-- Motion readiness (set pre-paint so reveal initial-states never flash,
+         and are never applied for reduced-motion users) -->
+    <script is:inline>
+      (() => {
+        const allowsMotion =
+          typeof matchMedia === 'undefined' ||
+          !matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (allowsMotion) {
+          document.documentElement.classList.add('gsap-ready');
+        }
       })();
     </script>
 
@@ -129,26 +143,31 @@ const navLinks = [
   </head>
 
   <body class="min-h-screen bg-[var(--color-bg-dark)] font-sans text-[var(--color-text-dark)] antialiased transition-colors duration-300">
+    <!-- Skip to content (first focusable element) -->
+    <a href="#main-content" class="skip-link">Skip to content</a>
+
     <!-- Ambient glow effect -->
     <div
       class="pointer-events-none fixed inset-0 z-0"
+      data-ambient
       aria-hidden="true"
     >
-      <!-- Top glow -->
+      <!-- Top glow (rose accent) -->
       <div
-        class="absolute -top-1/2 left-1/4 h-[800px] w-[800px] rounded-full opacity-30 blur-[120px]"
-        style="background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);"
+        class="absolute -top-1/2 left-1/4 h-[800px] w-[800px] rounded-full opacity-30 blur-[80px]"
+        style="background: radial-gradient(circle, rgba(244, 63, 94, 0.14) 0%, transparent 70%);"
       ></div>
-      <!-- Bottom right glow -->
+      <!-- Bottom right glow (warm amber) -->
       <div
-        class="absolute -bottom-1/4 right-0 h-[600px] w-[600px] rounded-full opacity-20 blur-[100px]"
-        style="background: radial-gradient(circle, rgba(251, 113, 133, 0.1) 0%, transparent 70%);"
+        class="absolute -bottom-1/4 right-0 h-[600px] w-[600px] rounded-full opacity-20 blur-[72px]"
+        style="background: radial-gradient(circle, rgba(245, 158, 11, 0.09) 0%, transparent 70%);"
       ></div>
     </div>
 
     <!-- Noise texture overlay -->
     <div
       class="pointer-events-none fixed inset-0 z-[100] opacity-[0.015] mix-blend-overlay"
+      data-ambient
       aria-hidden="true"
       style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');"
     ></div>
@@ -156,7 +175,7 @@ const navLinks = [
     <Navigation navLinks={navLinks} />
 
     <!-- Main Content -->
-    <main class="relative z-10">
+    <main id="main-content" tabindex="-1" class="relative z-10 focus:outline-none">
       <div class="mx-auto max-w-6xl px-4 pt-24 pb-16 sm:px-6 lg:px-8">
         <slot />
       </div>
@@ -166,38 +185,53 @@ const navLinks = [
 
     <!-- Scripts -->
     <script>
-      // Mobile menu toggle
+      // Mobile menu toggle: keeps aria-expanded, icons, and visibility in sync,
+      // closes on Escape (returning focus) and on link selection.
+      function setMenuState(toggle: HTMLElement, menu: HTMLElement, open: boolean) {
+        menu.classList.toggle('hidden', !open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        const openIcon = toggle.querySelector('#menu-icon-open');
+        const closeIcon = toggle.querySelector('#menu-icon-close');
+        if (openIcon && closeIcon) {
+          openIcon.classList.toggle('hidden', open);
+          closeIcon.classList.toggle('hidden', !open);
+        }
+      }
+
       function setupMobileMenu() {
         const menuToggle = document.getElementById('menu-toggle');
         const mobileMenu = document.getElementById('mobile-menu');
-        const menuIconOpen = document.getElementById('menu-icon-open');
-        const menuIconClose = document.getElementById('menu-icon-close');
+        if (!menuToggle || !mobileMenu) return;
 
-        if (menuToggle && mobileMenu && menuIconOpen && menuIconClose) {
-          const newToggle = menuToggle.cloneNode(true) as HTMLElement;
-          if (menuToggle.parentNode) {
-            menuToggle.parentNode.replaceChild(newToggle, menuToggle);
-          }
+        // Reset listeners by cloning (handles re-init across View Transitions)
+        const toggle = menuToggle.cloneNode(true) as HTMLElement;
+        menuToggle.parentNode?.replaceChild(toggle, menuToggle);
 
-          newToggle.addEventListener('click', () => {
-            const isOpen = !mobileMenu.classList.contains('hidden');
-            mobileMenu.classList.toggle('hidden');
+        // Normalize to a known closed state on each (re)init
+        setMenuState(toggle, mobileMenu, false);
 
-            const openIcon = newToggle.querySelector('#menu-icon-open');
-            const closeIcon = newToggle.querySelector('#menu-icon-close');
+        toggle.addEventListener('click', () => {
+          const willOpen = mobileMenu.classList.contains('hidden');
+          setMenuState(toggle, mobileMenu, willOpen);
+        });
 
-            if (openIcon && closeIcon) {
-              if (isOpen) {
-                openIcon.classList.remove('hidden');
-                closeIcon.classList.add('hidden');
-              } else {
-                openIcon.classList.add('hidden');
-                closeIcon.classList.remove('hidden');
-              }
-            }
-          });
+        // Selecting a destination closes the menu
+        for (const link of mobileMenu.querySelectorAll('a')) {
+          link.addEventListener('click', () => setMenuState(toggle, mobileMenu, false));
         }
       }
+
+      // Escape closes the open menu and returns focus to the toggle.
+      // Attached once; resolves the current elements on each keypress.
+      document.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape') return;
+        const toggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (toggle && mobileMenu && !mobileMenu.classList.contains('hidden')) {
+          setMenuState(toggle, mobileMenu, false);
+          toggle.focus();
+        }
+      });
 
       setupMobileMenu();
       document.addEventListener('astro:page-load', setupMobileMenu);

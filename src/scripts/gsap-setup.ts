@@ -40,12 +40,20 @@ export function initGSAP(): void {
 		markers: false, // Set to true for debugging
 	});
 
-	// Add gsap-ready class to enable initial hidden states
-	document.documentElement.classList.add("gsap-ready");
+	// Enable the hidden initial states ONLY when motion is allowed. Under
+	// reduced motion the class is never added, so .gsap-fade-* and .reveal
+	// elements stay visible by default and are never stranded blank.
+	// (The class is also set pre-paint in Layout's <head> to avoid a flash;
+	// this is the idempotent re-assertion for direct calls.)
+	if (!prefersReducedMotion()) {
+		document.documentElement.classList.add("gsap-ready");
+	}
 
 	// Refresh ScrollTrigger after View Transitions
 	document.addEventListener("astro:page-load", () => {
-		document.documentElement.classList.add("gsap-ready");
+		if (!prefersReducedMotion()) {
+			document.documentElement.classList.add("gsap-ready");
+		}
 		ScrollTrigger.refresh();
 	});
 }

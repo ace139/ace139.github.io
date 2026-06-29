@@ -2,7 +2,12 @@
 	"$schema": "https://biomejs.dev/schemas/2.4.16/schema.json",
 	"extends": ["ultracite/biome/astro"],
 	"files": {
-		"includes": ["**", "!!**/.astro", "!!**/dist"]
+		"includes": [
+			"**",
+			"!!**/.astro",
+			"!!**/dist",
+			"!!**/.impeccable/hook.cache.json"
+		]
 	},
 	"css": {
 		"parser": {

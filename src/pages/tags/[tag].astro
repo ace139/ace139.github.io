@@ -27,15 +27,14 @@ const { items } = Astro.props;
 ---
 
 <Layout title={`Posts tagged with ${tag}`}>
-  <main class="space-y-12 pt-24">
+  <div class="space-y-12">
     <section class="reveal border-b border-[var(--color-border)] pb-12">
-      <p class="section-eyebrow">Tagged</p>
-      <h1 class="section-title mt-4">#{tag}</h1>
+      <h1 class="section-title">#{tag}</h1>
       <p class="section-description mt-4">
         {items.length} {items.length === 1 ? 'item' : 'items'} tagged with this topic.
       </p>
     </section>
 
     <ContentBentoGrid animate items={items.map(toBentoItem)} />
-  </main>
+  </div>
 </Layout>

@@ -437,6 +437,9 @@
 		font-weight: 600;
 		letter-spacing: -0.02em;
 		color: var(--color-text-dark);
+		/* Long, unbroken titles (e.g. URLs) must wrap, not overflow the column */
+		overflow-wrap: break-word;
+		text-wrap: balance;
 	}
 
 	.light .content-list-item-title {

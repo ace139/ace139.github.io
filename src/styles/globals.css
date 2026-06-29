@@ -14,13 +14,24 @@
 	--font-serif: "Roboto Slab", Georgia, serif;
 
 	/* Fluid Type Scale */
-	--text-hero: clamp(3rem, 8vw + 1rem, 8rem);
+	--text-hero: clamp(3rem, 8vw + 1rem, 6rem);
 	--text-display: clamp(2rem, 5vw + 1rem, 5rem);
 	--text-h1: clamp(1.75rem, 3vw + 1rem, 3rem);
 	--text-h2: clamp(1.5rem, 2vw + 0.5rem, 2.25rem);
 	--text-h3: clamp(1.25rem, 1.5vw + 0.5rem, 1.5rem);
 	--text-body: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
 	--text-small: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+
+	/* Motion: easing scale (signature ease-out curves, no bounce/elastic) */
+	--ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+	--ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+	--ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+	--ease-signature: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+	/* Motion: durations */
+	--duration-fast: 150ms;
+	--duration-base: 300ms;
+	--duration-reveal: 700ms;
 
 	/* ========================================================================
      DARK MODE COLORS (Default - Editorial Noir)
@@ -35,7 +46,7 @@
 	/* Text - Cool whites and grays */
 	--color-text-dark: #f0f2f7;
 	--color-text-secondary-dark: #a0a8b8;
-	--color-muted-dark: #5a6478;
+	--color-muted-dark: #7e8b9c;
 
 	/* Borders */
 	--color-border-dark: #252a38;
@@ -83,8 +94,8 @@
 	/* Text */
 	--color-text: var(--color-text-dark);
 	--color-text-secondary: var(--color-text-secondary-dark);
-	--color-text-muted: #6b7a8a;
-	/* Improved contrast from #5a6478 - now passes WCAG AA */
+	--color-text-muted: #7e8b9c;
+	/* Unified muted tone; clears WCAG AA (≥4.5:1) on base, elevated, and surface backgrounds */
 
 	/* Borders */
 	--color-border: var(--color-border-dark);
@@ -159,11 +170,31 @@ body {
 		transition-duration: 0.01ms !important;
 	}
 
-	.gsap-animated {
-		/* biome-ignore lint/complexity/noImportantStyles: force GSAP-animated elements visible for reduced-motion users, overriding inline animation styles (a11y requirement) */
+	/* Force every reveal-based element visible, regardless of the gsap-ready
+	   gate or any JS-set initial state. This is the safety net that guarantees
+	   content is never stranded blank for reduced-motion users. */
+	.reveal,
+	.gsap-fade-up,
+	.gsap-fade-in,
+	.gsap-scale-in,
+	[data-animate-item] {
+		/* biome-ignore lint/complexity/noImportantStyles: must beat the gsap-ready initial-state rules and any inline GSAP transform to keep content visible (a11y requirement) */
 		opacity: 1 !important;
-		/* biome-ignore lint/complexity/noImportantStyles: force GSAP-animated elements visible for reduced-motion users, overriding inline animation styles (a11y requirement) */
+		/* biome-ignore lint/complexity/noImportantStyles: must beat the gsap-ready initial-state rules and any inline GSAP transform to keep content visible (a11y requirement) */
 		transform: none !important;
+	}
+}
+
+/* Decorative ambient layers (glow + noise): isolate their paint so they can't
+   invalidate other layers, and drop them entirely for users who ask for less
+   transparency / lower compositing cost. */
+[data-ambient] {
+	contain: layout style paint;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+	[data-ambient] {
+		display: none;
 	}
 }
 
@@ -257,13 +288,6 @@ body {
 		);
 	}
 
-	.gradient-text {
-		background: linear-gradient(135deg, #f43f5e 0%, #f59e0b 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-	}
-
 	/* Light mode gradient variants */
 	.light .gradient-hero {
 		background: linear-gradient(135deg, #be123c 0%, #e11d48 50%, #f59e0b 100%);
@@ -354,29 +378,20 @@ body {
 		transform-origin: bottom left;
 	}
 
-	/* Text masks and overlays */
-	.text-gradient {
-		background: linear-gradient(
-			135deg,
-			var(--color-accent) 0%,
-			var(--color-coral) 100%
-		);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-	}
-
-	/* Scroll reveal for non-GSAP fallback */
-	.reveal {
+	/* Scroll reveal.
+	   Visible by default. The hidden initial state applies ONLY when motion is
+	   active (html.gsap-ready, set pre-paint and never for reduced motion). This
+	   guarantees content is never stranded blank if JS is absent, the tab is
+	   backgrounded, or the IntersectionObserver never fires. */
+	.gsap-ready .reveal {
 		opacity: 0;
 		transform: translateY(30px);
 		transition:
-			opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
-			transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-		will-change: opacity, transform;
+			opacity var(--duration-reveal) var(--ease-out-quint),
+			transform var(--duration-reveal) var(--ease-out-quint);
 	}
 
-	.reveal-visible {
+	.gsap-ready .reveal.reveal-visible {
 		opacity: 1;
 		transform: translateY(0);
 	}
@@ -401,6 +416,35 @@ body {
 	.gsap-ready .gsap-scale-in {
 		opacity: 0;
 		transform: scale(0.95);
+	}
+
+	/* Skip-to-content link: hidden until focused, then slides into view above
+	   all overlays so keyboard users can jump past the fixed nav. */
+	.skip-link {
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 200;
+		margin: 0.75rem;
+		padding: 0.625rem 1.125rem;
+		border-radius: 9999px;
+		background: var(--color-accent);
+		color: #fff;
+		font-size: 0.875rem;
+		font-weight: 600;
+		text-decoration: none;
+		transform: translateY(-150%);
+		transition: transform var(--duration-fast, 150ms) var(--ease-out-quint);
+	}
+
+	.skip-link:focus {
+		transform: translateY(0);
+		outline: 2px solid #fff;
+		outline-offset: 2px;
+	}
+
+	.light .skip-link {
+		background: var(--color-primary-light);
 	}
 
 	/* Section spacing */
@@ -914,15 +958,19 @@ body {
 		position: fixed;
 		top: 0;
 		left: 0;
-		width: 0%;
+		width: 100%;
 		height: 3px;
 		background: linear-gradient(
 			90deg,
 			var(--color-accent) 0%,
 			var(--color-coral) 100%
 		);
-		z-index: 9999;
-		transition: width 100ms linear;
+		/* Above the nav (z-50/60); below the decorative noise overlay (z-100). */
+		z-index: 90;
+		/* Scaled on scroll via transform (off the layout path), not width. */
+		transform: scaleX(0);
+		transform-origin: left;
+		will-change: transform;
 	}
 
 	/* ========================================================================

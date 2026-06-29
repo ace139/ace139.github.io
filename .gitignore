@@ -35,3 +35,7 @@ test-results/
 # Development artifacts
 plans/
 .verify-screenshots/
+
+# Impeccable design-hook session cache (machine-generated; design.json and
+# live/config.json are intentionally kept)
+.impeccable/hook.cache.json

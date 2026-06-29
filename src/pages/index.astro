@@ -22,27 +22,18 @@ const featuredProjects = allProjects.slice(0, 3);
   <!-- Hero Section -->
   <section class="relative -mx-4 -mt-24 min-h-screen overflow-hidden px-4 pt-24 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
     <!-- Hero background glow -->
-    <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+    <div class="pointer-events-none absolute inset-0 overflow-hidden" data-ambient aria-hidden="true">
       <div
-        class="absolute left-1/2 top-1/4 h-[600px] w-[600px] -translate-x-1/2 rounded-full opacity-40 blur-[100px]"
+        class="absolute left-1/2 top-1/4 h-[600px] w-[600px] -translate-x-1/2 rounded-full opacity-40 blur-[80px]"
         style="background: radial-gradient(circle, rgba(244, 63, 94, 0.2) 0%, transparent 70%);"
       ></div>
       <div
-        class="absolute bottom-0 right-0 h-[400px] w-[400px] rounded-full opacity-30 blur-[80px]"
+        class="absolute bottom-0 right-0 h-[400px] w-[400px] rounded-full opacity-30 blur-[64px]"
         style="background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, transparent 70%);"
       ></div>
     </div>
 
     <div class="relative flex min-h-[calc(100vh-6rem)] flex-col items-center justify-center py-20">
-      <!-- Eyebrow -->
-      <div class="gsap-fade-up mb-8">
-        <span class="inline-flex items-center justify-center gap-3 text-center text-xs font-semibold uppercase tracking-[0.25em] text-[var(--color-text-muted)]">
-          <span class="h-px w-8 bg-[var(--color-border-dark)]"></span>
-          Tech · AI · Product · Stories
-          <span class="h-px w-8 bg-[var(--color-border-dark)]"></span>
-        </span>
-      </div>
-
       <!-- Avatar with glow ring -->
       <div class="gsap-fade-up relative mb-10">
         <div class="absolute -inset-4 rounded-full bg-gradient-to-r from-[var(--color-accent)] via-[var(--color-coral)] to-[var(--color-accent)] opacity-20 blur-2xl"></div>
@@ -64,8 +55,8 @@ const featuredProjects = allProjects.slice(0, 3);
       <div class="mb-6 text-center">
         <h1
           id="hero-title"
-          class="display-heading text-[var(--text-hero)] font-normal tracking-tight text-[var(--color-text)]"
-          style="font-size: clamp(3rem, 8vw + 1rem, 7rem); line-height: 1;"
+          class="display-heading text-hero font-bold tracking-tight text-balance text-[var(--color-text)]"
+          style="line-height: 1;"
         >
           <span class="gsap-fade-up inline-block">Soumyo</span>
           <span class="gsap-fade-up inline-block">Dey</span>
@@ -74,21 +65,21 @@ const featuredProjects = allProjects.slice(0, 3);
 
       <!-- Tagline -->
       <p
-        class="gsap-fade-up mx-auto mb-12 max-w-xl text-center text-lg leading-relaxed text-[var(--color-text-secondary)] sm:text-xl"
+        class="gsap-fade-up mx-auto mb-12 max-w-2xl text-pretty text-center text-lg leading-relaxed text-[var(--color-text-secondary)] sm:text-xl"
       >
-        Building products at the intersection of technology, data, and human insight.
-        <span class="text-[var(--color-accent)]">20+ years</span> of stories along the way.
+        Building products where engineering, intelligence, and the real world meet.
+        A decade of shipping things that <span class="text-[var(--color-accent)]">matter</span>, and writing about what holds up.
       </p>
 
       <!-- CTAs -->
       <div class="gsap-fade-up flex flex-col gap-4 sm:flex-row">
         <a
           href="/projects"
-          class="btn btn-primary"
+          class="btn btn-primary group"
           data-astro-prefetch
         >
           View my work
-          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <svg class="h-4 w-4 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
           </svg>
         </a>
@@ -157,14 +148,13 @@ const featuredProjects = allProjects.slice(0, 3);
       <!-- Text content -->
       <div class="reveal">
         <div class="section-header">
-          <p class="section-eyebrow">About</p>
           <h2 class="section-title">Building at the edge of what's possible</h2>
         </div>
         <div class="space-y-4 text-[var(--color-text-secondary)]">
           <p>
-            I've spent two decades building products that sit at the intersection of technology, data, and human insight.
+            I've spent the past decade building products that sit at the intersection of technology, data, and human insight.
             From early-stage startups to scaled platforms, I've learned that the best products emerge from deep
-            understanding—of users, systems, and the messy reality between them.
+            understanding of users, systems, and the messy reality between them.
           </p>
           <p>
             Currently, I'm exploring how AI is reshaping the way we work, create, and make decisions.
@@ -188,7 +178,7 @@ const featuredProjects = allProjects.slice(0, 3);
               href="https://x.com/soumyo"
               target="_blank"
               rel="noopener noreferrer"
-              class="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-text-muted)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+              class="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-text-muted)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
               aria-label="Follow on X"
             >
               <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -199,7 +189,7 @@ const featuredProjects = allProjects.slice(0, 3);
               href="https://linkedin.com/in/soumyo-dey"
               target="_blank"
               rel="noopener noreferrer"
-              class="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-text-muted)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+              class="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-text-muted)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
               aria-label="Connect on LinkedIn"
             >
               <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -210,7 +200,7 @@ const featuredProjects = allProjects.slice(0, 3);
               href="https://github.com/ace139"
               target="_blank"
               rel="noopener noreferrer"
-              class="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-text-muted)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+              class="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-text-muted)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
               aria-label="View GitHub"
             >
               <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -221,28 +211,26 @@ const featuredProjects = allProjects.slice(0, 3);
         </div>
       </div>
 
-      <!-- Stats/highlights card -->
+      <!-- At a glance -->
       <div class="reveal">
-        <div class="card-gradient p-8">
-          <div class="grid gap-8 sm:grid-cols-2">
-            <div>
-              <div class="mb-2 text-3xl font-semibold text-[var(--color-text)]">20+</div>
-              <div class="text-sm text-[var(--color-text-muted)]">Years building products</div>
-            </div>
-            <div>
-              <div class="mb-2 text-3xl font-semibold text-[var(--color-text)]">AI/ML</div>
-              <div class="text-sm text-[var(--color-text-muted)]">Data & Intelligence focus</div>
-            </div>
-            <div>
-              <div class="mb-2 text-3xl font-semibold text-[var(--color-text)]">0→1</div>
-              <div class="text-sm text-[var(--color-text-muted)]">Startup to scale experience</div>
-            </div>
-            <div>
-              <div class="mb-2 text-3xl font-semibold text-[var(--color-text)]">Writing</div>
-              <div class="text-sm text-[var(--color-text-muted)]">Sharing lessons learned</div>
-            </div>
+        <dl class="card-gradient divide-y divide-[var(--color-border)]/60 p-8" aria-label="At a glance">
+          <div class="flex items-baseline justify-between gap-6 py-4 first:pt-0 last:pb-0">
+            <dt class="text-sm text-[var(--color-text-secondary)]">Experience</dt>
+            <dd class="text-right text-xl font-semibold text-[var(--color-text)]">10 years</dd>
           </div>
-        </div>
+          <div class="flex items-baseline justify-between gap-6 py-4 first:pt-0 last:pb-0">
+            <dt class="text-sm text-[var(--color-text-secondary)]">Focus</dt>
+            <dd class="text-right text-xl font-semibold text-[var(--color-text)]">AI, ML &amp; data</dd>
+          </div>
+          <div class="flex items-baseline justify-between gap-6 py-4 first:pt-0 last:pb-0">
+            <dt class="text-sm text-[var(--color-text-secondary)]">Trajectory</dt>
+            <dd class="text-right text-xl font-semibold text-[var(--color-text)]">0&thinsp;→&thinsp;1 to scale</dd>
+          </div>
+          <div class="flex items-baseline justify-between gap-6 py-4 first:pt-0 last:pb-0">
+            <dt class="text-sm text-[var(--color-text-secondary)]">Writing</dt>
+            <dd class="text-right text-xl font-semibold text-[var(--color-text)]">Stochastic Musings</dd>
+          </div>
+        </dl>
       </div>
     </div>
   </section>
@@ -251,7 +239,6 @@ const featuredProjects = allProjects.slice(0, 3);
   {featuredProjects.length > 0 && (
     <section class="section-spacing border-t border-[var(--color-border)]/30">
       <div class="section-header reveal">
-        <p class="section-eyebrow">Selected Work</p>
         <h2 class="section-title">Things I've built</h2>
         <p class="section-description">
           A selection of projects that showcase my approach to product and technology.
@@ -279,7 +266,6 @@ const featuredProjects = allProjects.slice(0, 3);
   <!-- Field Notes (Blog) Section -->
   <section class="section-spacing border-t border-[var(--color-border)]/30">
     <div class="section-header reveal">
-      <p class="section-eyebrow">Field Notes</p>
       <h2 class="section-title">Recent writing</h2>
       <p class="section-description">
         Observations, frameworks, and lessons from building products.
@@ -317,7 +303,6 @@ const featuredProjects = allProjects.slice(0, 3);
         ></div>
 
         <div class="relative">
-          <p class="section-eyebrow mb-4">Newsletter</p>
           <h2 class="display-heading mb-4 text-3xl text-[var(--color-text)] sm:text-4xl">
             Stochastic Musings
           </h2>
@@ -331,10 +316,10 @@ const featuredProjects = allProjects.slice(0, 3);
               href="https://stochasticmusings.substack.com/"
               target="_blank"
               rel="noopener noreferrer"
-              class="btn btn-primary"
+              class="btn btn-primary group"
             >
               Subscribe for free
-              <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <svg class="h-4 w-4 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
             </a>

@@ -9,6 +9,10 @@ interface Props {
 }
 
 const { navLinks } = Astro.props;
+
+const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isActive = (href: string) =>
+  href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`);
 ---
 
 <nav
@@ -36,12 +40,13 @@ const { navLinks } = Astro.props;
         {navLinks.map((link) => (
           <a
             href={link.href}
-            class="relative py-1 text-sm font-medium uppercase tracking-[0.15em] text-[var(--color-muted-dark)] transition-colors hover:text-[var(--color-text-dark)]"
+            aria-current={isActive(link.href) ? 'page' : undefined}
+            class="group relative py-1 text-sm font-medium uppercase tracking-[0.15em] text-[var(--color-muted-dark)] transition-colors hover:text-[var(--color-text-dark)] aria-[current=page]:text-[var(--color-text-dark)]"
             data-astro-prefetch
           >
             <span class="relative">
               {link.label}
-              <span class="absolute -bottom-1 left-0 h-0.5 w-0 bg-[var(--color-accent)] transition-all duration-300 group-hover:w-full"></span>
+              <span class="absolute -bottom-1 left-0 h-0.5 w-full origin-left scale-x-0 bg-[var(--color-accent)] transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100 group-aria-[current=page]:scale-x-100"></span>
             </span>
           </a>
         ))}
@@ -95,6 +100,8 @@ const { navLinks } = Astro.props;
           type="button"
           id="menu-toggle"
           aria-label="Toggle navigation menu"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
           class="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border-dark)] text-[var(--color-text-dark)] transition-all hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] md:hidden"
         >
           <svg
@@ -144,7 +151,8 @@ const { navLinks } = Astro.props;
         {navLinks.map((link) => (
           <a
             href={link.href}
-            class="text-base font-medium uppercase tracking-[0.15em] text-[var(--color-muted-dark)] transition-colors hover:text-[var(--color-accent)]"
+            aria-current={isActive(link.href) ? 'page' : undefined}
+            class="text-base font-medium uppercase tracking-[0.15em] text-[var(--color-muted-dark)] transition-colors hover:text-[var(--color-accent)] aria-[current=page]:text-[var(--color-accent)]"
             data-astro-prefetch
           >
             {link.label}
