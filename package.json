@@ -21,6 +21,7 @@
 		"format:check": "biome format ."
 	},
 	"dependencies": {
+		"@astrojs/markdown-remark": "^7.2.0",
 		"@fontsource/playfair-display": "^5.2.8",
 		"@fontsource/plus-jakarta-sans": "^5.2.8",
 		"@fontsource/roboto-slab": "^5.2.8",

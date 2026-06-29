@@ -1,3 +1,4 @@
+import { unified } from "@astrojs/markdown-remark";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
@@ -38,6 +39,8 @@ export default defineConfig({
 		},
 	},
 	markdown: {
+		// `shikiConfig`/`syntaxHighlight` stay top-level — Astro applies
+		// syntax highlighting outside the markdown processor.
 		shikiConfig: {
 			theme: {
 				light: "github-light",
@@ -45,9 +48,9 @@ export default defineConfig({
 			},
 			wrap: true,
 		},
-		// Use rehype-mermaid (recommended replacement)
-		remarkPlugins: [],
-		rehypePlugins: [rehypeMermaid],
+		// Remark/rehype plugins now live on the processor; the bare
+		// `remarkPlugins`/`rehypePlugins` keys are deprecated in Astro 6.4.
+		processor: unified({ rehypePlugins: [rehypeMermaid] }),
 	},
 	compressHTML: true,
 });
