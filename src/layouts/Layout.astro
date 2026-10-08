@@ -83,8 +83,8 @@ const navLinks = [
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#0a0d14" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#fafbfc" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0a0b" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f7f7f5" media="(prefers-color-scheme: light)" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{fullTitle}</title>
@@ -109,8 +109,7 @@ const navLinks = [
 
     <!-- Self-hosted variable fonts with size-adjusted fallbacks (no layout shift on swap) -->
     <Font cssVariable="--font-jakarta" preload />
-    <Font cssVariable="--font-playfair" preload={[{ style: 'normal' }]} />
-    <Font cssVariable="--font-roboto-slab" />
+    <Font cssVariable="--font-source-serif" preload={type === 'article' ? [{ style: 'normal' }] : false} />
 
     <!-- Theme initialization (dark mode default, prevents FOUC) -->
     <script is:inline>
@@ -120,7 +119,7 @@ const navLinks = [
           if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
             return localStorage.getItem('theme');
           }
-          // Default to dark mode (Editorial Noir)
+          // Default to dark mode
           return 'dark';
         }
 
@@ -174,12 +173,12 @@ const navLinks = [
       }
       /* Prevent FOUC */
       html:not(.light) body {
-        background: #0a0d14;
-        color: #f0f2f7;
+        background: #0a0a0b;
+        color: #f3f3f1;
       }
       html.light body {
-        background: #fafbfc;
-        color: #111827;
+        background: #f7f7f5;
+        color: #0a0a0b;
       }
     </style>
 
@@ -199,18 +198,15 @@ const navLinks = [
     <ClientRouter />
   </head>
 
-  <body class="min-h-screen bg-[var(--color-bg-dark)] font-sans text-[var(--color-text-dark)] antialiased transition-colors duration-300">
+  <body class="min-h-screen bg-[var(--color-bg)] font-sans text-[var(--color-text)] antialiased">
     <!-- Skip to content (first focusable element) -->
     <a href="#main-content" class="skip-link">Skip to content</a>
-
-    <!-- Ambient light: one static gradient layer, no blur filters to repaint -->
-    <div class="ambient-light pointer-events-none fixed inset-0 z-0" data-ambient aria-hidden="true"></div>
 
     <Navigation navLinks={navLinks} />
 
     <!-- Main Content -->
-    <main id="main-content" tabindex="-1" class="relative z-10 focus:outline-none">
-      <div class="mx-auto max-w-6xl px-4 pt-24 pb-16 sm:px-6 lg:px-8">
+    <main id="main-content" tabindex="-1" class="focus:outline-none">
+      <div class="wrap pt-24 pb-16">
         <slot />
       </div>
     </main>
@@ -331,117 +327,5 @@ const navLinks = [
       document.addEventListener('astro:page-load', setupThemeToggle);
     </script>
 
-    <script>
-      // Scroll reveal. Elements are visible by default; html.motion-ok (set
-      // pre-paint, never under reduced motion) arms the hidden initial state in
-      // CSS, and this observer releases it. Stagger groups get per-item delays.
-      function setupScrollReveal() {
-        if (!document.documentElement.classList.contains('motion-ok')) return;
-
-        for (const group of document.querySelectorAll<HTMLElement>('[data-animate-stagger]')) {
-          group.querySelectorAll<HTMLElement>('[data-animate-item]').forEach((item, index) => {
-            item.style.setProperty('--reveal-delay', `${index * 120}ms`);
-            item.classList.add('reveal');
-          });
-        }
-
-        const observer = new IntersectionObserver(
-          (entries) => {
-            for (const entry of entries) {
-              if (entry.isIntersecting) {
-                entry.target.classList.add('reveal-visible');
-                observer.unobserve(entry.target);
-              }
-            }
-          },
-          { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
-        );
-
-        for (const el of document.querySelectorAll('.reveal:not(.reveal-visible)')) {
-          observer.observe(el);
-        }
-      }
-
-      // Fires on the initial load and after every view transition.
-      document.addEventListener('astro:page-load', setupScrollReveal);
-    </script>
   </body>
 </html>
-
-<style is:global>
-  /* Nav backdrop - dark mode default */
-  #nav-backdrop {
-    background: linear-gradient(180deg, rgba(10, 13, 20, 0.95) 0%, rgba(10, 13, 20, 0.8) 100%);
-  }
-
-  /* Light mode body overrides */
-  html.light body {
-    background: var(--color-bg-light);
-    color: var(--color-text-light);
-  }
-
-  /* Light mode nav */
-  html.light #main-nav {
-    border-color: var(--color-border-light);
-  }
-
-  html.light #nav-backdrop {
-    background: linear-gradient(180deg, rgba(250, 251, 252, 0.95) 0%, rgba(250, 251, 252, 0.8) 100%);
-  }
-
-  html.light #main-nav a {
-    color: var(--color-muted-light);
-  }
-
-  html.light #main-nav a:hover {
-    color: var(--color-text-light);
-  }
-
-  html.light #main-nav a[href="/"] {
-    color: var(--color-text-light);
-  }
-
-  html.light #main-nav a[href="/"]:hover {
-    color: var(--color-primary-light);
-  }
-
-  html.light #theme-toggle,
-  html.light #menu-toggle {
-    border-color: var(--color-border-light);
-    color: var(--color-muted-light);
-  }
-
-  html.light #theme-toggle:hover,
-  html.light #menu-toggle:hover {
-    border-color: var(--color-primary-light);
-    color: var(--color-primary-light);
-  }
-
-  /* Light mode ambient glow - more subtle */
-  html.light .ambient-light {
-    opacity: 0.25;
-  }
-
-  /* Light mode footer */
-  html.light footer {
-    border-color: var(--color-border-light);
-  }
-
-  html.light footer p {
-    color: var(--color-text-secondary-light);
-  }
-
-  /* biome-ignore lint/style/noDescendingSpecificity: footer links are disjoint from the higher-specificity #main-nav link rules above — no real cascade conflict */
-  html.light footer a {
-    color: var(--color-text-secondary-light);
-  }
-
-  /* biome-ignore lint/style/noDescendingSpecificity: footer links are disjoint from the higher-specificity #main-nav link rules above — no real cascade conflict */
-  html.light footer a:hover {
-    color: var(--color-primary-light);
-  }
-
-  html.light footer .footer-label {
-    color: var(--color-muted-light);
-  }
-</style>

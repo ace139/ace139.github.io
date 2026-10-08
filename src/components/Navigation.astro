@@ -15,150 +15,205 @@ const isActive = (href: string) =>
   href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`);
 ---
 
-<nav
-  id="main-nav"
-  class="fixed left-0 right-0 top-0 z-50 border-b border-[var(--color-border-dark)]/50 transition-all duration-300"
->
-  <div
-    id="nav-backdrop"
-    class="absolute inset-0 backdrop-blur-xl"
-  ></div>
+<nav id="main-nav" aria-label="Primary">
+  <div class="wrap">
+    <div class="nav-grid grid-12">
+      <!-- Wordmark: columns 1-3 -->
+      <a href="/" class="nav-mark c-label" data-astro-prefetch>Soumyo Dey</a>
 
-  <div class="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-    <div class="flex h-16 items-center justify-between">
-      <!-- Logo -->
-      <a
-        href="/"
-        class="group relative z-10 flex items-center gap-2 text-lg font-semibold tracking-tight text-[var(--color-text-dark)] transition-colors"
-        data-astro-prefetch
-      >
-        <span class="transition-colors group-hover:text-[var(--color-accent)]">Soumyo Dey</span>
-      </a>
-
-      <!-- Desktop Navigation -->
-      <div class="hidden items-center gap-8 md:flex">
+      <!-- Desktop links: start on column 4, like every page's content -->
+      <ul class="nav-links c-body">
         {navLinks.map((link) => (
-          <a
-            href={link.href}
-            aria-current={isActive(link.href) ? 'page' : undefined}
-            class="group relative py-1 text-[0.9375rem] font-medium text-[var(--color-muted-dark)] transition-colors hover:text-[var(--color-text-dark)] aria-[current=page]:text-[var(--color-text-dark)]"
-            data-astro-prefetch
-          >
-            <span class="relative">
+          <li>
+            <a
+              href={link.href}
+              aria-current={isActive(link.href) ? 'page' : undefined}
+              data-astro-prefetch
+            >
               {link.label}
-              <span class="absolute -bottom-1 left-0 h-0.5 w-full origin-left scale-x-0 bg-[var(--color-accent)] transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100 group-aria-[current=page]:scale-x-100"></span>
-            </span>
-          </a>
+            </a>
+          </li>
         ))}
-      </div>
+      </ul>
 
-      <!-- Right side controls -->
-      <div class="flex items-center gap-3">
-        <!-- Theme Toggle -->
-        <button
-          type="button"
-          id="theme-toggle"
-          aria-label="Toggle theme"
-          class="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border-dark)] text-[var(--color-muted-dark)] transition-all hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
-        >
+      <div class="nav-tools">
+        <button type="button" id="theme-toggle" class="nav-btn" aria-label="Toggle theme">
           <!-- Moon icon (shown in dark mode, click to go light) -->
-          <svg
-            id="theme-icon-dark"
-            aria-hidden="true"
-            class="h-5 w-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1.5"
-              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-            ></path>
+          <svg id="theme-icon-dark" aria-hidden="true" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="square" stroke-width="1.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
           </svg>
           <!-- Sun icon (shown in light mode, click to go dark) -->
-          <svg
-            id="theme-icon-light"
-            aria-hidden="true"
-            class="hidden h-5 w-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1.5"
-              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-            ></path>
+          <svg id="theme-icon-light" aria-hidden="true" class="hidden" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="square" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
           </svg>
         </button>
 
-        <!-- Mobile Menu Toggle -->
         <button
           type="button"
           id="menu-toggle"
+          class="nav-btn nav-menu-btn"
           aria-label="Toggle navigation menu"
           aria-expanded="false"
           aria-controls="mobile-menu"
-          class="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border-dark)] text-[var(--color-text-dark)] transition-all hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] md:hidden"
         >
-          <svg
-            id="menu-icon-open"
-            aria-hidden="true"
-            class="h-5 w-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1.5"
-              d="M4 6h16M4 12h16M4 18h16"
-            ></path>
+          <svg id="menu-icon-open" aria-hidden="true" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="square" stroke-width="1.5" d="M4 7h16M4 12h16M4 17h16"></path>
           </svg>
-          <svg
-            id="menu-icon-close"
-            aria-hidden="true"
-            class="hidden h-5 w-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1.5"
-              d="M6 18L18 6M6 6l12 12"
-            ></path>
+          <svg id="menu-icon-close" aria-hidden="true" class="hidden" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="square" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path>
           </svg>
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Mobile Menu -->
-  <div
-    id="mobile-menu"
-    class="fixed left-0 right-0 top-16 z-[60] hidden border-t border-[var(--color-border-dark)]/50 bg-[var(--color-bg-dark)]/95 backdrop-blur-xl md:hidden"
-  >
-    <div
-      class="px-4 py-6"
-    >
-      <div class="flex flex-col space-y-4">
-        {navLinks.map((link) => (
-          <a
-            href={link.href}
-            aria-current={isActive(link.href) ? 'page' : undefined}
-            class="text-lg font-medium text-[var(--color-muted-dark)] transition-colors hover:text-[var(--color-accent)] aria-[current=page]:text-[var(--color-accent)]"
-            data-astro-prefetch
-          >
-            {link.label}
-          </a>
+  <!-- Mobile menu: a solid ruled list -->
+  <div id="mobile-menu" class="hidden">
+    <div class="wrap">
+      <ul>
+        {navLinks.map((link, index) => (
+          <li>
+            <a
+              href={link.href}
+              aria-current={isActive(link.href) ? 'page' : undefined}
+              data-astro-prefetch
+            >
+              <span class="mono" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+              {link.label}
+            </a>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   </div>
 </nav>
+
+<style>
+  #main-nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 50;
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-rule);
+  }
+
+  .nav-grid {
+    align-items: center;
+    height: 4rem;
+  }
+
+  .nav-mark {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    letter-spacing: -0.035em;
+  }
+
+  .nav-mark:hover {
+    color: var(--color-accent);
+  }
+
+  .nav-links {
+    display: none;
+    gap: 2rem;
+  }
+
+  .nav-links a {
+    display: inline-block;
+    padding-block: 0.25rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--color-text-secondary);
+    border-bottom: 2px solid transparent;
+  }
+
+  .nav-links a:hover {
+    color: var(--color-text);
+    border-bottom-color: var(--color-rule-strong);
+  }
+
+  .nav-links a[aria-current='page'] {
+    color: var(--color-text);
+    border-bottom-color: var(--color-accent);
+  }
+
+  .nav-tools {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+
+  /* Phones: wordmark left, controls right. Grid from 768px. */
+  @media (max-width: 47.99rem) {
+    .nav-grid {
+      grid-template-columns: 1fr auto;
+    }
+  }
+
+  @media (min-width: 48rem) {
+    .nav-grid > * {
+      grid-row: 1;
+    }
+
+    .nav-links {
+      display: flex;
+      grid-column: 4 / 11;
+    }
+
+    .nav-tools {
+      grid-column: 11 / -1;
+    }
+
+    .nav-menu-btn {
+      display: none;
+    }
+  }
+
+  .nav-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--color-rule-strong);
+    border-radius: 0;
+    color: var(--color-text);
+    cursor: pointer;
+  }
+
+  .nav-btn:hover {
+    background: var(--color-text);
+    border-color: var(--color-text);
+    color: var(--color-bg);
+  }
+
+  #mobile-menu {
+    border-top: 1px solid var(--color-rule);
+    background: var(--color-bg);
+  }
+
+  #mobile-menu a {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--color-rule);
+    font-size: 1.5rem;
+    font-weight: 650;
+    letter-spacing: -0.035em;
+  }
+
+  #mobile-menu a[aria-current='page'] {
+    color: var(--color-accent);
+  }
+
+  #mobile-menu a:hover {
+    background: var(--color-row-hover);
+  }
+
+  @media (min-width: 48rem) {
+    #mobile-menu {
+      display: none;
+    }
+  }
+</style>

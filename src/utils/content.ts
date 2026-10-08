@@ -3,8 +3,6 @@
  */
 
 import type { CollectionEntry } from "astro:content";
-import type { ImageMetadata } from "astro";
-import type { HeroConfig } from "./hero-config";
 
 /**
  * Filter function for published (non-draft) content
@@ -21,90 +19,37 @@ export const sortByDateDesc = <T extends { data: { date: string } }>(
 	b: T,
 ): number => new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
 
-export function formatCardDate(
-	date: string,
-	style: "short" | "long" = "short",
-): string {
-	return new Date(date).toLocaleDateString("en-US", {
-		year: "numeric",
-		month: style === "short" ? "short" : "long",
-		day: style === "long" ? "numeric" : undefined,
-	});
+/**
+ * Reading time in minutes: ~230 words per minute for considered, technical
+ * reading.
+ */
+export function readingMinutes(body?: string): number {
+	const words = (body ?? "").split(/\s+/).filter(Boolean).length;
+	return Math.max(1, Math.round(words / 230));
 }
 
-export function formatCardMeta(
-	kind: "project" | "blog",
-	date?: string,
-): string | undefined {
-	const parts: string[] = [];
-	if (kind === "project") {
-		parts.push("Project");
-	}
-	if (date) {
-		parts.push(formatCardDate(date, "short"));
-	}
-	return parts.length > 0 ? parts.join(" · ") : undefined;
-}
-
-export interface BentoItem {
+export interface IndexItem {
 	href: string;
 	title: string;
+	/** ISO date string from the content collection. */
+	date: string;
 	description?: string;
-	subtitle?: string;
-	date?: string;
 	tags?: string[];
-	heroImage?: ImageMetadata;
-	heroConfig?: HeroConfig;
-	kind: "project" | "blog";
+	/** Last column: reading time for essays, a kind label for projects. */
+	trailing?: string;
 }
 
-export function toBentoItem(
+/** Row for the typeset index list (`PostIndex`). */
+export function toIndexItem(
 	entry: CollectionEntry<"blog"> | CollectionEntry<"projects">,
-): BentoItem {
-	const kind = entry.collection === "projects" ? "project" : "blog";
-	const base: BentoItem = {
+): IndexItem {
+	const isBlog = entry.collection === "blog";
+	return {
 		href: `/${entry.collection}/${entry.id}`,
 		title: entry.data.title,
-		description: entry.data.description,
 		date: entry.data.date,
-		tags: entry.data.tags,
-		heroImage: entry.data.heroImage,
-		kind,
-	};
-
-	if (entry.collection === "blog") {
-		return {
-			...base,
-			subtitle: entry.data.subtitle,
-			heroConfig: entry.data.heroConfig,
-		};
-	}
-
-	return base;
-}
-
-export interface StackedProjectProps {
-	href: string;
-	title: string;
-	description: string;
-	date: string;
-	tags?: string[];
-	heroImage?: ImageMetadata;
-	github?: string;
-	demo?: string;
-}
-
-export function toStackedProjectProps(
-	entry: CollectionEntry<"projects">,
-): StackedProjectProps {
-	return {
-		href: `/projects/${entry.id}`,
-		title: entry.data.title,
 		description: entry.data.description,
-		date: entry.data.date,
 		tags: entry.data.tags,
-		heroImage: entry.data.heroImage,
-		github: entry.data.github,
-		demo: entry.data.demo,
+		trailing: isBlog ? `${readingMinutes(entry.body)} min` : "Project",
 	};
 }

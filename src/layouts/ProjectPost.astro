@@ -1,9 +1,5 @@
 ---
-
-
-
 import { getImage } from 'astro:assets';
-import ResponsiveImage from '../components/ResponsiveImage.astro';
 import Tags from '../components/Tags.astro';
 import Layout from './Layout.astro';
 
@@ -12,86 +8,52 @@ const { frontmatter } = Astro.props;
 const socialImage = frontmatter.heroImage
   ? (await getImage({ src: frontmatter.heroImage, width: 1200, height: 630, fit: 'cover', format: 'jpeg' })).src
   : undefined;
+const isoDate = new Date(frontmatter.date).toISOString().slice(0, 10);
 ---
 
 <Layout title={frontmatter.title} description={frontmatter.description} image={socialImage}>
-  <article class="mx-auto max-w-3xl pt-20">
-    <div class="mb-8">
-      {
-        frontmatter.heroImage && (
-          <ResponsiveImage
-            src={frontmatter.heroImage}
-            alt={frontmatter.title}
-            class="mb-6 h-[400px] w-full rounded-lg object-cover"
-            loading="eager"
-            fetchpriority="high"
-            sizes="(min-width: 768px) 768px, 100vw"
-          />
-        )
-      }
-      <h1 class="mb-4 text-4xl font-bold font-serif text-[var(--color-text)]">{frontmatter.title}</h1>
-      <p class="mb-6 text-xl text-[var(--color-text-secondary)]">
-        {frontmatter.description}
-      </p>
+  <article class="pt-4">
+    <header class="pb-12">
+      <dl class="grid-12 gap-y-4 border-y border-[var(--color-rule)] py-4">
+        <div class="c-label">
+          <dt class="mono">Published</dt>
+          <dd class="mono text-[var(--color-text)]"><time datetime={isoDate}>{isoDate}</time></dd>
+        </div>
+        {frontmatter.tags && (
+          <div class="c-body">
+            <dt class="mono">Topics</dt>
+            <dd><Tags tags={frontmatter.tags} /></dd>
+          </div>
+        )}
+      </dl>
 
-      <div class="mb-6">
-        {frontmatter.tags && <Tags tags={frontmatter.tags} />}
+      <div class="grid-12 gap-y-6 pt-12">
+        <h1 class="c-body t-title">{frontmatter.title}</h1>
+        <p class="c-body t-lead max-w-[40rem]">{frontmatter.description}</p>
+
+        {(frontmatter.github || frontmatter.demo) && (
+          <p class="c-body flex flex-wrap gap-x-8 gap-y-2">
+            {frontmatter.github && (
+              <a href={frontmatter.github} class="link" target="_blank" rel="noopener noreferrer">GitHub repository</a>
+            )}
+            {frontmatter.demo && (
+              <a href={frontmatter.demo} class="link" target="_blank" rel="noopener noreferrer">Live demo</a>
+            )}
+          </p>
+        )}
       </div>
+    </header>
 
-      <div class="mb-8 flex gap-4">
-        {
-          frontmatter.github && (
-            <a
-              href={frontmatter.github}
-              class="inline-flex items-center gap-2 text-[var(--color-primary)] hover:text-[var(--color-primary-hover)]"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-              </svg>
-              GitHub Repository
-            </a>
-          )
-        }
-        {
-          frontmatter.demo && (
-            <a
-              href={frontmatter.demo}
-              class="inline-flex items-center gap-2 text-[var(--color-primary)] hover:text-[var(--color-primary-hover)]"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                />
-              </svg>
-              Live Demo
-            </a>
-          )
-        }
+    <div class="grid-12 border-t border-[var(--color-rule)] pt-8">
+      <div class="c-body">
+        <div class="prose">
+          <slot />
+        </div>
       </div>
     </div>
 
-    <div class="prose max-w-none">
-      <slot />
-    </div>
-
-    <div class="mt-12 border-t border-[var(--color-border)]/30 pt-8">
-      <a href="/projects" class="inline-flex items-center text-[var(--color-primary)] hover:text-[var(--color-primary-hover)]">
-        <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-        </svg>
-        Back to Projects
-      </a>
+    <div class="grid-12 mt-16 border-t border-[var(--color-rule)] pt-8">
+      <p class="c-body"><a href="/projects" class="link">Back to Projects</a></p>
     </div>
   </article>
 </Layout>
