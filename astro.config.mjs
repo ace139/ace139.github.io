@@ -9,8 +9,19 @@ import rehypeMermaid from "rehype-mermaid";
  * Self-hosted variable font from an installed @fontsource-variable package.
  * Latin subset only: the site is English, and one file per style keeps
  * preloading exact (rare glyphs fall back to the system face).
+ * `axes` picks a fontsource axis set per style (default `wght`). Newsreader's
+ * upright face uses `opsz` so the optical-size axis tracks font-size; its
+ * italic stays wght-only (rarely used, half the bytes).
  */
-function variableFamily({ name, cssVariable, pkg, weight, styles, fallbacks }) {
+function variableFamily({
+	name,
+	cssVariable,
+	pkg,
+	weight,
+	styles,
+	fallbacks,
+	axes = {},
+}) {
 	return {
 		provider: fontProviders.local(),
 		name,
@@ -19,7 +30,7 @@ function variableFamily({ name, cssVariable, pkg, weight, styles, fallbacks }) {
 		options: {
 			variants: styles.map((style) => ({
 				src: [
-					`./node_modules/@fontsource-variable/${pkg}/files/${pkg}-latin-wght-${style}.woff2`,
+					`./node_modules/@fontsource-variable/${pkg}/files/${pkg}-latin-${axes[style] ?? "wght"}-${style}.woff2`,
 				],
 				weight,
 				style,
@@ -46,19 +57,12 @@ export default defineConfig({
 			fallbacks: ["system-ui", "sans-serif"],
 		}),
 		variableFamily({
-			name: "Playfair Display",
-			cssVariable: "--font-playfair",
-			pkg: "playfair-display",
-			weight: "400 900",
+			name: "Newsreader",
+			cssVariable: "--font-newsreader",
+			pkg: "newsreader",
+			weight: "200 800",
 			styles: ["normal", "italic"],
-			fallbacks: ["Georgia", "serif"],
-		}),
-		variableFamily({
-			name: "Roboto Slab",
-			cssVariable: "--font-roboto-slab",
-			pkg: "roboto-slab",
-			weight: "100 900",
-			styles: ["normal"],
+			axes: { normal: "opsz" },
 			fallbacks: ["Georgia", "serif"],
 		}),
 	],
