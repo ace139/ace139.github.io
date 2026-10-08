@@ -1,31 +1,30 @@
 ---
-
 import { getCollection } from 'astro:content';
-import ContentCardStacked from '../components/ContentCardStacked.astro';
+import ContentListItem from '../components/ContentListItem.astro';
 import Layout from '../layouts/Layout.astro';
-import { isPublished, sortByDateDesc, toStackedProjectProps } from '../utils/content';
+import { isPublished, sortByDateDesc, toEntry } from '../utils/content';
 
 const projects = (await getCollection('projects', isPublished)).sort(sortByDateDesc);
 ---
 
 <Layout title="Work" description="Things Soumyo Dey has built, with notes on what worked and what broke.">
-  <div class="space-y-12">
-    <section class="fade-up">
-      <h1 class="section-title">Selected Work</h1>
-      <p class="section-description mt-4 max-w-2xl text-lg">
-        Experiments, shipping stories, and products that bend AI, strategy, and delightful UI into something useful.
-      </p>
-    </section>
+  <header class="chapter-head">
+    <h1 class="chapter-title">Selected Work</h1>
+    <p class="chapter-dek">
+      Experiments, shipping stories, and products that bend AI, strategy, and delightful UI into something useful.
+    </p>
+  </header>
 
+  <div class="section-break">
     {
       projects.length > 0 ? (
-        <div class="grid gap-8 md:grid-cols-2" data-animate-stagger>
+        <div class="entries">
           {projects.map((project) => (
-            <ContentCardStacked {...toStackedProjectProps(project)} animate />
+            <ContentListItem {...toEntry(project)} />
           ))}
         </div>
       ) : (
-        <p class="max-w-2xl text-lg text-[var(--color-text-secondary)]">
+        <p class="measure text-[var(--color-text-secondary)]">
           Project write-ups are in progress. For now, the{' '}
           <a class="link-primary" href="/blog">writing</a>
           {' '}covers what I've been building.

@@ -83,8 +83,8 @@ const navLinks = [
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#0a0d14" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#fafbfc" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1c1b1a" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#fbfbfa" media="(prefers-color-scheme: light)" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{fullTitle}</title>
@@ -107,79 +107,81 @@ const navLinks = [
     <meta name="twitter:creator" content="@soumyo" />
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 
-    <!-- Self-hosted variable fonts with size-adjusted fallbacks (no layout shift on swap) -->
-    <Font cssVariable="--font-jakarta" preload />
-    <Font cssVariable="--font-playfair" preload={[{ style: 'normal' }]} />
-    <Font cssVariable="--font-roboto-slab" />
+    <!-- Self-hosted variable font (roman + italic) with a size-adjusted fallback (no layout shift on swap) -->
+    <Font cssVariable="--font-source-serif" preload />
 
-    <!-- Theme initialization (dark mode default, prevents FOUC) -->
+    <!-- Theme initialization (follows the system preference until the reader
+         chooses; runs before first paint so there is no flash) -->
     <script is:inline>
       (() => {
-        function getTheme() {
-          // Check localStorage first
-          if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-            return localStorage.getItem('theme');
+        const systemDark = matchMedia('(prefers-color-scheme: dark)');
+        const chrome = { light: '#fbfbfa', dark: '#1c1b1a' };
+
+        function storedTheme() {
+          try {
+            const value = localStorage.getItem('theme');
+            return value === 'light' || value === 'dark' ? value : null;
+          } catch {
+            return null;
           }
-          // Default to dark mode (Editorial Noir)
-          return 'dark';
         }
 
         function applyTheme() {
-          const theme = getTheme();
-          const html = document.documentElement;
-
-          // Remove both classes first
-          html.classList.remove('light', 'dark');
-
-          // Add the appropriate class (we use 'light' class for light mode,
-          // default/no class or 'dark' class for dark mode)
-          if (theme === 'light') {
-            html.classList.add('light');
+          const theme = storedTheme() ?? (systemDark.matches ? 'dark' : 'light');
+          const root = document.documentElement;
+          root.classList.remove('light', 'dark');
+          root.classList.add(theme);
+          for (const meta of document.querySelectorAll('meta[name="theme-color"]')) {
+            meta.setAttribute('content', chrome[theme]);
           }
-          // Dark is default, no class needed but we add it for consistency
+          document.dispatchEvent(new Event('theme-applied'));
         }
 
         applyTheme();
+        systemDark.addEventListener('change', applyTheme);
+        document.addEventListener('theme-change', applyTheme);
         document.addEventListener('astro:after-swap', applyTheme);
       })();
     </script>
 
-    <!-- Motion readiness (set pre-paint so reveal initial-states never flash,
-         and are never applied for reduced-motion users) -->
+    <!-- Motion readiness (set pre-paint; never set for reduced-motion users, so
+         transitions gated on it never run for them) -->
     <script is:inline>
       (() => {
-        const allowsMotion =
-          typeof matchMedia === 'undefined' ||
-          !matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (allowsMotion) {
-          document.documentElement.classList.add('motion-ok');
+        function markMotion() {
+          const allowsMotion =
+            typeof matchMedia === 'undefined' ||
+            !matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (allowsMotion) {
+            document.documentElement.classList.add('motion-ok');
+          }
         }
+        markMotion();
+        // View transitions replace the <html> attributes; restore the flag.
+        document.addEventListener('astro:after-swap', markMotion);
       })();
     </script>
 
-    <!-- Critical inline styles -->
+    <!-- Critical inline styles: mirror --color-bg / --color-text so first paint matches the theme -->
     <style is:inline>
       :root {
-        color-scheme: dark light;
+        color-scheme: light dark;
+      }
+      :root.light {
+        color-scheme: light;
+      }
+      :root.dark {
+        color-scheme: dark;
       }
       body {
         margin: 0;
+        background: light-dark(#fbfbfa, #1c1b1a);
+        color: light-dark(#18181b, #ebe9e5);
         text-rendering: optimizeLegibility;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
       }
       img {
         max-width: 100%;
         height: auto;
-      }
-      /* Prevent FOUC */
-      html:not(.light) body {
-        background: #0a0d14;
-        color: #f0f2f7;
-      }
-      html.light body {
-        background: #fafbfc;
-        color: #111827;
       }
     </style>
 
@@ -199,18 +201,15 @@ const navLinks = [
     <ClientRouter />
   </head>
 
-  <body class="min-h-screen bg-[var(--color-bg-dark)] font-sans text-[var(--color-text-dark)] antialiased transition-colors duration-300">
+  <body>
     <!-- Skip to content (first focusable element) -->
     <a href="#main-content" class="skip-link">Skip to content</a>
-
-    <!-- Ambient light: one static gradient layer, no blur filters to repaint -->
-    <div class="ambient-light pointer-events-none fixed inset-0 z-0" data-ambient aria-hidden="true"></div>
 
     <Navigation navLinks={navLinks} />
 
     <!-- Main Content -->
-    <main id="main-content" tabindex="-1" class="relative z-10 focus:outline-none">
-      <div class="mx-auto max-w-6xl px-4 pt-24 pb-16 sm:px-6 lg:px-8">
+    <main id="main-content" tabindex="-1" class="focus:outline-none">
+      <div class="page">
         <slot />
       </div>
     </main>
@@ -219,229 +218,41 @@ const navLinks = [
 
     <!-- Scripts -->
     <script>
-      // Mobile menu toggle: keeps aria-expanded, icons, and visibility in sync,
-      // closes on Escape (returning focus) and on link selection.
-      function setMenuState(toggle: HTMLElement, menu: HTMLElement, open: boolean) {
-        menu.classList.toggle('hidden', !open);
-        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-        const openIcon = toggle.querySelector('#menu-icon-open');
-        const closeIcon = toggle.querySelector('#menu-icon-close');
-        if (openIcon && closeIcon) {
-          openIcon.classList.toggle('hidden', open);
-          closeIcon.classList.toggle('hidden', !open);
-        }
+      // Theme toggle: the icon shows the current theme; a click pins the
+      // other one in localStorage and asks the inline script to apply it.
+      function updateThemeIcons() {
+        const isLight = document.documentElement.classList.contains('light');
+        document.getElementById('theme-icon-dark')?.classList.toggle('hidden', isLight);
+        document.getElementById('theme-icon-light')?.classList.toggle('hidden', !isLight);
       }
 
-      function setupMobileMenu() {
-        const menuToggle = document.getElementById('menu-toggle');
-        const mobileMenu = document.getElementById('mobile-menu');
-        if (!menuToggle || !mobileMenu) return;
+      function setupThemeToggle() {
+        updateThemeIcons();
+        const themeToggle = document.getElementById('theme-toggle');
+        if (!themeToggle) return;
 
         // Reset listeners by cloning (handles re-init across View Transitions)
-        const toggle = menuToggle.cloneNode(true) as HTMLElement;
-        menuToggle.parentNode?.replaceChild(toggle, menuToggle);
-
-        // Normalize to a known closed state on each (re)init
-        setMenuState(toggle, mobileMenu, false);
+        const toggle = themeToggle.cloneNode(true) as HTMLElement;
+        themeToggle.parentNode?.replaceChild(toggle, themeToggle);
 
         toggle.addEventListener('click', () => {
-          const willOpen = mobileMenu.classList.contains('hidden');
-          setMenuState(toggle, mobileMenu, willOpen);
-        });
-
-        // Selecting a destination closes the menu
-        for (const link of mobileMenu.querySelectorAll('a')) {
-          link.addEventListener('click', () => setMenuState(toggle, mobileMenu, false));
-        }
-      }
-
-      // Escape closes the open menu and returns focus to the toggle.
-      // Attached once; resolves the current elements on each keypress.
-      document.addEventListener('keydown', (event) => {
-        if (event.key !== 'Escape') return;
-        const toggle = document.getElementById('menu-toggle');
-        const mobileMenu = document.getElementById('mobile-menu');
-        if (toggle && mobileMenu && !mobileMenu.classList.contains('hidden')) {
-          setMenuState(toggle, mobileMenu, false);
-          toggle.focus();
-        }
-      });
-
-      setupMobileMenu();
-      document.addEventListener('astro:page-load', setupMobileMenu);
-    </script>
-
-    <script>
-      // Theme toggle logic
-      function setupThemeToggle() {
-        const themeToggle = document.getElementById('theme-toggle');
-        const darkIcon = document.getElementById('theme-icon-dark');
-        const lightIcon = document.getElementById('theme-icon-light');
-
-        function updateIcons() {
-          const isLight = document.documentElement.classList.contains('light');
-          if (darkIcon && lightIcon) {
-            if (isLight) {
-              darkIcon.classList.add('hidden');
-              lightIcon.classList.remove('hidden');
-            } else {
-              darkIcon.classList.remove('hidden');
-              lightIcon.classList.add('hidden');
-            }
+          const next = document.documentElement.classList.contains('light') ? 'dark' : 'light';
+          try {
+            localStorage.setItem('theme', next);
+          } catch {
+            // Storage blocked: the choice still applies for this page view.
+            document.documentElement.classList.remove('light', 'dark');
+            document.documentElement.classList.add(next);
+            updateThemeIcons();
+            return;
           }
-        }
-
-        // Initial icon state
-        updateIcons();
-
-        if (themeToggle) {
-          const newToggle = themeToggle.cloneNode(true) as HTMLElement;
-          themeToggle.parentNode?.replaceChild(newToggle, themeToggle);
-
-          newToggle.addEventListener('click', () => {
-            const html = document.documentElement;
-            const isCurrentlyLight = html.classList.contains('light');
-
-            if (isCurrentlyLight) {
-              html.classList.remove('light');
-              localStorage.setItem('theme', 'dark');
-            } else {
-              html.classList.add('light');
-              localStorage.setItem('theme', 'light');
-            }
-
-            // Update icons after toggle
-            const updatedDarkIcon = newToggle.querySelector('#theme-icon-dark');
-            const updatedLightIcon = newToggle.querySelector('#theme-icon-light');
-
-            if (updatedDarkIcon && updatedLightIcon) {
-              if (html.classList.contains('light')) {
-                updatedDarkIcon.classList.add('hidden');
-                updatedLightIcon.classList.remove('hidden');
-              } else {
-                updatedDarkIcon.classList.remove('hidden');
-                updatedLightIcon.classList.add('hidden');
-              }
-            }
-          });
-        }
+          document.dispatchEvent(new Event('theme-change'));
+        });
       }
 
+      document.addEventListener('theme-applied', updateThemeIcons);
       setupThemeToggle();
       document.addEventListener('astro:page-load', setupThemeToggle);
     </script>
-
-    <script>
-      // Scroll reveal. Elements are visible by default; html.motion-ok (set
-      // pre-paint, never under reduced motion) arms the hidden initial state in
-      // CSS, and this observer releases it. Stagger groups get per-item delays.
-      function setupScrollReveal() {
-        if (!document.documentElement.classList.contains('motion-ok')) return;
-
-        for (const group of document.querySelectorAll<HTMLElement>('[data-animate-stagger]')) {
-          group.querySelectorAll<HTMLElement>('[data-animate-item]').forEach((item, index) => {
-            item.style.setProperty('--reveal-delay', `${index * 120}ms`);
-            item.classList.add('reveal');
-          });
-        }
-
-        const observer = new IntersectionObserver(
-          (entries) => {
-            for (const entry of entries) {
-              if (entry.isIntersecting) {
-                entry.target.classList.add('reveal-visible');
-                observer.unobserve(entry.target);
-              }
-            }
-          },
-          { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
-        );
-
-        for (const el of document.querySelectorAll('.reveal:not(.reveal-visible)')) {
-          observer.observe(el);
-        }
-      }
-
-      // Fires on the initial load and after every view transition.
-      document.addEventListener('astro:page-load', setupScrollReveal);
-    </script>
   </body>
 </html>
-
-<style is:global>
-  /* Nav backdrop - dark mode default */
-  #nav-backdrop {
-    background: linear-gradient(180deg, rgba(10, 13, 20, 0.95) 0%, rgba(10, 13, 20, 0.8) 100%);
-  }
-
-  /* Light mode body overrides */
-  html.light body {
-    background: var(--color-bg-light);
-    color: var(--color-text-light);
-  }
-
-  /* Light mode nav */
-  html.light #main-nav {
-    border-color: var(--color-border-light);
-  }
-
-  html.light #nav-backdrop {
-    background: linear-gradient(180deg, rgba(250, 251, 252, 0.95) 0%, rgba(250, 251, 252, 0.8) 100%);
-  }
-
-  html.light #main-nav a {
-    color: var(--color-muted-light);
-  }
-
-  html.light #main-nav a:hover {
-    color: var(--color-text-light);
-  }
-
-  html.light #main-nav a[href="/"] {
-    color: var(--color-text-light);
-  }
-
-  html.light #main-nav a[href="/"]:hover {
-    color: var(--color-primary-light);
-  }
-
-  html.light #theme-toggle,
-  html.light #menu-toggle {
-    border-color: var(--color-border-light);
-    color: var(--color-muted-light);
-  }
-
-  html.light #theme-toggle:hover,
-  html.light #menu-toggle:hover {
-    border-color: var(--color-primary-light);
-    color: var(--color-primary-light);
-  }
-
-  /* Light mode ambient glow - more subtle */
-  html.light .ambient-light {
-    opacity: 0.25;
-  }
-
-  /* Light mode footer */
-  html.light footer {
-    border-color: var(--color-border-light);
-  }
-
-  html.light footer p {
-    color: var(--color-text-secondary-light);
-  }
-
-  /* biome-ignore lint/style/noDescendingSpecificity: footer links are disjoint from the higher-specificity #main-nav link rules above — no real cascade conflict */
-  html.light footer a {
-    color: var(--color-text-secondary-light);
-  }
-
-  /* biome-ignore lint/style/noDescendingSpecificity: footer links are disjoint from the higher-specificity #main-nav link rules above — no real cascade conflict */
-  html.light footer a:hover {
-    color: var(--color-primary-light);
-  }
-
-  html.light footer .footer-label {
-    color: var(--color-muted-light);
-  }
-</style>

@@ -1,158 +1,94 @@
 @import "tailwindcss";
-@import "./content-surfaces.css";
 
 /* ==========================================================================
-   EDITORIAL NOIR DESIGN SYSTEM
-   A sophisticated dark-mode-first aesthetic with editorial typography
-   and cinematic lighting
+   THE QUARTERLY: A LONG-FORM BOOK SYSTEM
+   One serif superfamily (Source Serif 4, optical sizes), ink on near-white by
+   day, warm off-black by night, and a single deep carmine for links, focus and
+   current states. Colors switch with light-dark(), so the system preference
+   works with no script; html.light / html.dark (set from localStorage) pin it.
    ========================================================================== */
 
-@theme {
-	/* Typography */
-	/* Families (and size-adjusted fallbacks) are defined by Astro's Fonts API
-	   in astro.config.mjs and exposed as these CSS variables. */
-	--font-display: var(--font-playfair);
-	--font-sans: var(--font-jakarta);
-	--font-serif: var(--font-roboto-slab);
+@theme static {
+	/* Typography: families (and size-adjusted fallbacks) come from Astro's
+	   Fonts API in astro.config.mjs and are exposed as --font-source-serif. */
+	--default-font-family: var(--font-source-serif);
+	--font-serif: var(--font-source-serif);
+	--font-mono:
+		ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono",
+		monospace;
 
-	/* Fluid Type Scale */
-	--text-hero: clamp(3rem, 8vw + 1rem, 6rem);
-	--text-display: clamp(2rem, 5vw + 1rem, 5rem);
-	--text-h1: clamp(1.75rem, 3vw + 1rem, 3rem);
-	--text-h2: clamp(1.5rem, 2vw + 0.5rem, 2.25rem);
-	--text-h3: clamp(1.25rem, 1.5vw + 0.5rem, 1.5rem);
-	--text-body: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
-	--text-small: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+	/* Type scale */
+	--text-display: clamp(2.75rem, 1.6rem + 5vw, 5rem);
+	--text-title: clamp(2.125rem, 1.45rem + 3vw, 3.5rem);
+	--text-section: clamp(1.625rem, 1.3rem + 1.4vw, 2.125rem);
+	--text-lede: clamp(1.25rem, 1.15rem + 0.5vw, 1.4375rem);
+	--text-body: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+	--text-small: 0.9375rem;
+	--text-note: 0.8125rem;
 
-	/* Motion: easing scale (signature ease-out curves, no bounce/elastic) */
-	--ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+	/* Measure: a classic text block of 62-68 characters */
+	--measure: 66ch;
+	--page-width: 46rem;
+
+	/* Motion */
 	--ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
-	--ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-	--ease-signature: cubic-bezier(0.2, 0.8, 0.2, 1);
-
-	/* Motion: durations */
 	--duration-fast: 150ms;
-	--duration-base: 300ms;
-	--duration-reveal: 700ms;
 
-	/* ========================================================================
-     DARK MODE COLORS (Default - Editorial Noir)
-     ======================================================================== */
-
-	/* Backgrounds - Deep blacks with subtle blue undertones */
-	--color-bg-void: #030408;
-	--color-bg-dark: #0a0d14;
-	--color-bg-elevated-dark: #12161f;
-	--color-surface-dark: #1a1f2b;
-
-	/* Text - Cool whites and grays */
-	--color-text-dark: #f0f2f7;
-	--color-text-secondary-dark: #a0a8b8;
-	--color-muted-dark: #7e8b9c;
-
-	/* Borders */
-	--color-border-dark: #252a38;
-
-	/* Accent: Rose/Coral (Primary) */
-	--color-accent: #f43f5e;
-	--color-accent-glow: #fb7185;
-	--color-accent-deep: #e11d48;
-
-	/* Secondary: Warm Amber */
-	--color-coral: #f59e0b;
-	--color-coral-glow: #fbbf24;
-
-	/* ========================================================================
-     LIGHT MODE COLORS
-     ======================================================================== */
-
-	/* Backgrounds */
-	--color-bg-light: #fafbfc;
-	--color-bg-elevated-light: #ffffff;
-	--color-surface-light: #f3f4f6;
-
-	/* Text */
-	--color-text-light: #111827;
-	--color-text-secondary-light: #4b5563;
-	--color-muted-light: #6b7280;
-
-	/* Borders */
-	--color-border-light: #e5e7eb;
-
-	/* Primary (adjusted for light mode contrast) */
-	--color-primary-light: #e11d48;
-	--color-primary-light-hover: #be123c;
-
-	/* ========================================================================
-     SEMANTIC TOKENS (auto-switch with theme)
-     These tokens are used in components and automatically adapt to the theme
-     ======================================================================== */
-
-	/* Backgrounds */
-	--color-bg: var(--color-bg-dark);
-	--color-bg-elevated: var(--color-bg-elevated-dark);
-	--color-surface: var(--color-surface-dark);
-
-	/* Text */
-	--color-text: var(--color-text-dark);
-	--color-text-secondary: var(--color-text-secondary-dark);
-	--color-text-muted: #7e8b9c;
-	/* Unified muted tone; clears WCAG AA (≥4.5:1) on base, elevated, and surface backgrounds */
-
-	/* Borders */
-	--color-border: var(--color-border-dark);
-
-	/* Brand colors */
-	--color-primary: var(--color-accent);
-	--color-primary-hover: var(--color-accent-glow);
-	--color-secondary: var(--color-coral);
-
-	/* Backwards compatibility aliases */
-	--color-primary-dark: var(--color-accent);
-	--color-primary-dark-hover: var(--color-accent-glow);
+	/* Color: light-dark(<day>, <night>). Pairs are contrast-checked for WCAG
+	   2.2 AA; see DESIGN.md. */
+	--color-bg: light-dark(#fbfbfa, #1c1b1a);
+	--color-surface: light-dark(#f1f1ef, #262422);
+	--color-text: light-dark(#18181b, #ebe9e5);
+	--color-text-secondary: light-dark(#434349, #c9c6c0);
+	--color-text-muted: light-dark(#5b5b63, #a3a09a);
+	/* Hairlines are decorative; --color-border-strong is for the dotted
+	   leaders and form-like edges that should still register. */
+	--color-border: light-dark(#dededa, #3a3836);
+	--color-border-strong: light-dark(#8e8e88, #6a6761);
+	/* The one accent: oxblood by day, a lifted carmine by night. */
+	--color-primary: light-dark(#8c1c2b, #e8838d);
+	--color-primary-hover: light-dark(#640f1c, #f5aab1);
 }
 
 /* ==========================================================================
-   BASE STYLES
+   BASE
    ========================================================================== */
 
 :root {
-	color-scheme: dark light;
+	color-scheme: light dark;
+}
+
+:root.light {
+	color-scheme: light;
+}
+
+:root.dark {
+	color-scheme: dark;
 }
 
 html {
-	font-family: var(--font-sans);
 	scroll-behavior: smooth;
-	font-feature-settings:
-		"liga" 1,
-		"calt" 1;
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
 }
 
-/* Dark mode is default */
 body {
-	background: var(--color-bg-dark);
-	color: var(--color-text-dark);
-}
-
-/* Light mode override */
-.light body {
-	background: var(--color-bg-light);
-	color: var(--color-text-light);
-}
-
-/* Light mode semantic token overrides */
-.light {
-	--color-bg: var(--color-bg-light);
-	--color-bg-elevated: var(--color-bg-elevated-light);
-	--color-surface: var(--color-surface-light);
-	--color-text: var(--color-text-light);
-	--color-text-secondary: var(--color-text-secondary-light);
-	--color-text-muted: var(--color-muted-light);
-	--color-border: var(--color-border-light);
-	--color-primary: var(--color-primary-light);
-	--color-primary-hover: var(--color-primary-light-hover);
-	--color-primary-dark: var(--color-primary-light);
-	--color-primary-dark-hover: var(--color-primary-light-hover);
+	background: var(--color-bg);
+	color: var(--color-text);
+	font-size: var(--text-body);
+	line-height: 1.6;
+	font-optical-sizing: auto;
+	/* Old-style, proportional figures for running text. Dates and tables
+	   override this with lining, tabular figures so columns align. */
+	font-variant-numeric: oldstyle-nums proportional-nums;
+	font-kerning: normal;
+	font-variant-ligatures: common-ligatures;
+	/* Never fake a bold, italic or small cap: use the real glyphs or none. */
+	font-synthesis: none;
+	hanging-punctuation: first last;
+	overflow-wrap: break-word;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -160,7 +96,6 @@ body {
 		scroll-behavior: auto;
 	}
 
-	/* Disable all transforms for reduced motion users */
 	*,
 	*::before,
 	*::after {
@@ -171,108 +106,64 @@ body {
 		/* biome-ignore lint/complexity/noImportantStyles: reduced-motion override must beat any transition rule regardless of specificity (a11y requirement) */
 		transition-duration: 0.01ms !important;
 	}
-
-	/* Force every reveal-based element visible, regardless of the motion-ok
-	   gate. This is the safety net that guarantees content is never stranded
-	   blank for reduced-motion users. */
-	.reveal,
-	.fade-up {
-		/* biome-ignore lint/complexity/noImportantStyles: must beat the motion-ok initial-state rules to keep content visible (a11y requirement) */
-		opacity: 1 !important;
-		/* biome-ignore lint/complexity/noImportantStyles: must beat the motion-ok initial-state rules to keep content visible (a11y requirement) */
-		transform: none !important;
-	}
 }
-
-/* Decorative ambient light: isolate its paint so it can't invalidate other
-   layers, and drop it entirely for users who ask for less transparency.
-   Plain radial gradients (no blur filter) paint once and stay put. */
-[data-ambient] {
-	contain: layout style paint;
-}
-
-.ambient-light {
-	background:
-		radial-gradient(
-			50rem 50rem at 40% -25%,
-			rgb(244 63 94 / 0.06),
-			transparent 70%
-		),
-		radial-gradient(
-			38rem 38rem at 100% 110%,
-			rgb(245 158 11 / 0.03),
-			transparent 70%
-		);
-}
-
-@media (prefers-reduced-transparency: reduce) {
-	[data-ambient] {
-		display: none;
-	}
-}
-
-/* Custom variant for dark mode (default) and light mode */
-@custom-variant dark (&:where(:not(.light), :not(.light) *));
-@custom-variant light (&:where(.light, .light *));
-
-/* ==========================================================================
-   BASE TYPOGRAPHY
-   ========================================================================== */
 
 @layer base {
 	h1,
 	h2,
 	h3,
-	h4,
-	h5,
-	h6 {
-		font-family: var(--font-sans);
-		font-weight: 600;
-		letter-spacing: -0.02em;
+	h4 {
+		font-weight: 500;
+		line-height: 1.15;
+		letter-spacing: -0.01em;
 		text-wrap: balance;
-		line-height: 1.1;
-	}
-
-	/* Display headings use Playfair */
-	.display-heading {
-		font-family: var(--font-display);
-		font-weight: 400;
-		letter-spacing: -0.03em;
 	}
 
 	p {
-		line-height: 1.7;
+		text-wrap: pretty;
 	}
 
 	a {
-		color: var(--color-accent);
-		transition:
-			color 200ms ease,
-			opacity 200ms ease;
+		color: var(--color-primary);
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.2em;
 	}
 
 	a:hover {
-		color: var(--color-accent-glow);
+		color: var(--color-primary-hover);
 	}
 
-	.light a {
-		color: var(--color-primary-light);
+	:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 3px;
+		border-radius: 1px;
 	}
 
-	.light a:hover {
-		color: var(--color-primary-light-hover);
-	}
-
-	/* Selection */
 	::selection {
-		background: rgba(244, 63, 94, 0.3);
-		color: var(--color-text-dark);
+		background: color-mix(in srgb, var(--color-primary) 22%, transparent);
 	}
 
-	.light ::selection {
-		background: rgba(225, 29, 72, 0.2);
-		color: var(--color-text-light);
+	small {
+		font-size: var(--text-small);
 	}
+
+	em,
+	i,
+	cite {
+		font-style: italic;
+	}
+}
+
+/* Link color shifts are the only transition, and only when motion is welcome
+   (html.motion-ok is set pre-paint, never under reduced motion). */
+.motion-ok a {
+	transition: color var(--duration-fast) ease;
+}
+
+/* Scrollbars stay quiet */
+html {
+	scrollbar-width: thin;
+	scrollbar-color: var(--color-border-strong) transparent;
 }
 
 /* ==========================================================================
@@ -280,225 +171,63 @@ body {
    ========================================================================== */
 
 @layer utilities {
-	/* Gradient utilities */
-	.gradient-hero {
-		background: linear-gradient(135deg, #e11d48 0%, #f43f5e 50%, #f59e0b 100%);
+	/* Real small caps (smcp + c2sc). Capitals stay full height. */
+	.smcp {
+		font-variant-caps: all-small-caps;
+		letter-spacing: 0.06em;
 	}
 
-	.gradient-glow {
-		background: radial-gradient(
-			ellipse at center,
-			rgba(244, 63, 94, 0.15) 0%,
-			transparent 70%
-		);
+	/* Lining, tabular figures so dates and numbers align in columns */
+	.figures-aligned {
+		font-variant-numeric: lining-nums tabular-nums;
 	}
 
-	.gradient-card {
-		background: linear-gradient(
-			180deg,
-			rgba(244, 63, 94, 0.05) 0%,
-			transparent 100%
-		);
+	.measure {
+		max-width: var(--measure);
 	}
 
-	/* Light mode gradient variants */
-	.light .gradient-hero {
-		background: linear-gradient(135deg, #be123c 0%, #e11d48 50%, #f59e0b 100%);
-	}
-
-	.light .gradient-glow {
-		background: radial-gradient(
-			ellipse at center,
-			rgba(225, 29, 72, 0.08) 0%,
-			transparent 70%
-		);
-	}
-
-	.light .gradient-card {
-		background: linear-gradient(
-			180deg,
-			rgba(225, 29, 72, 0.03) 0%,
-			transparent 100%
-		);
-	}
-
-	/* Glow effects */
-	.glow-accent {
-		box-shadow:
-			0 0 40px rgba(244, 63, 94, 0.3),
-			0 0 80px rgba(244, 63, 94, 0.15);
-	}
-
-	.glow-accent-soft {
-		box-shadow: 0 0 60px rgba(244, 63, 94, 0.1);
-	}
-
-	/* Glass panel with blur */
-	.glass-panel {
-		background: rgba(18, 22, 31, 0.8);
-		backdrop-filter: blur(20px);
-		-webkit-backdrop-filter: blur(20px);
-		border: 1px solid rgba(255, 255, 255, 0.05);
-	}
-
-	.light .glass-panel {
-		background: rgba(255, 255, 255, 0.8);
-		border-color: rgba(0, 0, 0, 0.05);
-	}
-
-	/* Shadows */
-	.shadow-soft {
-		box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-	}
-
-	.shadow-card {
-		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
-	}
-
-	.shadow-button {
-		box-shadow: 0 15px 30px rgba(244, 63, 94, 0.25);
-	}
-
-	.light .shadow-soft {
-		box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
-	}
-
-	.light .shadow-card {
-		box-shadow: 0 12px 40px rgba(15, 23, 42, 0.06);
-	}
-
-	/* Animated link underline */
-	.link-underline {
-		position: relative;
-		text-decoration: none;
-	}
-
-	.link-underline::after {
-		content: "";
-		position: absolute;
-		width: 100%;
-		height: 2px;
-		bottom: -2px;
-		left: 0;
-		background: currentColor;
-		transform: scaleX(0);
-		transform-origin: bottom right;
-		transition: transform 0.3s ease-out;
-	}
-
-	.link-underline:hover::after {
-		transform: scaleX(1);
-		transform-origin: bottom left;
-	}
-
-	/* Scroll reveal.
-	   Visible by default. The hidden initial state applies ONLY when motion is
-	   allowed (html.motion-ok, set pre-paint by an inline script and never for
-	   reduced motion), so content is never stranded blank without JS. */
-	.motion-ok .reveal {
-		opacity: 0;
-		transform: translateY(24px);
-		transition:
-			opacity var(--duration-reveal) var(--ease-out-quint)
-			var(--reveal-delay, 0ms),
-			transform var(--duration-reveal) var(--ease-out-quint)
-			var(--reveal-delay, 0ms);
-	}
-
-	.motion-ok .reveal.reveal-visible {
-		opacity: 1;
-		transform: translateY(0);
-	}
-
-	/* Load-in for above-the-fold content: pure CSS, no JS. Stagger with
-	   style="--fade-delay: 120ms". */
-	.motion-ok .fade-up {
-		animation: fade-up 800ms var(--ease-out-quint) var(--fade-delay, 0ms) both;
-	}
-
-	@keyframes fade-up {
-		from {
-			opacity: 0;
-			transform: translateY(24px);
-		}
-	}
-
-	/* Skip-to-content link: hidden until focused, then slides into view above
-	   all overlays so keyboard users can jump past the fixed nav. */
 	.skip-link {
 		position: fixed;
 		top: 0;
 		left: 0;
 		z-index: 200;
 		margin: 0.75rem;
-		padding: 0.625rem 1.125rem;
-		border-radius: 9999px;
-		background: var(--color-accent);
-		color: #fff;
-		font-size: 0.875rem;
-		font-weight: 600;
+		padding: 0.5rem 1rem;
+		background: var(--color-text);
+		color: var(--color-bg);
+		font-size: var(--text-small);
 		text-decoration: none;
 		transform: translateY(-150%);
-		transition: transform var(--duration-fast, 150ms) var(--ease-out-quint);
 	}
 
 	.skip-link:focus {
 		transform: translateY(0);
-		outline: 2px solid #fff;
-		outline-offset: 2px;
+		color: var(--color-bg);
 	}
 
-	.light .skip-link {
-		background: var(--color-primary-light);
+	/* The page: a single centered column */
+	.page {
+		width: 100%;
+		max-width: var(--page-width);
+		margin-inline: auto;
+		padding-inline: 1.25rem;
 	}
 
-	/* Section spacing */
-	.section-spacing {
-		padding-top: clamp(4rem, 10vw, 8rem);
-		padding-bottom: clamp(4rem, 10vw, 8rem);
+	/* Section break: a typographic ornament instead of a rule. Generated
+	   content is given an empty alternative so screen readers skip it. */
+	.section-break {
+		padding-top: clamp(2.5rem, 6vw, 4rem);
+		margin-top: clamp(2.5rem, 6vw, 4rem);
 	}
 
-	/* Prose max width for readability */
-	.prose-width {
-		max-width: 65ch;
-	}
-}
-
-/* ==========================================================================
-   ANIMATIONS
-   ========================================================================== */
-
-@keyframes fadeIn {
-	from {
-		opacity: 0;
-		transform: translateY(20px);
-	}
-
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
-@keyframes pulse-glow {
-	0%,
-	100% {
-		opacity: 0.6;
-	}
-
-	50% {
-		opacity: 1;
-	}
-}
-
-@keyframes float {
-	0%,
-	100% {
-		transform: translateY(0);
-	}
-
-	50% {
-		transform: translateY(-10px);
+	.section-break::before {
+		display: block;
+		margin-bottom: clamp(2rem, 5vw, 3rem);
+		color: var(--color-text-muted);
+		text-align: center;
+		letter-spacing: 0.7em;
+		text-indent: 0.7em;
+		content: "* * *";
 	}
 }
 
@@ -507,663 +236,652 @@ body {
    ========================================================================== */
 
 @layer components {
-	/* ========================================================================
-     PROSE STYLES (for blog content)
-     ======================================================================== */
+	/* ---------- Running header ---------- */
 
-	.prose {
-		color: var(--color-text-secondary-dark);
-		font-family: var(--font-serif);
-		font-size: var(--text-body);
-		line-height: 1.8;
+	.running-head {
+		border-bottom: 1px solid var(--color-border);
 	}
 
-	.light .prose {
-		color: var(--color-text-secondary-light);
+	.running-head-inner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		min-height: 4rem;
 	}
 
-	.prose h2 {
-		font-family: var(--font-sans);
-		font-size: var(--text-h2);
-		font-weight: 600;
-		color: var(--color-text-dark);
-		margin-top: 2.5rem;
-		margin-bottom: 1rem;
-		letter-spacing: -0.02em;
-	}
-
-	.light .prose h2 {
-		color: var(--color-text-light);
-	}
-
-	.prose h3 {
-		font-family: var(--font-sans);
-		font-size: var(--text-h3);
-		font-weight: 600;
-		color: var(--color-text-dark);
-		margin-top: 2rem;
-		margin-bottom: 0.75rem;
-	}
-
-	.light .prose h3 {
-		color: var(--color-text-light);
-	}
-
-	.prose p {
-		margin-bottom: 1.5rem;
-	}
-
-	.prose ul,
-	.prose ol {
-		margin-bottom: 1.5rem;
-		padding-left: 1.5rem;
-	}
-
-	.prose ul {
-		list-style-type: disc;
-	}
-
-	.prose ol {
-		list-style-type: decimal;
-	}
-
-	.prose li {
-		margin-bottom: 0.5rem;
-	}
-
-	.prose code {
-		background: var(--color-surface-dark);
-		padding: 0.125rem 0.375rem;
-		border-radius: 0.375rem;
-		font-size: 0.875em;
-	}
-
-	.light .prose code {
-		background: var(--color-surface-light);
-	}
-
-	.prose pre {
-		background: var(--color-bg-elevated-dark);
-		border: 1px solid var(--color-border-dark);
-		border-radius: 1rem;
-		padding: 1.5rem;
-		overflow-x: auto;
-		margin-bottom: 1.5rem;
-	}
-
-	.light .prose pre {
-		background: var(--color-surface-light);
-		border-color: var(--color-border-light);
-	}
-
-	.prose pre code {
-		background: transparent;
-		padding: 0;
-		font-size: 0.875rem;
-	}
-
-	.prose a {
-		color: var(--color-accent);
-		text-decoration: underline;
-		text-underline-offset: 3px;
-	}
-
-	.prose a:hover {
-		color: var(--color-accent-glow);
-	}
-
-	.light .prose a {
-		color: var(--color-primary-light);
-	}
-
-	.prose img,
-	.prose iframe {
-		border-radius: 1rem;
-		margin: 2rem 0;
-	}
-
-	.prose iframe {
-		width: 100%;
-		max-width: 100%;
-		aspect-ratio: 16 / 9;
-	}
-
-	.prose blockquote {
-		border-left: 3px solid var(--color-accent);
-		padding-left: 1.5rem;
-		margin: 2rem 0;
+	.running-head-name {
+		color: var(--color-text);
+		font-size: 1.1875rem;
 		font-style: italic;
-		color: var(--color-text-secondary-dark);
+		text-decoration: none;
+		white-space: nowrap;
 	}
 
-	.light .prose blockquote {
-		color: var(--color-text-secondary-light);
+	.running-head-name:hover {
+		color: var(--color-primary);
 	}
 
-	/* Pull quote for emphasis */
-	.prose .pull-quote {
-		font-family: var(--font-display);
-		font-size: var(--text-h3);
-		font-weight: 400;
+	.running-head-links {
+		display: flex;
+		align-items: center;
+		gap: clamp(0.75rem, 3vw, 1.75rem);
+	}
+
+	.running-head-links a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 2.75rem;
+		color: var(--color-text-secondary);
+		font-size: 1.0625rem;
+		font-variant-caps: all-small-caps;
+		letter-spacing: 0.06em;
+		text-decoration: none;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.35em;
+	}
+
+	.running-head-links a:hover {
+		color: var(--color-text);
+		text-decoration: underline;
+	}
+
+	.running-head-links a[aria-current="page"] {
+		color: var(--color-primary);
+		text-decoration: underline;
+	}
+
+	.theme-toggle {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 2.75rem;
+		height: 2.75rem;
+		margin-right: -0.5rem;
+		color: var(--color-text-secondary);
+		cursor: pointer;
+	}
+
+	.theme-toggle:hover {
+		color: var(--color-primary);
+	}
+
+	/* ---------- Colophon (footer) ---------- */
+
+	.colophon {
+		margin-top: clamp(4rem, 10vw, 7rem);
+		padding-bottom: 3.5rem;
+		font-size: var(--text-small);
+		color: var(--color-text-secondary);
+	}
+
+	.colophon::before {
+		display: block;
+		margin-bottom: 2.5rem;
+		color: var(--color-text-muted);
 		text-align: center;
-		padding: 2rem 0;
-		margin: 2rem 0;
-		border-top: 1px solid var(--color-border-dark);
-		border-bottom: 1px solid var(--color-border-dark);
-		color: var(--color-text-dark);
+		letter-spacing: 0.7em;
+		text-indent: 0.7em;
+		content: "* * *";
 	}
 
-	.light .prose .pull-quote {
-		border-color: var(--color-border-light);
-		color: var(--color-text-light);
+	.colophon a {
+		color: var(--color-text-secondary);
+		text-decoration: underline;
+		text-decoration-color: var(--color-border-strong);
 	}
 
-	/* ========================================================================
-     BUTTON SYSTEM
-     ======================================================================== */
+	.colophon a:hover {
+		color: var(--color-primary);
+		text-decoration-color: currentColor;
+	}
+
+	.colophon-label {
+		margin-bottom: 0.5rem;
+		color: var(--color-text-muted);
+		font-variant-caps: all-small-caps;
+		letter-spacing: 0.06em;
+	}
+
+	.colophon-list {
+		display: grid;
+		gap: 0.25rem;
+	}
+
+	.colophon-set {
+		margin-top: 2.5rem;
+		color: var(--color-text-muted);
+		font-style: italic;
+	}
+
+	/* ---------- Chapter heads (page titles) ---------- */
+
+	.chapter-head {
+		padding-block: clamp(2.5rem, 7vw, 5rem) 0;
+		text-align: center;
+	}
+
+	.chapter-title {
+		font-size: var(--text-title);
+		line-height: 1.08;
+		letter-spacing: -0.015em;
+		overflow-wrap: break-word;
+	}
+
+	.chapter-dek {
+		max-width: 36rem;
+		margin: 1.25rem auto 0;
+		color: var(--color-text-secondary);
+		font-size: var(--text-lede);
+		font-style: italic;
+		line-height: 1.45;
+	}
+
+	.chapter-meta {
+		margin-top: 1.5rem;
+		color: var(--color-text-muted);
+		font-size: var(--text-small);
+		font-variant-numeric: lining-nums proportional-nums;
+	}
+
+	.chapter-meta .sep {
+		padding-inline: 0.4em;
+	}
+
+	/* ---------- Section headings ---------- */
+
+	.section-title {
+		font-size: var(--text-section);
+		line-height: 1.15;
+	}
+
+	.section-description {
+		margin-top: 0.75rem;
+		max-width: 38ch;
+		color: var(--color-text-secondary);
+		font-style: italic;
+	}
+
+	/* ---------- Table-of-contents entries ---------- */
+
+	.entries {
+		display: grid;
+		gap: 2.25rem;
+	}
+
+	.entry {
+		position: relative;
+	}
+
+	.entry-line {
+		display: flex;
+		align-items: last baseline;
+		gap: 0.6rem;
+	}
+
+	.entry-title {
+		flex: 0 1 auto;
+		min-width: 0;
+		font-size: clamp(1.3125rem, 1.15rem + 0.8vw, 1.625rem);
+		font-weight: 500;
+		line-height: 1.25;
+		letter-spacing: -0.005em;
+	}
+
+	.entry-title a {
+		color: var(--color-text);
+		text-decoration: none;
+	}
+
+	/* Stretch the title link across the entry; topic links sit above it. */
+	.entry-title a::after {
+		position: absolute;
+		inset: 0;
+		content: "";
+	}
+
+	.entry:hover .entry-title a,
+	.entry:focus-within .entry-title a {
+		color: var(--color-primary);
+		text-decoration: underline;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.2em;
+	}
+
+	/* Dot leader */
+	.entry-leader {
+		flex: 1 1 1.5rem;
+		min-width: 1.5rem;
+		align-self: flex-end;
+		margin-bottom: 0.4em;
+		border-bottom: 2px dotted var(--color-border-strong);
+	}
+
+	.entry-meta {
+		flex: none;
+		color: var(--color-text-muted);
+		font-size: var(--text-small);
+		font-variant-numeric: lining-nums tabular-nums;
+		white-space: nowrap;
+	}
+
+	.entry-dek {
+		max-width: 56ch;
+		margin-top: 0.4rem;
+		color: var(--color-text-secondary);
+		font-size: 1.0625rem;
+		font-style: italic;
+		line-height: 1.5;
+	}
+
+	.entry-links {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25rem 1.25rem;
+		margin-top: 0.5rem;
+		font-size: var(--text-small);
+	}
+
+	@media (max-width: 36rem) {
+		.entry-line {
+			flex-wrap: wrap;
+			row-gap: 0.15rem;
+		}
+
+		.entry-title {
+			flex-basis: 100%;
+		}
+
+		.entry-leader {
+			display: none;
+		}
+	}
+
+	/* Topics: small-caps text, no chips, no hashtags */
+	.topics {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		flex-wrap: wrap;
+		margin-top: 0.5rem;
+		color: var(--color-text-muted);
+		font-size: 1rem;
+		font-variant-caps: all-small-caps;
+		letter-spacing: 0.06em;
+	}
+
+	.topics li:not(:last-child)::after {
+		padding-inline: 0.55em;
+		content: "\00b7";
+	}
+
+	.topics a {
+		color: var(--color-text-muted);
+		text-decoration: none;
+	}
+
+	.topics a:hover {
+		color: var(--color-primary);
+		text-decoration: underline;
+		text-underline-offset: 0.25em;
+	}
+
+	/* ---------- Buttons & quiet links ---------- */
 
 	.btn {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
 		gap: 0.5rem;
-		border-radius: 9999px;
-		padding: 0.875rem 1.75rem;
-		font-size: 0.9375rem;
-		font-weight: 600;
-		transition: all 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
-		cursor: pointer;
+		min-height: 2.75rem;
+		padding: 0.5rem 1.25rem;
+		border: 1px solid var(--color-text);
+		font-size: 1.0625rem;
+		line-height: 1.2;
+		text-decoration: none;
 	}
 
 	.btn-primary {
-		background: var(--color-accent);
-		color: white;
-		box-shadow: 0 15px 30px rgba(244, 63, 94, 0.25);
+		background: var(--color-text);
+		color: var(--color-bg);
 	}
 
 	.btn-primary:hover {
-		transform: translateY(-3px) scale(1.02);
-		box-shadow: 0 20px 40px rgba(244, 63, 94, 0.35);
-		background: var(--color-accent-glow);
-	}
-
-	.light .btn-primary {
-		background: var(--color-primary-light);
-	}
-
-	.light .btn-primary:hover {
-		background: var(--color-primary-light-hover);
+		background: var(--color-text-secondary);
+		border-color: var(--color-text-secondary);
+		color: var(--color-bg);
 	}
 
 	.btn-secondary {
 		background: transparent;
-		border: 1px solid var(--color-border-dark);
-		color: var(--color-text-dark);
+		color: var(--color-text);
 	}
 
 	.btn-secondary:hover {
-		border-color: var(--color-accent);
-		color: var(--color-accent);
-		background: rgba(244, 63, 94, 0.1);
+		background: var(--color-surface);
+		color: var(--color-text);
 	}
-
-	.light .btn-secondary {
-		border-color: var(--color-border-light);
-		color: var(--color-text-light);
-	}
-
-	.light .btn-secondary:hover {
-		border-color: var(--color-primary-light);
-		color: var(--color-primary-light);
-		background: rgba(225, 29, 72, 0.1);
-	}
-
-	.btn-ghost {
-		background: transparent;
-		color: var(--color-muted-dark);
-		padding: 0.5rem 1rem;
-	}
-
-	.btn-ghost:hover {
-		color: var(--color-accent);
-	}
-
-	.light .btn-ghost {
-		color: var(--color-muted-light);
-	}
-
-	.light .btn-ghost:hover {
-		color: var(--color-primary-light);
-	}
-
-	/* ========================================================================
-     CARD SYSTEM
-     ======================================================================== */
-
-	.card {
-		background: var(--color-bg-elevated-dark);
-		border: 1px solid var(--color-border-dark);
-		border-radius: 1.5rem;
-		padding: 2rem;
-		transition: all 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
-	}
-
-	.light .card {
-		background: var(--color-bg-elevated-light);
-		border-color: var(--color-border-light);
-	}
-
-	.card-hover {
-		background: var(--color-bg-elevated-dark);
-		border: 1px solid var(--color-border-dark);
-		border-radius: 1.5rem;
-		padding: 2rem;
-		transition: all 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
-	}
-
-	.card-hover:hover {
-		transform: translateY(-8px);
-		border-color: rgba(244, 63, 94, 0.3);
-		box-shadow:
-			0 20px 60px rgba(0, 0, 0, 0.3),
-			0 0 40px rgba(244, 63, 94, 0.1);
-	}
-
-	.light .card-hover {
-		background: var(--color-bg-elevated-light);
-		border-color: var(--color-border-light);
-	}
-
-	.light .card-hover:hover {
-		border-color: rgba(225, 29, 72, 0.3);
-		box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
-	}
-
-	.card-gradient {
-		background: linear-gradient(
-			180deg,
-			rgba(244, 63, 94, 0.05) 0%,
-			var(--color-bg-elevated-dark) 100%
-		);
-		border: 1px solid var(--color-border-dark);
-		border-radius: 1.5rem;
-		padding: 2rem;
-	}
-
-	.light .card-gradient {
-		background: linear-gradient(
-			180deg,
-			rgba(225, 29, 72, 0.03) 0%,
-			var(--color-bg-elevated-light) 100%
-		);
-		border-color: var(--color-border-light);
-	}
-
-	/* ========================================================================
-     PILL / TAG SYSTEM
-     ======================================================================== */
-
-	.pill {
-		display: inline-flex;
-		align-items: center;
-		border-radius: 9999px;
-		border: 1px solid var(--color-border-dark);
-		padding: 0.25rem 0.75rem;
-		font-size: 0.8125rem;
-		color: var(--color-muted-dark);
-		transition: all 200ms;
-	}
-
-	.light .pill {
-		border-color: var(--color-border-light);
-		color: var(--color-muted-light);
-	}
-
-	.pill-scrim {
-		background: rgba(0, 0, 0, 0.55);
-		backdrop-filter: blur(6px);
-		-webkit-backdrop-filter: blur(6px);
-		border-color: rgba(255, 255, 255, 0.15);
-		color: rgba(240, 242, 247, 0.95);
-	}
-
-	.light .pill-scrim {
-		background: rgba(255, 255, 255, 0.82);
-		border-color: rgba(0, 0, 0, 0.08);
-		color: var(--color-text-light);
-	}
-
-	.pill-interactive {
-		display: inline-flex;
-		align-items: center;
-		border-radius: 9999px;
-		border: 1px solid var(--color-border-dark);
-		padding: 0.25rem 0.75rem;
-		font-size: 0.8125rem;
-		color: var(--color-muted-dark);
-		transition: all 200ms;
-		cursor: pointer;
-	}
-
-	.pill-interactive:hover {
-		border-color: var(--color-accent);
-		color: var(--color-accent);
-		background: rgba(244, 63, 94, 0.1);
-	}
-
-	.light .pill-interactive {
-		border-color: var(--color-border-light);
-		color: var(--color-muted-light);
-	}
-
-	.light .pill-interactive:hover {
-		border-color: var(--color-primary-light);
-		color: var(--color-primary-light);
-		background: rgba(225, 29, 72, 0.1);
-	}
-
-	.pill-active {
-		background: var(--color-accent);
-		border-color: var(--color-accent);
-		color: white;
-	}
-
-	.light .pill-active {
-		background: var(--color-primary-light);
-		border-color: var(--color-primary-light);
-	}
-
-	/* ========================================================================
-     LINK SYSTEM
-     ======================================================================== */
 
 	.link-primary {
-		color: var(--color-accent);
-		transition: color 200ms;
+		text-decoration: underline;
 	}
 
-	.link-primary:hover {
-		color: var(--color-accent-glow);
-	}
-
-	.light .link-primary {
-		color: var(--color-primary-light);
-	}
-
-	.light .link-primary:hover {
-		color: var(--color-primary-light-hover);
-	}
-
-	/* Secondary text link: quiet until hovered, with a visible underline so
-	   it still reads as a link (not a label). */
+	/* Secondary text link: visible underline so it still reads as a link */
 	.link-quiet {
 		color: var(--color-text-secondary);
-		font-size: 0.9375rem;
-		font-weight: 500;
 		text-decoration: underline;
-		text-decoration-color: color-mix(
-			in srgb,
-			var(--color-text-secondary) 35%,
-			transparent
-		);
-		text-underline-offset: 4px;
-		transition:
-			color var(--duration-fast) ease,
-			text-decoration-color var(--duration-fast) ease;
+		text-decoration-color: var(--color-border-strong);
+		text-underline-offset: 0.25em;
 	}
 
 	.link-quiet:hover {
-		color: var(--color-text);
-		text-decoration-color: var(--color-primary);
+		color: var(--color-primary);
+		text-decoration-color: currentColor;
 	}
 
-	.link-muted {
-		color: var(--color-muted-dark);
-		transition: color 200ms;
-	}
-
-	.link-muted:hover {
-		color: var(--color-accent);
-	}
-
-	.light .link-muted {
-		color: var(--color-muted-light);
-	}
-
-	.light .link-muted:hover {
-		color: var(--color-primary-light);
-	}
-
-	/* ========================================================================
-     SECTION HEADERS
-     ======================================================================== */
-
-	.section-header {
-		margin-bottom: 3rem;
-	}
-
-	.section-title {
-		font-family: var(--font-sans);
-		font-size: var(--text-h1);
-		font-weight: 600;
-		color: var(--color-text-dark);
-		letter-spacing: -0.02em;
-	}
-
-	.light .section-title {
-		color: var(--color-text-light);
-	}
-
-	.section-description {
-		color: var(--color-text-secondary-dark);
-		font-size: var(--text-body);
-		margin-top: 0.75rem;
-		max-width: 40ch;
-	}
-
-	.light .section-description {
-		color: var(--color-text-secondary-light);
-	}
-
-	/* ========================================================================
-     READING PROGRESS BAR
-     ======================================================================== */
+	/* ---------- Reading progress ---------- */
 
 	.reading-progress {
 		position: fixed;
 		top: 0;
 		left: 0;
-		width: 100%;
-		height: 3px;
-		background: linear-gradient(
-			90deg,
-			var(--color-accent) 0%,
-			var(--color-coral) 100%
-		);
-		/* Above the nav (z-50/60); below the decorative noise overlay (z-100). */
 		z-index: 90;
+		width: 100%;
+		height: 2px;
+		background: var(--color-text-muted);
 		/* Scaled on scroll via transform (off the layout path), not width. */
 		transform: scaleX(0);
 		transform-origin: left;
 		will-change: transform;
 	}
 
-	/* ========================================================================
-     FORM ELEMENTS
-     ======================================================================== */
+	/* ---------- Prose (article body) ---------- */
 
-	.input {
+	.prose {
+		max-width: var(--measure);
+		margin-inline: auto;
+		color: var(--color-text);
+		font-size: var(--text-body);
+		line-height: 1.65;
+		text-wrap: pretty;
+	}
+
+	.prose > * + * {
+		margin-top: 1.1em;
+	}
+
+	.prose h2,
+	.prose h3,
+	.prose h4 {
+		margin-top: 2.1em;
+		/* Clear nothing fixed, but leave air when jumping from the contents. */
+		scroll-margin-top: 1.5rem;
+		line-height: 1.2;
+	}
+
+	.prose h2 + *,
+	.prose h3 + *,
+	.prose h4 + * {
+		margin-top: 0.6em;
+	}
+
+	.prose h2 {
+		font-size: 1.75em;
+		font-weight: 600;
+	}
+
+	.prose h3 {
+		font-size: 1.3em;
+		font-style: italic;
+		font-weight: 500;
+	}
+
+	.prose h4 {
+		font-size: 1.05em;
+		font-variant-caps: all-small-caps;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+	}
+
+	.prose a {
+		text-decoration: underline;
+		text-decoration-color: color-mix(
+			in srgb,
+			var(--color-primary) 45%,
+			transparent
+		);
+	}
+
+	.prose a:hover {
+		text-decoration-color: currentColor;
+	}
+
+	.prose strong {
+		font-weight: 600;
+	}
+
+	.prose ul,
+	.prose ol {
+		padding-left: 1.4em;
+	}
+
+	.prose ul {
+		list-style: disc;
+	}
+
+	.prose ol {
+		list-style: decimal;
+	}
+
+	.prose li {
+		padding-left: 0.2em;
+	}
+
+	.prose li + li {
+		margin-top: 0.5em;
+	}
+
+	.prose li::marker {
+		color: var(--color-text-muted);
+	}
+
+	/* Quotations: indented italic, punctuation hung where the browser allows */
+	.prose blockquote {
+		margin-block: 1.75em;
+		margin-inline: clamp(0.5rem, 4vw, 2.25rem);
+		color: var(--color-text-secondary);
+		font-style: italic;
+		hanging-punctuation: first;
+	}
+
+	.prose blockquote > * + * {
+		margin-top: 0.75em;
+	}
+
+	.prose blockquote strong {
+		font-weight: 600;
+	}
+
+	.prose figure {
+		margin-block: 2em;
+	}
+
+	.prose figcaption,
+	.figure-caption {
+		margin-top: 0.6rem;
+		color: var(--color-text-muted);
+		font-size: var(--text-note);
+		font-style: italic;
+		line-height: 1.45;
+	}
+
+	.prose img,
+	.prose iframe {
+		display: block;
+		max-width: 100%;
+		height: auto;
+		margin-block: 2em;
+	}
+
+	.prose iframe {
 		width: 100%;
-		background: var(--color-surface-dark);
-		border: 1px solid var(--color-border-dark);
-		border-radius: 0.75rem;
-		padding: 0.875rem 1rem;
+		aspect-ratio: 16 / 9;
+	}
+
+	.prose hr {
+		margin-block: 2.5em;
+		border: 0;
+		text-align: center;
+	}
+
+	.prose hr::before {
+		color: var(--color-text-muted);
+		letter-spacing: 0.7em;
+		text-indent: 0.7em;
+		content: "* * *";
+	}
+
+	/* Code: the one place for the system monospace */
+	.prose code {
+		padding: 0.1em 0.3em;
+		background: var(--color-surface);
+		font-family: var(--font-mono);
+		font-size: 0.85em;
+		font-variant-numeric: normal;
+		font-variant-ligatures: none;
+		overflow-wrap: anywhere;
+	}
+
+	.prose pre {
+		padding: 1.1rem 1.25rem;
+		overflow-x: auto;
+		background: var(--color-surface);
+		font-size: 0.875rem;
+		line-height: 1.55;
+		hanging-punctuation: none;
+	}
+
+	.prose pre code {
+		padding: 0;
+		background: transparent;
+		font-size: inherit;
+		overflow-wrap: normal;
+	}
+
+	/* Shiki is configured with defaultColor: false, so tokens carry both
+	   palettes as variables; light-dark() picks one with the page theme. */
+	.prose .astro-code {
+		background-color: var(--color-surface);
+	}
+
+	.prose .astro-code,
+	.prose .astro-code span {
+		color: light-dark(var(--shiki-light), var(--shiki-dark));
+	}
+
+	/* Tables, set like a book: rules above and below, none between columns */
+	.prose table {
+		display: block;
+		max-width: 100%;
+		overflow-x: auto;
+		border-collapse: collapse;
+		font-size: 0.9375em;
+		font-variant-numeric: lining-nums tabular-nums;
+	}
+
+	.prose th,
+	.prose td {
+		padding: 0.55rem 1rem 0.55rem 0;
+		border-bottom: 1px solid var(--color-border);
+		text-align: left;
+		vertical-align: top;
+	}
+
+	.prose thead th {
+		border-top: 1px solid var(--color-text);
+		border-bottom: 1px solid var(--color-text);
+		font-weight: 600;
+	}
+
+	/* Footnotes (remark-gfm) */
+	.prose sup {
+		font-size: 0.75em;
+		line-height: 0;
+		vertical-align: baseline;
+		position: relative;
+		top: -0.45em;
+	}
+
+	.prose [data-footnotes] {
+		margin-top: 3em;
+		padding-top: 1.25em;
+		border-top: 1px solid var(--color-border);
+		color: var(--color-text-secondary);
+		font-size: var(--text-small);
+	}
+
+	.prose [data-footnotes] h2 {
+		margin-top: 0;
 		font-size: 1rem;
-		color: var(--color-text-dark);
-		transition: all 200ms;
+		font-variant-caps: all-small-caps;
+		letter-spacing: 0.06em;
 	}
 
-	.input:focus {
-		outline: none;
-		border-color: var(--color-accent);
-		box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.15);
+	/* Sidenotes: set a note in the left margin on wide screens, inline
+	   (indented, small italic) elsewhere. Markup: <aside class="sidenote">. */
+	.prose .sidenote {
+		margin-block: 1em;
+		padding-left: 1rem;
+		color: var(--color-text-muted);
+		font-size: var(--text-note);
+		font-style: italic;
+		line-height: 1.5;
 	}
 
-	.input::placeholder {
-		color: var(--color-muted-dark);
+	@media (min-width: 80rem) {
+		.prose .sidenote {
+			float: left;
+			clear: left;
+			width: 11rem;
+			margin: 0 0 0 -13.5rem;
+			padding: 0;
+			text-align: right;
+		}
 	}
 
-	.light .input {
-		background: var(--color-bg-elevated-light);
-		border-color: var(--color-border-light);
-		color: var(--color-text-light);
+	/* Opening of an article: a drop cap where the browser can size it to the
+	   text, a conservative float elsewhere. It is purely visual: the
+	   paragraph stays one text node for assistive tech. */
+	.dropcap > p:first-of-type::first-letter {
+		float: left;
+		padding: 0.06em 0.08em 0 0;
+		font-size: 3.6em;
+		font-weight: 500;
+		line-height: 0.82;
 	}
 
-	.light .input:focus {
-		border-color: var(--color-primary-light);
-		box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.1);
+	@supports (initial-letter: 3) or (-webkit-initial-letter: 3) {
+		.dropcap > p:first-of-type::first-letter {
+			float: none;
+			padding: 0;
+			margin-right: 0.08em;
+			font-size: inherit;
+			line-height: inherit;
+			-webkit-initial-letter: 3;
+			initial-letter: 3;
+		}
 	}
+}
 
-	.light .input::placeholder {
-		color: var(--color-muted-light);
+/* Generated ornaments get an empty alternative so screen readers skip them.
+   Declared separately: browsers without the alt-text syntax keep the plain
+   content above. */
+@supports (content: "a" / "b") {
+	.section-break::before,
+	.colophon::before,
+	.prose hr::before {
+		content: "* * *" / "";
 	}
-}
-
-/* ==========================================================================
-   CUSTOM SCROLLBAR
-   A modern, minimal scrollbar that complements the Editorial Noir aesthetic
-   ========================================================================== */
-
-/* Webkit browsers (Chrome, Safari, Edge) - Dark mode (default) */
-html:not(.light) ::-webkit-scrollbar,
-html:not(.light)::-webkit-scrollbar {
-	width: 10px;
-	height: 10px;
-}
-
-html:not(.light) ::-webkit-scrollbar-track,
-html:not(.light)::-webkit-scrollbar-track {
-	background: var(--color-bg-elevated-dark);
-	border-radius: 8px;
-}
-
-html:not(.light) ::-webkit-scrollbar-thumb,
-html:not(.light)::-webkit-scrollbar-thumb {
-	background: linear-gradient(
-		180deg,
-		var(--color-accent) 0%,
-		var(--color-accent-deep) 100%
-	);
-	border-radius: 8px;
-	border: 2px solid var(--color-bg-elevated-dark);
-}
-
-html:not(.light) ::-webkit-scrollbar-thumb:hover,
-html:not(.light)::-webkit-scrollbar-thumb:hover {
-	background: linear-gradient(
-		180deg,
-		var(--color-accent-glow) 0%,
-		var(--color-accent) 100%
-	);
-}
-
-html:not(.light) ::-webkit-scrollbar-thumb:active,
-html:not(.light)::-webkit-scrollbar-thumb:active {
-	background: var(--color-accent-deep);
-}
-
-html:not(.light) ::-webkit-scrollbar-corner,
-html:not(.light)::-webkit-scrollbar-corner {
-	background: var(--color-bg-elevated-dark);
-}
-
-/* Light mode scrollbar */
-html.light ::-webkit-scrollbar,
-html.light::-webkit-scrollbar {
-	width: 10px;
-	height: 10px;
-}
-
-html.light ::-webkit-scrollbar-track,
-html.light::-webkit-scrollbar-track {
-	background: #e5e7eb;
-	border-radius: 8px;
-}
-
-html.light ::-webkit-scrollbar-thumb,
-html.light::-webkit-scrollbar-thumb {
-	background: linear-gradient(
-		180deg,
-		var(--color-primary-light) 0%,
-		var(--color-primary-light-hover) 100%
-	);
-	border-radius: 8px;
-	border: 2px solid #e5e7eb;
-}
-
-html.light ::-webkit-scrollbar-thumb:hover,
-html.light::-webkit-scrollbar-thumb:hover {
-	background: linear-gradient(
-		180deg,
-		var(--color-primary-light-hover) 0%,
-		#9f1239 100%
-	);
-}
-
-html.light ::-webkit-scrollbar-thumb:active,
-html.light::-webkit-scrollbar-thumb:active {
-	background: #9f1239;
-}
-
-html.light ::-webkit-scrollbar-corner,
-html.light::-webkit-scrollbar-corner {
-	background: #e5e7eb;
-}
-
-/* Firefox - Dark mode */
-html:not(.light) {
-	scrollbar-width: thin;
-	scrollbar-color: var(--color-accent) var(--color-bg-elevated-dark);
-}
-
-/* Firefox - Light mode */
-html.light {
-	scrollbar-width: thin;
-	scrollbar-color: var(--color-primary-light) #e5e7eb;
-}
-
-/* Horizontal scrollbar for code blocks - Dark mode */
-html:not(.light) pre::-webkit-scrollbar,
-html:not(.light) .overflow-x-auto::-webkit-scrollbar {
-	height: 6px;
-}
-
-html:not(.light) pre::-webkit-scrollbar-thumb,
-html:not(.light) .overflow-x-auto::-webkit-scrollbar-thumb {
-	background: var(--color-accent);
-	border-radius: 4px;
-}
-
-html:not(.light) pre::-webkit-scrollbar-track,
-html:not(.light) .overflow-x-auto::-webkit-scrollbar-track {
-	background: var(--color-surface-dark);
-	border-radius: 4px;
-}
-
-/* Horizontal scrollbar for code blocks - Light mode */
-html.light pre::-webkit-scrollbar,
-html.light .overflow-x-auto::-webkit-scrollbar {
-	height: 6px;
-}
-
-html.light pre::-webkit-scrollbar-track,
-html.light .overflow-x-auto::-webkit-scrollbar-track {
-	background: #d1d5db;
-	border-radius: 4px;
-}
-
-html.light pre::-webkit-scrollbar-thumb,
-html.light .overflow-x-auto::-webkit-scrollbar-thumb {
-	background: var(--color-primary-light);
-	border-radius: 4px;
 }

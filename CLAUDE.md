@@ -12,7 +12,7 @@ Strategic design context lives in [`PRODUCT.md`](PRODUCT.md) (read it before UI 
 - **Anti-references**: AI-agency/consultancy hype (the headline one), generic SaaS landing, AI-slop/templated looks (no per-section tracked eyebrows, no cream-paper default), corporate/clinical sterility, loud hype marketing.
 
 > Note: the earlier Cornet Health / dentist-burnout content (6 draft posts + `content-strategy/`) is a closed chapter being retired. The About page now lists Oogway Labs as current with Cornet as past; the résumé still needs updating.
-- **Accessibility**: WCAG 2.2 AA across both dark (default) and light themes; reduced-motion alternatives for all load/scroll animation.
+- **Accessibility**: WCAG 2.2 AA across both light and dark themes (the theme follows the system preference until the reader toggles); reduced-motion alternatives for all load/scroll animation.
 
 When DESIGN.md is generated (via `/impeccable document`), it captures the visual system (palette, type, components).
 
@@ -67,7 +67,7 @@ Content uses Astro's Content Layer API with glob loaders:
 
 ### Key Layouts & Components
 
-- `src/layouts/Layout.astro` - Base layout with theme toggle, nav, footer, and all `<head>` SEO (canonical, Open Graph/Twitter, JSON-LD). Handles dark mode (default) with `localStorage` persistence
+- `src/layouts/Layout.astro` - Base layout with theme toggle, nav, footer, and all `<head>` SEO (canonical, Open Graph/Twitter, JSON-LD). Handles the theme: follows `prefers-color-scheme` unless `localStorage.theme` is set, via an inline pre-paint script that sets `html.light` or `html.dark`
 - `src/layouts/BlogPost.astro` - Blog post wrapper: margin table of contents (≥3 `##` sections), reading progress, subscribe prompt, previous/next essay
 - `src/layouts/ProjectPost.astro` - Project wrapper
 - `src/components/ResponsiveImage.astro` - Wraps `astro:assets` Picture for AVIF/WebP with responsive widths
@@ -78,8 +78,8 @@ Content uses Astro's Content Layer API with glob loaders:
 
 - TailwindCSS v4 via `@tailwindcss/vite` plugin (not the Astro integration)
 - Global styles in `src/styles/globals.css`
-- CSS custom properties for theming: `--color-bg-dark`, `--color-text-dark`, `--color-accent`, etc.
-- Dark mode is default; `html.light` class triggers light theme
+- Semantic CSS custom properties defined once with `light-dark()` in `@theme`: `--color-bg`, `--color-text`, `--color-primary`, etc.
+- Light is the primary experience, dark an equal "night reading" mode; the system preference works without JS, `html.light`/`html.dark` pin it
 
 ### Build Scripts (run automatically)
 
@@ -104,7 +104,4 @@ Requests with `Accept: text/markdown` receive a Markdown version of the page; br
 
 ### Fonts
 
-Configured with Astro's Fonts API in `astro.config.mjs` (`fonts`), using the local provider pointed at the Latin variable files from `@fontsource-variable/*`. Astro emits the `@font-face` rules, preload links, and size-adjusted fallback faces; `<Font>` in Layout.astro exposes them as CSS variables that `globals.css` maps into the theme:
-- Playfair Display → `--font-playfair` → `--font-display` (display headings)
-- Plus Jakarta Sans → `--font-jakarta` → `--font-sans` (UI and headings)
-- Roboto Slab → `--font-roboto-slab` → `--font-serif` (article body)
+Configured with Astro's Fonts API in `astro.config.mjs` (`fonts`), local provider. One superfamily: Source Serif 4 (roman + italic, wght and opsz axes) from `src/assets/fonts/` (Adobe release, SIL OFL, Latin subset that keeps `smcp`/`c2sc`/`onum` features; the @fontsource Latin subsets strip them). Exposed as `--font-source-serif` -> `--font-serif`/default family. UI is set in the same serif (small caps, italics); code uses the system monospace stack.
