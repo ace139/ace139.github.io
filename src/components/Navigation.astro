@@ -15,51 +15,33 @@ const isActive = (href: string) =>
   href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`);
 ---
 
-<nav
-  id="main-nav"
-  class="fixed left-0 right-0 top-0 z-50 border-b border-[var(--color-border-dark)]/50 transition-all duration-300"
->
-  <div
-    id="nav-backdrop"
-    class="absolute inset-0 backdrop-blur-xl"
-  ></div>
+<nav id="main-nav" class="nav" aria-label="Primary">
+  <div class="shell">
+    <div class="nav-bar">
+      <a href="/" class="nav-name" data-astro-prefetch>Soumyo Dey</a>
 
-  <div class="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-    <div class="flex h-16 items-center justify-between">
-      <!-- Logo -->
-      <a
-        href="/"
-        class="group relative z-10 flex items-center gap-2 text-lg font-semibold tracking-tight text-[var(--color-text-dark)] transition-colors"
-        data-astro-prefetch
-      >
-        <span class="transition-colors group-hover:text-[var(--color-accent)]">Soumyo Dey</span>
-      </a>
-
-      <!-- Desktop Navigation -->
-      <div class="hidden items-center gap-8 md:flex">
+      <!-- Desktop navigation -->
+      <div class="nav-links">
         {navLinks.map((link) => (
           <a
             href={link.href}
+            class="nav-link"
             aria-current={isActive(link.href) ? 'page' : undefined}
-            class="group relative py-1 text-[0.9375rem] font-medium text-[var(--color-muted-dark)] transition-colors hover:text-[var(--color-text-dark)] aria-[current=page]:text-[var(--color-text-dark)]"
             data-astro-prefetch
           >
-            <span class="relative">
-              {link.label}
-              <span class="absolute -bottom-1 left-0 h-0.5 w-full origin-left scale-x-0 bg-[var(--color-accent)] transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100 group-aria-[current=page]:scale-x-100"></span>
-            </span>
+            {link.label}
           </a>
         ))}
       </div>
 
       <!-- Right side controls -->
-      <div class="flex items-center gap-3">
+      <div class="nav-controls">
         <!-- Theme Toggle -->
         <button
           type="button"
           id="theme-toggle"
           aria-label="Toggle theme"
-          class="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border-dark)] text-[var(--color-muted-dark)] transition-all hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+          class="nav-button"
         >
           <!-- Moon icon (shown in dark mode, click to go light) -->
           <svg
@@ -102,7 +84,7 @@ const isActive = (href: string) =>
           aria-label="Toggle navigation menu"
           aria-expanded="false"
           aria-controls="mobile-menu"
-          class="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border-dark)] text-[var(--color-text-dark)] transition-all hover:border-[var(--color-accent)]/50 hover:text-[var(--color-accent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] md:hidden"
+          class="nav-button nav-menu-button"
         >
           <svg
             id="menu-icon-open"
@@ -139,26 +121,136 @@ const isActive = (href: string) =>
     </div>
   </div>
 
-  <!-- Mobile Menu -->
-  <div
-    id="mobile-menu"
-    class="fixed left-0 right-0 top-16 z-[60] hidden border-t border-[var(--color-border-dark)]/50 bg-[var(--color-bg-dark)]/95 backdrop-blur-xl md:hidden"
-  >
-    <div
-      class="px-4 py-6"
-    >
-      <div class="flex flex-col space-y-4">
-        {navLinks.map((link) => (
-          <a
-            href={link.href}
-            aria-current={isActive(link.href) ? 'page' : undefined}
-            class="text-lg font-medium text-[var(--color-muted-dark)] transition-colors hover:text-[var(--color-accent)] aria-[current=page]:text-[var(--color-accent)]"
-            data-astro-prefetch
-          >
-            {link.label}
-          </a>
-        ))}
-      </div>
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="mobile-menu hidden">
+    <div class="shell mobile-menu-links">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class="nav-link"
+          aria-current={isActive(link.href) ? 'page' : undefined}
+          data-astro-prefetch
+        >
+          {link.label}
+        </a>
+      ))}
     </div>
   </div>
 </nav>
+
+<style is:global>
+  .nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 50;
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .nav-bar {
+    display: flex;
+    height: 4rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  .nav-name {
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    letter-spacing: var(--tracking-heading);
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .nav-name:hover {
+    color: var(--color-text);
+  }
+
+  .nav-links {
+    display: none;
+    gap: 2rem;
+  }
+
+  .nav-link {
+    font-size: var(--text-ui);
+    font-weight: 500;
+    color: var(--color-text-muted);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.5em;
+  }
+
+  .nav-link:hover {
+    color: var(--color-text);
+  }
+
+  .nav-link[aria-current="page"] {
+    color: var(--color-text);
+    text-decoration-color: var(--color-accent);
+  }
+
+  .nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .nav-button {
+    display: flex;
+    width: 2.5rem;
+    height: 2.5rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    color: var(--color-text-secondary);
+    transition:
+      color var(--duration-fast) ease,
+      border-color var(--duration-fast) ease;
+  }
+
+  .nav-button:hover {
+    color: var(--color-text);
+    border-color: var(--color-border-strong);
+  }
+
+  .mobile-menu {
+    border-top: 1px solid var(--color-border);
+    background: var(--color-bg);
+  }
+
+  .mobile-menu-links {
+    display: flex;
+    flex-direction: column;
+    padding-block: 0.75rem 1.25rem;
+  }
+
+  .mobile-menu-links .nav-link {
+    padding-block: 0.75rem;
+    font-size: 1.0625rem;
+  }
+
+  /* Name sits in the label column, links start at the reading column. */
+  @media (min-width: 48rem) {
+    .nav-bar {
+      display: grid;
+      grid-template-columns: var(--label-w) minmax(0, 1fr) auto;
+      column-gap: var(--label-gap);
+    }
+
+    .nav-links {
+      display: flex;
+    }
+
+    .nav-menu-button,
+    .mobile-menu {
+      display: none;
+    }
+  }
+
+  .mobile-menu.hidden {
+    display: none;
+  }
+</style>

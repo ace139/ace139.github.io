@@ -1,41 +1,46 @@
 ---
-
-
-
 interface Props {
 	tags: string[];
 	class?: string;
-	variant?: "default" | "scrim";
-	linked?: boolean;
-	hashPrefix?: boolean;
 	limit?: number;
 }
 
-const {
-	tags,
-	class: className = "",
-	variant = "default",
-	linked = true,
-	hashPrefix = true,
-	limit,
-} = Astro.props;
+const { tags, class: className = "", limit } = Astro.props;
 
 const visibleTags = limit ? tags.slice(0, limit) : tags;
-const pillClass =
-	variant === "scrim" ? "pill pill-scrim text-xs" : "pill text-xs transition-all hover:-translate-y-0.5";
 ---
 
-<div class={`flex flex-wrap gap-2 ${className}`}>
+<ul class:list={["topics", className]} aria-label="Topics">
 	{
-		visibleTags.map((tag) => {
-			const label = hashPrefix ? `#${tag}` : tag;
-			return linked ? (
-				<a href={`/tags/${tag}`} class={pillClass}>
-					{label}
-				</a>
-			) : (
-				<span class={pillClass}>{label}</span>
-			);
-		})
+		visibleTags.map((tag) => (
+			<li>
+				<a href={`/tags/${tag}`}>{tag}</a>
+			</li>
+		))
 	}
-</div>
+</ul>
+
+<style>
+	.topics {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.125rem 1rem;
+		font-family: var(--font-sans);
+		font-size: var(--text-note);
+		line-height: 1.5;
+	}
+
+	.topics a {
+		display: inline-block;
+		padding-block: 0.25rem;
+		color: var(--color-text-muted);
+		text-decoration: underline;
+		text-decoration-color: var(--color-border-strong);
+		text-underline-offset: 0.25em;
+	}
+
+	.topics a:hover {
+		color: var(--color-text);
+		text-decoration-color: var(--color-accent);
+	}
+</style>

@@ -1,0 +1,117 @@
+---
+import type { EntryItem } from "../utils/content";
+import { formatCardDate } from "../utils/content";
+import Tags from "./Tags.astro";
+
+interface Props {
+	items: EntryItem[];
+	/** Heading level for entry titles (3 when under a section heading). */
+	level?: 2 | 3;
+}
+
+const { items, level = 2 } = Astro.props;
+const Heading = `h${level}` as const;
+---
+
+<ol class="entries">
+	{
+		items.map((item) => (
+			<li class="row ruled entry">
+				<div class="marginalia entry-meta">
+					<time datetime={new Date(item.date).toISOString()}>
+						{formatCardDate(item.date, "long")}
+					</time>
+					{item.readingTime && <span>{item.readingTime} min read</span>}
+				</div>
+				<div class="entry-body">
+					<Heading class="entry-title">
+						<a href={item.href} data-astro-prefetch>
+							{item.title}
+						</a>
+					</Heading>
+					{item.dek && <p class="entry-dek">{item.dek}</p>}
+					{
+						item.links && item.links.length > 0 && (
+							<p class="entry-links">
+								{item.links.map((link) => (
+									<a
+										href={link.href}
+										class="link-quiet"
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										{link.label}
+									</a>
+								))}
+							</p>
+						)
+					}
+					{item.tags && item.tags.length > 0 && <Tags tags={item.tags} limit={4} />}
+				</div>
+			</li>
+		))
+	}
+</ol>
+
+<style>
+	.entry {
+		padding-bottom: 1.75rem;
+	}
+
+	.entry-meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0 0.75rem;
+		padding-top: 0.35rem;
+	}
+
+	@media (min-width: 48rem) {
+		.entry-meta {
+			display: block;
+		}
+
+		.entry-meta span {
+			display: block;
+		}
+	}
+
+	.entry-title {
+		font-size: var(--text-h3);
+		font-weight: 400;
+		line-height: 1.2;
+		text-wrap: balance;
+	}
+
+	.entry-title a {
+		color: var(--color-text);
+		text-decoration: underline;
+		text-decoration-color: transparent;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.2em;
+	}
+
+	.entry-title a:hover {
+		color: var(--color-text);
+		text-decoration-color: var(--color-accent);
+	}
+
+	.entry-dek {
+		margin-top: 0.5rem;
+		max-width: 38rem;
+		font-family: var(--font-serif);
+		font-size: var(--text-body);
+		line-height: 1.5;
+		color: var(--color-text-secondary);
+		text-wrap: pretty;
+	}
+
+	.entry-links {
+		display: flex;
+		gap: 1.25rem;
+		margin-top: 0.5rem;
+	}
+
+	.entry-body :global(.topics) {
+		margin-top: 0.5rem;
+	}
+</style>

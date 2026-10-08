@@ -4,11 +4,11 @@
 
 import { Picture } from 'astro:assets';
 import { getCollection } from 'astro:content';
-import ContentBentoGrid from '../components/ContentBentoGrid.astro';
+import PostList from '../components/PostList.astro';
 import { socials } from '../config/socials';
 import avatar from '../images/avatar.jpg';
 import Layout from '../layouts/Layout.astro';
-import { formatCardDate, isPublished, sortByDateDesc, toBentoItem } from '../utils/content';
+import { formatCardDate, isPublished, sortByDateDesc, toEntry } from '../utils/content';
 
 const allPosts = (await getCollection('blog', isPublished)).sort(sortByDateDesc);
 const [latestPost, ...olderPosts] = allPosts;
@@ -49,173 +49,144 @@ const record = [
 
 <Layout title="Soumyo Dey">
   <!-- Hero: who, in one breath, then straight to the work -->
-  <section class="hero grid gap-14 pt-10 pb-20 sm:pt-16 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:items-end lg:gap-16 lg:pt-24 lg:pb-28">
-    <div>
-      <div class="fade-up mb-8 flex items-center gap-4">
-        <div class="h-14 w-14 shrink-0 overflow-hidden rounded-full border border-[var(--color-border)]">
-          <Picture
-            src={avatar}
-            widths={[56, 112]}
-            sizes="56px"
-            formats={['avif', 'webp', 'jpeg']}
-            alt=""
-            loading="eager"
-            fetchpriority="high"
-            class="h-full w-full object-cover"
-          />
-        </div>
-        <p class="text-sm text-[var(--color-text-secondary)]">
-          Builder, systems thinker, occasional essayist
-        </p>
+  <section class="row hero" aria-label="Introduction">
+    <div class="hero-aside marginalia">
+      <div class="hero-avatar">
+        <Picture
+          src={avatar}
+          widths={[72, 144]}
+          sizes="72px"
+          formats={['avif', 'webp', 'jpeg']}
+          alt=""
+          loading="eager"
+          fetchpriority="high"
+        />
       </div>
+      <p>Builder, systems thinker, occasional essayist</p>
+    </div>
 
-      <h1 class="fade-up display-heading text-hero text-[var(--color-text)]" style="--fade-delay: 80ms; line-height: 0.95;">
-        Soumyo Dey
-      </h1>
+    <div>
+      <h1 class="display">Soumyo Dey</h1>
 
-      <p class="fade-up mt-8 max-w-[38rem] text-pretty text-lg leading-relaxed text-[var(--color-text-secondary)] sm:text-xl" style="--fade-delay: 160ms;">
+      <p class="lead hero-lede">
         A decade of building systems that have to work outside the demo: connected
         platforms for half a million electric scooters, voice AI in clinics, data
         platforms for retail. I write about what held up, and what broke at 3am.
       </p>
 
-      <div class="fade-up mt-10 flex flex-wrap items-center gap-x-8 gap-y-4" style="--fade-delay: 240ms;">
-        <a href="/blog" class="btn btn-primary group" data-astro-prefetch>
-          Read the writing
-          <svg class="h-4 w-4 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-          </svg>
-        </a>
+      <div class="hero-actions">
+        <a href="/blog" class="btn" data-astro-prefetch>Read the writing</a>
         <a href="/about" class="link-quiet" data-astro-prefetch>More about me</a>
-        <ul class="flex items-center gap-1" aria-label="Elsewhere">
-          {socials.filter((s) => s.platform !== 'email').map((social) => (
-            <li>
-              <a
-                href={social.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="social-pill"
-              >
-                {social.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
-
-    {latestPost && (
-      <a
-        href={`/blog/${latestPost.id}`}
-        class="fade-up latest-essay group block"
-        style="--fade-delay: 320ms;"
-        data-astro-prefetch
-      >
-        <p class="latest-essay-label">Latest essay · <time datetime={new Date(latestPost.data.date).toISOString()}>{formatCardDate(latestPost.data.date, 'long')}</time></p>
-        <h2 class="display-heading mt-4 text-3xl text-[var(--color-text)] text-balance transition-colors group-hover:text-[var(--color-primary)] sm:text-4xl">
-          {latestPost.data.title}
-        </h2>
-        {latestPost.data.subtitle && (
-          <p class="mt-3 text-lg text-[var(--color-text-secondary)] text-pretty">{latestPost.data.subtitle}</p>
-        )}
-        {latestPost.data.description && (
-          <p class="mt-4 line-clamp-3 text-sm leading-relaxed text-[var(--color-text-muted)]">{latestPost.data.description}</p>
-        )}
-        <span class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-primary)]">
-          Read it
-          <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-          </svg>
-        </span>
-      </a>
-    )}
-  </section>
-
-  <!-- Track record: receipts, not metrics -->
-  <section class="section-spacing border-t border-[var(--color-border)]/30" aria-labelledby="record-title">
-    <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16">
-      <div class="reveal">
-        <h2 id="record-title" class="section-title">Where the work has been</h2>
-        <p class="section-description mt-4">
-          Startups and scaled platforms, mostly in places where software meets
-          hardware, clinics, or warehouses, and has to behave.
-        </p>
       </div>
 
-      <ol class="record reveal">
-        {record.map((item) => (
-          <li class="record-item">
-            <p class="record-when">{item.when}</p>
-            <div>
-              <h3 class="record-where">
-                {item.href ? (
-                  <a href={item.href} target="_blank" rel="noopener noreferrer">{item.where}</a>
-                ) : (
-                  item.where
-                )}
-                <span class="record-role">{item.role}</span>
-              </h3>
-              <p class="record-what">{item.what}</p>
-            </div>
+      <ul class="hero-elsewhere" aria-label="Elsewhere">
+        {socials.filter((s) => s.platform !== 'email').map((social) => (
+          <li>
+            <a href={social.url} target="_blank" rel="noopener noreferrer">{social.label}</a>
           </li>
         ))}
-      </ol>
+      </ul>
     </div>
+  </section>
+
+  <!-- Latest essay -->
+  {latestPost && (
+    <section class="row ruled section" aria-labelledby="latest-title">
+      <p class="marginalia">
+        Latest essay<br />
+        <time datetime={new Date(latestPost.data.date).toISOString()}>{formatCardDate(latestPost.data.date, 'long')}</time>
+      </p>
+      <div>
+        <h2 id="latest-title" class="page-title latest-title">
+          <a href={`/blog/${latestPost.id}`} data-astro-prefetch>{latestPost.data.title}</a>
+        </h2>
+        {latestPost.data.subtitle && <p class="lead latest-sub">{latestPost.data.subtitle}</p>}
+        {latestPost.data.description && <p class="body-serif latest-desc">{latestPost.data.description}</p>}
+        <p class="latest-more">
+          <a href={`/blog/${latestPost.id}`} class="link-quiet" data-astro-prefetch>Read it<span aria-hidden="true"> →</span></a>
+        </p>
+      </div>
+    </section>
+  )}
+
+  <!-- Track record: receipts, not metrics -->
+  <section class="section" aria-labelledby="record-title">
+    <div class="row ruled">
+      <p class="marginalia">
+        Startups and scaled platforms, mostly in places where software meets
+        hardware, clinics, or warehouses, and has to behave.
+      </p>
+      <h2 id="record-title" class="section-title">Where the work has been</h2>
+    </div>
+
+    <ol class="record">
+      {record.map((item) => (
+        <li class="row record-item">
+          <p class="marginalia record-when">{item.when}</p>
+          <div>
+            <h3 class="record-where">
+              {item.href ? (
+                <a href={item.href} target="_blank" rel="noopener noreferrer">{item.where}</a>
+              ) : (
+                item.where
+              )}
+              <span class="record-role">{item.role}</span>
+            </h3>
+            <p class="body-serif record-what">{item.what}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
   </section>
 
   <!-- Built work (only when there are real write-ups to show) -->
   {featuredProjects.length > 0 && (
-    <section class="section-spacing border-t border-[var(--color-border)]/30">
-      <div class="section-header reveal">
-        <h2 class="section-title">Things I've built</h2>
+    <section class="section" aria-labelledby="built-title">
+      <div class="row ruled">
+        <p class="marginalia"><a href="/projects" class="link-primary" data-astro-prefetch>All work</a></p>
+        <h2 id="built-title" class="section-title">Things I've built</h2>
       </div>
-
-      <ContentBentoGrid animate items={featuredProjects.map(toBentoItem)} />
-
-      <div class="mt-12 reveal">
-        <a href="/projects" class="btn btn-secondary" data-astro-prefetch>All work</a>
-      </div>
+      <PostList level={3} items={featuredProjects.map(toEntry)} />
     </section>
   )}
 
   <!-- More writing -->
   {morePosts.length > 0 && (
-    <section class="section-spacing border-t border-[var(--color-border)]/30">
-      <div class="section-header reveal flex flex-wrap items-end justify-between gap-6">
-        <div>
-          <h2 class="section-title">More writing</h2>
-          <p class="section-description mt-4">
+    <section class="section" aria-labelledby="more-title">
+      <div class="row ruled">
+        <div class="marginalia">
+          <p>
             On AI systems, product judgment, and the distance between the
             benchmark and the real thing.
           </p>
+          <p class="more-link"><a href="/blog" class="link-primary" data-astro-prefetch>All essays<span aria-hidden="true"> →</span></a></p>
         </div>
-        <a href="/blog" class="link-quiet" data-astro-prefetch>All essays<span aria-hidden="true"> →</span></a>
+        <h2 id="more-title" class="section-title">More writing</h2>
       </div>
-
-      <ContentBentoGrid animate items={morePosts.map(toBentoItem)} />
+      <PostList level={3} items={morePosts.map(toEntry)} />
     </section>
   )}
 
   <!-- Newsletter -->
-  <section id="newsletter-section" class="section-spacing border-t border-[var(--color-border)]/30">
-    <div class="reveal grid gap-8 md:grid-cols-[minmax(0,1.4fr)_auto] md:items-end">
+  <section id="newsletter-section" class="section" aria-labelledby="newsletter-title">
+    <div class="row ruled">
+      <p class="marginalia">
+        New essays by email, sent when there's something worth saying rather
+        than on a schedule. Unsubscribe whenever; no hard feelings.
+      </p>
       <div>
-        <h2 class="display-heading text-3xl text-[var(--color-text)] sm:text-4xl">Stochastic Musings</h2>
-        <p class="mt-4 max-w-xl text-[var(--color-text-secondary)]">
-          New essays by email, sent when there's something worth saying rather
-          than on a schedule. Unsubscribe whenever; no hard feelings.
-        </p>
-      </div>
-      <div class="flex flex-wrap items-center gap-6">
-        <a
-          href="https://stochasticmusings.substack.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn btn-primary"
-        >
-          Subscribe on Substack
-        </a>
-        <a href="/rss.xml" class="link-quiet">or use RSS</a>
+        <h2 id="newsletter-title" class="section-title">Stochastic Musings</h2>
+        <div class="newsletter-actions">
+          <a
+            href="https://stochasticmusings.substack.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn"
+          >
+            Subscribe on Substack
+          </a>
+          <a href="/rss.xml" class="link-quiet">or use RSS</a>
+        </div>
       </div>
     </div>
   </section>
@@ -223,118 +194,177 @@ const record = [
 
 <style>
   .hero {
-    /* The hero is a normal-flow section now; no full-viewport takeover. */
-    min-height: auto;
+    padding-block: clamp(2rem, 6vw, 4.5rem) clamp(3rem, 7vw, 5.5rem);
+    align-items: start;
   }
 
-  .latest-essay {
-    position: relative;
-    padding: 2rem;
-    border: 1px solid var(--color-border);
-    border-radius: 1.5rem;
-    background: var(--color-bg-elevated);
-    text-decoration: none;
-    transition:
-      border-color var(--duration-base) var(--ease-out-quint),
-      transform var(--duration-base) var(--ease-out-quint);
-  }
-
-  .latest-essay:hover {
-    border-color: color-mix(in srgb, var(--color-primary) 45%, var(--color-border));
-  }
-
-  .latest-essay:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 4px;
-  }
-
-  .latest-essay-label {
-    font-size: 0.875rem;
-    color: var(--color-text-muted);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .social-pill {
-    display: inline-flex;
+  .hero-aside {
+    display: flex;
     align-items: center;
-    min-height: 2.75rem;
-    padding: 0 0.75rem;
-    font-size: 0.875rem;
-    color: var(--color-text-muted);
-    text-decoration: underline;
-    text-decoration-color: transparent;
-    text-underline-offset: 4px;
-    transition:
-      color var(--duration-fast) ease,
-      text-decoration-color var(--duration-fast) ease;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
   }
 
-  .social-pill:hover {
-    color: var(--color-text);
-    text-decoration-color: var(--color-primary);
+  .hero-aside::before {
+    display: none;
   }
 
-  .record {
-    border-top: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent);
+  .hero-aside p {
+    max-width: 9rem;
   }
 
-  .record-item {
-    display: grid;
-    grid-template-columns: 7rem minmax(0, 1fr);
-    gap: 1.5rem;
-    padding: 1.75rem 0;
-    border-bottom: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent);
-  }
+  @media (min-width: 48rem) {
+    .hero-aside {
+      display: block;
+      padding-top: 1rem;
+      margin-bottom: 0;
+    }
 
-  @media (max-width: 30rem) {
-    .record-item {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 0.5rem;
+    .hero-aside::before {
+      display: block;
+    }
+
+    .hero-aside p {
+      margin-top: 0.75rem;
     }
   }
 
-  .record-when {
-    padding-top: 0.2rem;
-    font-size: 0.875rem;
+  .hero-avatar {
+    width: 4.5rem;
+    height: 4.5rem;
+    flex: none;
+    overflow: hidden;
+    border-radius: 4px;
+    border: 1px solid var(--color-border);
+  }
+
+  .hero-avatar :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero-lede {
+    margin-top: 2rem;
+    max-width: 36rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.75rem;
+    margin-top: 2rem;
+  }
+
+  .hero-elsewhere {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.25rem;
+    margin-top: 1rem;
+  }
+
+  .hero-elsewhere a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    font-size: var(--text-ui);
     color: var(--color-text-muted);
+    text-decoration: underline;
+    text-decoration-color: var(--color-border-strong);
+    text-underline-offset: 0.3em;
+  }
+
+  .hero-elsewhere a:hover {
+    color: var(--color-text);
+    text-decoration-color: var(--color-accent);
+  }
+
+  .latest-title {
+    max-width: 32rem;
+  }
+
+  .latest-title a {
+    color: var(--color-text);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
+  }
+
+  .latest-title a:hover {
+    text-decoration-color: var(--color-accent);
+  }
+
+  .latest-sub {
+    margin-top: 1rem;
+    max-width: 34rem;
+  }
+
+  .latest-desc {
+    margin-top: 1rem;
+    max-width: 34rem;
+    color: var(--color-text-muted);
+  }
+
+  .latest-more {
+    margin-top: 1.25rem;
+  }
+
+  .more-link {
+    margin-top: 1rem;
+  }
+
+  .record-item {
+    padding-block: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .record-item:last-child {
+    border-bottom: 0;
+  }
+
+  .record-when {
+    padding-top: 0.35rem;
   }
 
   .record-where {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
-    gap: 0.25rem 0.75rem;
-    font-size: 1.25rem;
+    gap: 0.125rem 0.75rem;
+    font-size: var(--text-h3);
+    line-height: 1.2;
     color: var(--color-text);
   }
 
   .record-where a {
     color: inherit;
     text-decoration: underline;
-    text-decoration-color: color-mix(in srgb, var(--color-primary) 40%, transparent);
-    text-underline-offset: 4px;
+    text-decoration-color: color-mix(in srgb, var(--color-accent) 50%, transparent);
+    text-underline-offset: 0.2em;
   }
 
   .record-where a:hover {
-    color: var(--color-primary);
+    color: var(--color-accent);
   }
 
   .record-role {
-    font-size: 0.9375rem;
-    font-weight: 500;
-    color: var(--color-text-secondary);
+    font-family: var(--font-sans);
+    font-size: var(--text-ui);
+    color: var(--color-text-muted);
   }
 
   .record-what {
     margin-top: 0.5rem;
-    max-width: 38rem;
-    color: var(--color-text-secondary);
+    max-width: 36rem;
+  }
+
+  .newsletter-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.75rem;
+    margin-top: 1.5rem;
   }
 </style>

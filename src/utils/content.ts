@@ -3,8 +3,6 @@
  */
 
 import type { CollectionEntry } from "astro:content";
-import type { ImageMetadata } from "astro";
-import type { HeroConfig } from "./hero-config";
 
 /**
  * Filter function for published (non-draft) content
@@ -32,79 +30,45 @@ export function formatCardDate(
 	});
 }
 
-export function formatCardMeta(
-	kind: "project" | "blog",
-	date?: string,
-): string | undefined {
-	const parts: string[] = [];
-	if (kind === "project") {
-		parts.push("Project");
-	}
-	if (date) {
-		parts.push(formatCardDate(date, "short"));
-	}
-	return parts.length > 0 ? parts.join(" · ") : undefined;
+/** ~230 words per minute for considered, technical reading. */
+export function readingMinutes(body = ""): number {
+	const words = body.split(/\s+/).filter(Boolean).length;
+	return Math.max(1, Math.round(words / 230));
 }
 
-export interface BentoItem {
+export interface EntryItem {
 	href: string;
 	title: string;
-	description?: string;
-	subtitle?: string;
-	date?: string;
+	dek?: string;
+	date: string;
+	readingTime?: number;
 	tags?: string[];
-	heroImage?: ImageMetadata;
-	heroConfig?: HeroConfig;
-	kind: "project" | "blog";
+	links?: { label: string; href: string }[];
 }
 
-export function toBentoItem(
+/** Map a blog post or project onto the typeset list row. */
+export function toEntry(
 	entry: CollectionEntry<"blog"> | CollectionEntry<"projects">,
-): BentoItem {
-	const kind = entry.collection === "projects" ? "project" : "blog";
-	const base: BentoItem = {
+): EntryItem {
+	const base = {
 		href: `/${entry.collection}/${entry.id}`,
-		title: entry.data.title,
-		description: entry.data.description,
 		date: entry.data.date,
+		title: entry.data.title,
 		tags: entry.data.tags,
-		heroImage: entry.data.heroImage,
-		kind,
 	};
 
 	if (entry.collection === "blog") {
 		return {
 			...base,
-			subtitle: entry.data.subtitle,
-			heroConfig: entry.data.heroConfig,
+			dek: entry.data.subtitle ?? entry.data.description,
+			readingTime: readingMinutes(entry.body),
 		};
 	}
 
-	return base;
-}
+	const links = [
+		entry.data.github && { label: "Code", href: entry.data.github },
+		entry.data.demo && { label: "Demo", href: entry.data.demo },
+	].filter((link): link is { label: string; href: string } => Boolean(link));
 
-export interface StackedProjectProps {
-	href: string;
-	title: string;
-	description: string;
-	date: string;
-	tags?: string[];
-	heroImage?: ImageMetadata;
-	github?: string;
-	demo?: string;
-}
-
-export function toStackedProjectProps(
-	entry: CollectionEntry<"projects">,
-): StackedProjectProps {
-	return {
-		href: `/projects/${entry.id}`,
-		title: entry.data.title,
-		description: entry.data.description,
-		date: entry.data.date,
-		tags: entry.data.tags,
-		heroImage: entry.data.heroImage,
-		github: entry.data.github,
-		demo: entry.data.demo,
-	};
+	return { ...base, dek: entry.data.description, links };
 }
