@@ -4,6 +4,9 @@ description: 'A modern food blog platform built with Next.js'
 date: '2025-01-15'
 heroImage: './food-blog-hero.svg'
 tags: ['Next.js', 'TailwindCSS', 'Markdown']
+# Placeholder from the original template (johndoe repo, demo.com link).
+# Hidden until replaced with a real project write-up.
+draft: true
 github: 'https://github.com/johndoe/food-blog'
 demo: 'https://food-blog.demo.com'
 ---

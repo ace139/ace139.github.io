@@ -50,7 +50,7 @@ const objectPosition = config.objectPosition;
       
       <div class="hero-content-overlay absolute inset-0 flex flex-col justify-end">
         <div class="relative z-10 flex max-w-2xl flex-col items-start p-6 sm:p-12">
-          <div class="hero-meta mb-4 flex flex-wrap items-center gap-2 text-xs font-medium uppercase tracking-[0.15em]">
+          <div class="hero-meta mb-4 flex flex-wrap items-center gap-2 text-sm font-medium tabular-nums">
             <time datetime={date.toISOString()} class="hero-meta-item flex items-center gap-1.5">
               <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -68,7 +68,7 @@ const objectPosition = config.objectPosition;
                   <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  {readingTime} min
+                  {readingTime} min read
                 </span>
               </>
             )}
@@ -93,7 +93,7 @@ const objectPosition = config.objectPosition;
         style="background: radial-gradient(ellipse at top right, rgba(244, 63, 94, 0.15) 0%, transparent 60%);"
       />
       <div class="relative z-10 flex max-w-2xl flex-col items-start p-6 sm:p-12">
-        <div class="hero-meta mb-4 flex flex-wrap items-center gap-2 text-xs font-medium uppercase tracking-[0.15em]">
+        <div class="hero-meta mb-4 flex flex-wrap items-center gap-2 text-sm font-medium tabular-nums">
           <time datetime={date.toISOString()} class="hero-meta-item flex items-center gap-1.5">
             <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -111,7 +111,7 @@ const objectPosition = config.objectPosition;
                 <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                {readingTime} min
+                {readingTime} min read
               </span>
             </>
           )}
@@ -131,7 +131,7 @@ const objectPosition = config.objectPosition;
   <!-- Mobile: Content below image -->
   {heroImage && (
     <div class="hero-content-mobile">
-      <div class="hero-meta mb-3 flex flex-wrap items-center gap-2 text-xs font-medium uppercase tracking-[0.12em]">
+      <div class="hero-meta mb-3 flex flex-wrap items-center gap-2 text-sm font-medium tabular-nums">
         <time datetime={date.toISOString()} class="hero-meta-item-mobile flex items-center gap-1.5">
           <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -149,7 +149,7 @@ const objectPosition = config.objectPosition;
               <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              {readingTime} min
+              {readingTime} min read
             </span>
           </>
         )}

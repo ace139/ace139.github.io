@@ -18,13 +18,13 @@ const { navLinks } = Astro.props;
       <div>
         <p class="mb-3 text-lg font-semibold text-[var(--color-text-dark)]">Soumyo Dey</p>
         <p class="text-sm leading-relaxed text-[var(--color-muted-dark)]">
-          Tech, AI & data products, and the stories picked up along the way.
+          Building systems that hold up outside the demo, and writing about the ones that didn't.
         </p>
       </div>
 
       <!-- Navigation -->
       <div>
-        <p class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-muted-dark)]">Navigate</p>
+        <p class="footer-label mb-4 text-sm font-medium text-[var(--color-muted-dark)]">Pages</p>
         <div class="flex flex-col gap-2">
           {navLinks.map((link) => (
             <a
@@ -34,12 +34,18 @@ const { navLinks } = Astro.props;
               {link.label}
             </a>
           ))}
+          <a
+            href="/rss.xml"
+            class="text-sm text-[var(--color-text-secondary-dark)] transition-colors hover:text-[var(--color-accent)]"
+          >
+            RSS feed
+          </a>
         </div>
       </div>
 
       <!-- Connect -->
       <div>
-        <p class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-muted-dark)]">Connect</p>
+        <p class="footer-label mb-4 text-sm font-medium text-[var(--color-muted-dark)]">Elsewhere</p>
         <div class="flex flex-col gap-2 text-sm">
           <a
             href="mailto:heysoumyo@gmail.com"
@@ -87,8 +93,8 @@ const { navLinks } = Astro.props;
     </div>
 
     <div class="mt-12 border-t border-[var(--color-border-dark)]/30 pt-8 text-center">
-      <p class="text-xs uppercase tracking-[0.2em] text-[var(--color-muted-dark)]">
-        &copy; {new Date().getFullYear()} Soumyo Dey &middot; Crafted with care
+      <p class="footer-label text-sm text-[var(--color-muted-dark)]">
+        &copy; {new Date().getFullYear()} Soumyo Dey &middot; <a href="/privacy" class="underline underline-offset-4">Privacy</a>
       </p>
     </div>
   </div>

@@ -11,8 +11,8 @@ Strategic design context lives in [`PRODUCT.md`](PRODUCT.md) (read it before UI 
 - **Personality**: authoritative, direct, and quietly funny (*grounded, direct, wry*). Execution over hype, claims grounded in shipped work; a practitioner sharing understanding, never selling.
 - **Anti-references**: AI-agency/consultancy hype (the headline one), generic SaaS landing, AI-slop/templated looks (no per-section tracked eyebrows, no cream-paper default), corporate/clinical sterility, loud hype marketing.
 
-> Note: the earlier Cornet Health / dentist-burnout content (6 draft posts + `content-strategy/`) is a closed chapter being retired; the About page and résumé still reference Cornet and need updating.
-- **Accessibility**: WCAG 2.2 AA across both dark (default) and light themes; reduced-motion alternatives for all GSAP/scroll animation.
+> Note: the earlier Cornet Health / dentist-burnout content (6 draft posts + `content-strategy/`) is a closed chapter being retired. The About page now lists Oogway Labs as current with Cornet as past; the résumé still needs updating.
+- **Accessibility**: WCAG 2.2 AA across both dark (default) and light themes; reduced-motion alternatives for all load/scroll animation.
 
 When DESIGN.md is generated (via `/impeccable document`), it captures the visual system (palette, type, components).
 
@@ -55,7 +55,7 @@ If you cannot articulate a concrete reason like the above, fix the code instead.
 
 ## Architecture Overview
 
-This is an Astro 6 static site with TailwindCSS v4 and TypeScript. Deployed to Cloudflare Pages.
+This is an Astro 7 static site with TailwindCSS v4 and TypeScript. Deployed to Cloudflare Pages.
 
 ### Content System
 
@@ -67,11 +67,12 @@ Content uses Astro's Content Layer API with glob loaders:
 
 ### Key Layouts & Components
 
-- `src/layouts/Layout.astro` - Base layout with theme toggle, nav, footer. Handles dark mode (default) with `localStorage` persistence
-- `src/layouts/BlogPost.astro` - Blog post wrapper
+- `src/layouts/Layout.astro` - Base layout with theme toggle, nav, footer, and all `<head>` SEO (canonical, Open Graph/Twitter, JSON-LD). Handles dark mode (default) with `localStorage` persistence
+- `src/layouts/BlogPost.astro` - Blog post wrapper: margin table of contents (≥3 `##` sections), reading progress, subscribe prompt, previous/next essay
 - `src/layouts/ProjectPost.astro` - Project wrapper
 - `src/components/ResponsiveImage.astro` - Wraps `astro:assets` Picture for AVIF/WebP with responsive widths
-- `src/scripts/gsap-setup.ts` - GSAP/ScrollTrigger animation utilities
+- Motion is CSS-only plus one small IntersectionObserver in Layout.astro: `.fade-up` (load-in, stagger via `--fade-delay`) and `.reveal` (on scroll; `data-animate-stagger` groups stagger their `data-animate-item` children). Both are gated on `html.motion-ok`, which is never set under reduced motion. No animation library.
+- `src/pages/rss.xml.ts` - RSS feed of published posts
 
 ### Styling Architecture
 
@@ -103,7 +104,7 @@ Requests with `Accept: text/markdown` receive a Markdown version of the page; br
 
 ### Fonts
 
-Loaded via `@fontsource/*` packages in Layout.astro:
-- Playfair Display (headings)
-- Roboto Slab
-- Plus Jakarta Sans (body)
+Configured with Astro's Fonts API in `astro.config.mjs` (`fonts`), using the local provider pointed at the Latin variable files from `@fontsource-variable/*`. Astro emits the `@font-face` rules, preload links, and size-adjusted fallback faces; `<Font>` in Layout.astro exposes them as CSS variables that `globals.css` maps into the theme:
+- Playfair Display → `--font-playfair` → `--font-display` (display headings)
+- Plus Jakarta Sans → `--font-jakarta` → `--font-sans` (UI and headings)
+- Roboto Slab → `--font-roboto-slab` → `--font-serif` (article body)

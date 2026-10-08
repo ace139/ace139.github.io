@@ -4,18 +4,26 @@
 
 import { getCollection, render } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
-import { isPublished } from '../../utils/content';
+import { isPublished, sortByDateDesc } from '../../utils/content';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', isPublished);
-  return posts.map((post) => ({
-    params: { slug: post.id },
-    props: { post },
-  }));
+  const posts = (await getCollection('blog', isPublished)).sort(sortByDateDesc);
+  return posts.map((post, index) => {
+    const newer = posts[index - 1];
+    const older = posts[index + 1];
+    return {
+      params: { slug: post.id },
+      props: {
+        post,
+        newer: newer && { href: `/blog/${newer.id}`, title: newer.data.title },
+        older: older && { href: `/blog/${older.id}`, title: older.data.title },
+      },
+    };
+  });
 }
 
-const { post } = Astro.props;
-const { Content } = await render(post);
+const { post, newer, older } = Astro.props;
+const { Content, headings } = await render(post);
 
 // ~230 words per minute for considered, technical reading.
 const wordCount = (post.body ?? '').split(/\s+/).filter(Boolean).length;
@@ -25,6 +33,6 @@ const frontmatter = {
 };
 ---
 
-<BlogPost frontmatter={frontmatter}>
+<BlogPost frontmatter={frontmatter} headings={headings} newer={newer} older={older}>
   <Content />
 </BlogPost>

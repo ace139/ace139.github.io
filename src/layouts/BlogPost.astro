@@ -3,11 +3,29 @@
 
 
 import { getImage } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import type { MarkdownHeading } from 'astro';
 import BlogHeader from '../components/BlogHeader.astro';
 import Tags from '../components/Tags.astro';
 import Layout from './Layout.astro';
 
-const { frontmatter } = Astro.props;
+interface AdjacentPost {
+  href: string;
+  title: string;
+}
+
+interface Props {
+  frontmatter: CollectionEntry<'blog'>['data'] & { readingTime?: number };
+  headings?: MarkdownHeading[];
+  newer?: AdjacentPost;
+  older?: AdjacentPost;
+}
+
+const { frontmatter, headings = [], newer, older } = Astro.props;
+
+// Section list for the margin table of contents (wide screens only).
+const sections = headings.filter((h) => h.depth === 2);
+const showToc = sections.length >= 3;
 const readingTime = frontmatter.readingTime || 5;
 
 // 1200×630 social card cropped from the hero image, when the post has one.
@@ -27,7 +45,20 @@ const socialImage = frontmatter.heroImage
   <!-- Reading progress: mirrors scroll position through the article -->
   <div class="reading-progress" data-reading-progress aria-hidden="true"></div>
 
-  <article class="mx-auto max-w-3xl pt-4 md:pt-8">
+  <article class="relative mx-auto max-w-3xl pt-4 md:pt-8">
+    {showToc && (
+      <aside class="post-toc" aria-labelledby="post-toc-title">
+        <nav class="post-toc-inner">
+          <p id="post-toc-title" class="post-toc-title">In this essay</p>
+          <ol>
+            {sections.map((section) => (
+              <li><a href={`#${section.slug}`} data-toc-link={section.slug}>{section.text}</a></li>
+            ))}
+          </ol>
+        </nav>
+      </aside>
+    )}
+
     <BlogHeader
       title={frontmatter.title}
       subtitle={frontmatter.subtitle}
@@ -51,21 +82,52 @@ const socialImage = frontmatter.heroImage
     </div>
 
     <!-- Article Footer -->
-    <footer class="mt-20 border-t border-[var(--color-border)]/30 pt-12">
+    <footer class="mt-20 space-y-16 border-t border-[var(--color-border)]/30 pt-12">
+      <!-- Subscribe: the moment a reader decides whether to come back -->
+      <section class="post-subscribe" aria-labelledby="post-subscribe-title">
+        <h2 id="post-subscribe-title" class="display-heading text-2xl text-[var(--color-text)] sm:text-3xl">
+          Get the next one by email
+        </h2>
+        <p class="mt-3 max-w-xl text-[var(--color-text-secondary)]">
+          Stochastic Musings goes out when there's something worth saying,
+          not on a schedule.
+        </p>
+        <div class="mt-6 flex flex-wrap items-center gap-6">
+          <a
+            href="https://stochasticmusings.substack.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-primary"
+          >
+            Subscribe on Substack
+          </a>
+          <a href="/rss.xml" class="link-quiet">or use RSS</a>
+        </div>
+      </section>
+
+      {(newer || older) && (
+        <nav class="grid gap-6 sm:grid-cols-2" aria-label="More essays">
+          {older && (
+            <a href={older.href} class="post-adjacent group" data-astro-prefetch>
+              <span class="post-adjacent-label"><span aria-hidden="true">← </span>Previous essay</span>
+              <span class="post-adjacent-title">{older.title}</span>
+            </a>
+          )}
+          {newer && (
+            <a href={newer.href} class="post-adjacent group sm:col-start-2 sm:text-right" data-astro-prefetch>
+              <span class="post-adjacent-label">Next essay<span aria-hidden="true"> →</span></span>
+              <span class="post-adjacent-title">{newer.title}</span>
+            </a>
+          )}
+        </nav>
+      )}
+
       <div class="flex flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
-        <a
-          href="/blog"
-          class="group inline-flex items-center gap-2 text-sm font-medium uppercase tracking-[0.15em] text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-primary)]"
-        >
-          <svg class="h-4 w-4 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-          Back to Field Notes
-        </a>
+        <a href="/blog" class="link-quiet" data-astro-prefetch>All writing</a>
 
         <!-- Share Section -->
         <div class="flex items-center gap-4">
-          <span class="text-xs uppercase tracking-[0.15em] text-[var(--color-text-muted)]">Share</span>
+          <span class="text-sm text-[var(--color-text-muted)]">Share this essay</span>
           <div class="flex gap-3">
             <a
               href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(frontmatter.title)}&url=${encodeURIComponent(Astro.url.href)}`}
@@ -136,10 +198,127 @@ const socialImage = frontmatter.heroImage
 
     setupReadingProgress();
     document.addEventListener('astro:page-load', setupReadingProgress);
+
+    // Margin TOC: mark the last section heading scrolled past the top third.
+    let tocLinks: HTMLAnchorElement[] = [];
+    let tocTargets: HTMLElement[] = [];
+
+    function updateTocHighlight() {
+      const line = window.innerHeight / 3;
+      let current = -1;
+      for (const [index, target] of tocTargets.entries()) {
+        if (target.getBoundingClientRect().top <= line) current = index;
+      }
+      for (const [index, link] of tocLinks.entries()) {
+        link.toggleAttribute('aria-current', index === current);
+      }
+    }
+
+    function setupTocHighlight() {
+      tocLinks = [...document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]')];
+      tocTargets = tocLinks
+        .map((link) => document.getElementById(link.dataset.tocLink ?? ''))
+        .filter((el): el is HTMLElement => el !== null);
+      updateTocHighlight();
+    }
+
+    // Attached once; the element lists refresh on each page load.
+    window.addEventListener('scroll', () => requestAnimationFrame(updateTocHighlight), { passive: true });
+
+    document.addEventListener('astro:page-load', setupTocHighlight);
   </script>
 </Layout>
 
 <style>
+  /* Margin table of contents: sits in the right gutter on wide screens so the
+     reading column stays centred; hidden below that. */
+  .post-toc {
+    display: none;
+  }
+
+  @media (min-width: 80rem) {
+    .post-toc {
+      display: block;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 100%;
+      width: 11rem;
+      margin-left: 3rem;
+    }
+  }
+
+  .post-toc-inner {
+    position: sticky;
+    top: 7rem;
+  }
+
+  .post-toc-title {
+    margin-bottom: 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+  }
+
+  .post-toc ol {
+    display: grid;
+    gap: 0.625rem;
+    border-left: 1px solid var(--color-border);
+  }
+
+  .post-toc a {
+    display: block;
+    margin-left: -1px;
+    padding-left: 0.875rem;
+    border-left: 1px solid transparent;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color var(--duration-fast) ease, border-color var(--duration-fast) ease;
+  }
+
+  .post-toc a:hover {
+    color: var(--color-text);
+  }
+
+  .post-toc a[aria-current] {
+    color: var(--color-text);
+    border-left-color: var(--color-primary);
+  }
+
+  .post-adjacent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 1rem;
+    text-decoration: none;
+    transition: border-color var(--duration-base) var(--ease-out-quint);
+  }
+
+  .post-adjacent:hover {
+    border-color: color-mix(in srgb, var(--color-primary) 45%, var(--color-border));
+  }
+
+  .post-adjacent-label {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+
+  .post-adjacent-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    line-height: 1.3;
+    color: var(--color-text);
+    text-wrap: balance;
+  }
+
+  .post-adjacent:hover .post-adjacent-title {
+    color: var(--color-primary);
+  }
+
   /* Editorial prose styling - optimized for reading.
      Roboto Slab is the reading body per DESIGN.md; headings below switch to
      the sans face for structural contrast. */
@@ -166,6 +345,9 @@ const socialImage = frontmatter.heroImage
     margin-top: 2.5em;
     margin-bottom: 0.75em;
     line-height: 1.3;
+    text-wrap: balance;
+    /* Clear the fixed nav when jumping from the table of contents. */
+    scroll-margin-top: 6rem;
   }
 
   .prose-editorial :global(h1) { font-size: 2.25rem; }
@@ -205,6 +387,7 @@ const socialImage = frontmatter.heroImage
     padding: 1.5rem;
     border-radius: 0 0.75rem 0.75rem 0;
     font-style: italic;
+    hanging-punctuation: first;
   }
 
   .prose-editorial :global(blockquote p) {
@@ -252,6 +435,30 @@ const socialImage = frontmatter.heroImage
 
   .prose-editorial :global(li::marker) {
     color: var(--color-accent);
+  }
+
+  /* Tables: scroll sideways on narrow screens instead of squashing */
+  .prose-editorial :global(table) {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .prose-editorial :global(th),
+  .prose-editorial :global(td) {
+    padding: 0.625rem 1rem 0.625rem 0;
+    border-bottom: 1px solid var(--color-border);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .prose-editorial :global(th) {
+    font-weight: 600;
+    color: var(--color-text);
   }
 
   /* Images */

@@ -894,6 +894,29 @@ body {
 		color: var(--color-primary-light-hover);
 	}
 
+	/* Secondary text link: quiet until hovered, with a visible underline so
+	   it still reads as a link (not a label). */
+	.link-quiet {
+		color: var(--color-text-secondary);
+		font-size: 0.9375rem;
+		font-weight: 500;
+		text-decoration: underline;
+		text-decoration-color: color-mix(
+			in srgb,
+			var(--color-text-secondary) 35%,
+			transparent
+		);
+		text-underline-offset: 4px;
+		transition:
+			color var(--duration-fast) ease,
+			text-decoration-color var(--duration-fast) ease;
+	}
+
+	.link-quiet:hover {
+		color: var(--color-text);
+		text-decoration-color: var(--color-primary);
+	}
+
 	.link-muted {
 		color: var(--color-muted-dark);
 		transition: color 200ms;
@@ -917,19 +940,6 @@ body {
 
 	.section-header {
 		margin-bottom: 3rem;
-	}
-
-	.section-eyebrow {
-		font-size: 0.75rem;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.2em;
-		color: var(--color-accent);
-		margin-bottom: 0.75rem;
-	}
-
-	.light .section-eyebrow {
-		color: var(--color-primary-light);
 	}
 
 	.section-title {

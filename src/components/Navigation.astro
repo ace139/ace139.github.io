@@ -41,7 +41,7 @@ const isActive = (href: string) =>
           <a
             href={link.href}
             aria-current={isActive(link.href) ? 'page' : undefined}
-            class="group relative py-1 text-sm font-medium uppercase tracking-[0.15em] text-[var(--color-muted-dark)] transition-colors hover:text-[var(--color-text-dark)] aria-[current=page]:text-[var(--color-text-dark)]"
+            class="group relative py-1 text-[0.9375rem] font-medium text-[var(--color-muted-dark)] transition-colors hover:text-[var(--color-text-dark)] aria-[current=page]:text-[var(--color-text-dark)]"
             data-astro-prefetch
           >
             <span class="relative">
@@ -152,7 +152,7 @@ const isActive = (href: string) =>
           <a
             href={link.href}
             aria-current={isActive(link.href) ? 'page' : undefined}
-            class="text-base font-medium uppercase tracking-[0.15em] text-[var(--color-muted-dark)] transition-colors hover:text-[var(--color-accent)] aria-[current=page]:text-[var(--color-accent)]"
+            class="text-lg font-medium text-[var(--color-muted-dark)] transition-colors hover:text-[var(--color-accent)] aria-[current=page]:text-[var(--color-accent)]"
             data-astro-prefetch
           >
             {link.label}
