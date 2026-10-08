@@ -2,15 +2,28 @@
 
 
 
+import { getImage } from 'astro:assets';
 import BlogHeader from '../components/BlogHeader.astro';
 import Tags from '../components/Tags.astro';
 import Layout from './Layout.astro';
 
 const { frontmatter } = Astro.props;
 const readingTime = frontmatter.readingTime || 5;
+
+// 1200×630 social card cropped from the hero image, when the post has one.
+const socialImage = frontmatter.heroImage
+  ? (await getImage({ src: frontmatter.heroImage, width: 1200, height: 630, fit: 'cover', format: 'jpeg' })).src
+  : undefined;
 ---
 
-<Layout title={frontmatter.title}>
+<Layout
+  title={frontmatter.title}
+  description={frontmatter.description ?? frontmatter.subtitle}
+  image={socialImage}
+  type="article"
+  publishedTime={new Date(frontmatter.date)}
+  tags={frontmatter.tags}
+>
   <!-- Reading progress: mirrors scroll position through the article -->
   <div class="reading-progress" data-reading-progress aria-hidden="true"></div>
 

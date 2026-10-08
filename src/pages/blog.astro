@@ -8,7 +8,7 @@ import { isPublished, sortByDateDesc } from '../utils/content';
 const posts = (await getCollection('blog', isPublished)).sort(sortByDateDesc);
 ---
 
-<Layout title="Blog | Soumyo Dey">
+<Layout title="Writing" description="Essays on AI, data, systems, and product, from someone who ships them.">
   <div class="space-y-12">
     <section class="reveal border-b border-[var(--color-border)] pb-12">
       <h1 class="section-title">Stories from the build log</h1>
@@ -19,7 +19,7 @@ const posts = (await getCollection('blog', isPublished)).sort(sortByDateDesc);
 
     {
       posts.length > 0 ? (
-        <div class="space-y-0">
+        <div class="space-y-0" data-animate-stagger>
           {posts.map((post, index) => (
             <ContentListItem
               href={`/blog/${post.id}`}

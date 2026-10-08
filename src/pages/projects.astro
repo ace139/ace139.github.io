@@ -8,9 +8,9 @@ import { isPublished, sortByDateDesc, toStackedProjectProps } from '../utils/con
 const projects = (await getCollection('projects', isPublished)).sort(sortByDateDesc);
 ---
 
-<Layout title="Work | Soumyo Dey">
+<Layout title="Work" description="Things Soumyo Dey has built, with notes on what worked and what broke.">
   <div class="space-y-12">
-    <section class="gsap-fade-up">
+    <section class="fade-up">
       <h1 class="section-title">Selected Work</h1>
       <p class="section-description mt-4 max-w-2xl text-lg">
         Experiments, shipping stories, and products that bend AI, strategy, and delightful UI into something useful.

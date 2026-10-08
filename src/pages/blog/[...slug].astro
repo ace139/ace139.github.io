@@ -17,11 +17,11 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 
-// Merge frontmatter with a default reading time
-// (actual reading time can be calculated if needed)
+// ~230 words per minute for considered, technical reading.
+const wordCount = (post.body ?? '').split(/\s+/).filter(Boolean).length;
 const frontmatter = {
   ...post.data,
-  readingTime: 5, // Default estimate
+  readingTime: Math.max(1, Math.round(wordCount / 230)),
 };
 ---
 

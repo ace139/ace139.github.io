@@ -9,9 +9,11 @@
 
 @theme {
 	/* Typography */
-	--font-display: "Playfair Display", Georgia, serif;
-	--font-sans: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
-	--font-serif: "Roboto Slab", Georgia, serif;
+	/* Families (and size-adjusted fallbacks) are defined by Astro's Fonts API
+	   in astro.config.mjs and exposed as these CSS variables. */
+	--font-display: var(--font-playfair);
+	--font-sans: var(--font-jakarta);
+	--font-serif: var(--font-roboto-slab);
 
 	/* Fluid Type Scale */
 	--text-hero: clamp(3rem, 8vw + 1rem, 6rem);
@@ -170,26 +172,37 @@ body {
 		transition-duration: 0.01ms !important;
 	}
 
-	/* Force every reveal-based element visible, regardless of the gsap-ready
-	   gate or any JS-set initial state. This is the safety net that guarantees
-	   content is never stranded blank for reduced-motion users. */
+	/* Force every reveal-based element visible, regardless of the motion-ok
+	   gate. This is the safety net that guarantees content is never stranded
+	   blank for reduced-motion users. */
 	.reveal,
-	.gsap-fade-up,
-	.gsap-fade-in,
-	.gsap-scale-in,
-	[data-animate-item] {
-		/* biome-ignore lint/complexity/noImportantStyles: must beat the gsap-ready initial-state rules and any inline GSAP transform to keep content visible (a11y requirement) */
+	.fade-up {
+		/* biome-ignore lint/complexity/noImportantStyles: must beat the motion-ok initial-state rules to keep content visible (a11y requirement) */
 		opacity: 1 !important;
-		/* biome-ignore lint/complexity/noImportantStyles: must beat the gsap-ready initial-state rules and any inline GSAP transform to keep content visible (a11y requirement) */
+		/* biome-ignore lint/complexity/noImportantStyles: must beat the motion-ok initial-state rules to keep content visible (a11y requirement) */
 		transform: none !important;
 	}
 }
 
-/* Decorative ambient layers (glow + noise): isolate their paint so they can't
-   invalidate other layers, and drop them entirely for users who ask for less
-   transparency / lower compositing cost. */
+/* Decorative ambient light: isolate its paint so it can't invalidate other
+   layers, and drop it entirely for users who ask for less transparency.
+   Plain radial gradients (no blur filter) paint once and stay put. */
 [data-ambient] {
 	contain: layout style paint;
+}
+
+.ambient-light {
+	background:
+		radial-gradient(
+			50rem 50rem at 40% -25%,
+			rgb(244 63 94 / 0.06),
+			transparent 70%
+		),
+		radial-gradient(
+			38rem 38rem at 100% 110%,
+			rgb(245 158 11 / 0.03),
+			transparent 70%
+		);
 }
 
 @media (prefers-reduced-transparency: reduce) {
@@ -380,42 +393,34 @@ body {
 
 	/* Scroll reveal.
 	   Visible by default. The hidden initial state applies ONLY when motion is
-	   active (html.gsap-ready, set pre-paint and never for reduced motion). This
-	   guarantees content is never stranded blank if JS is absent, the tab is
-	   backgrounded, or the IntersectionObserver never fires. */
-	.gsap-ready .reveal {
+	   allowed (html.motion-ok, set pre-paint by an inline script and never for
+	   reduced motion), so content is never stranded blank without JS. */
+	.motion-ok .reveal {
 		opacity: 0;
-		transform: translateY(30px);
+		transform: translateY(24px);
 		transition:
-			opacity var(--duration-reveal) var(--ease-out-quint),
-			transform var(--duration-reveal) var(--ease-out-quint);
+			opacity var(--duration-reveal) var(--ease-out-quint)
+			var(--reveal-delay, 0ms),
+			transform var(--duration-reveal) var(--ease-out-quint)
+			var(--reveal-delay, 0ms);
 	}
 
-	.gsap-ready .reveal.reveal-visible {
+	.motion-ok .reveal.reveal-visible {
 		opacity: 1;
 		transform: translateY(0);
 	}
 
-	/* GSAP animation helpers - visible by default, GSAP applies initial state */
-	.gsap-fade-up,
-	.gsap-fade-in,
-	.gsap-scale-in {
-		/* Elements are visible by default - GSAP sets initial state on load */
+	/* Load-in for above-the-fold content: pure CSS, no JS. Stagger with
+	   style="--fade-delay: 120ms". */
+	.motion-ok .fade-up {
+		animation: fade-up 800ms var(--ease-out-quint) var(--fade-delay, 0ms) both;
 	}
 
-	/* Class applied by JS when GSAP is ready */
-	.gsap-ready .gsap-fade-up {
-		opacity: 0;
-		transform: translateY(40px);
-	}
-
-	.gsap-ready .gsap-fade-in {
-		opacity: 0;
-	}
-
-	.gsap-ready .gsap-scale-in {
-		opacity: 0;
-		transform: scale(0.95);
+	@keyframes fade-up {
+		from {
+			opacity: 0;
+			transform: translateY(24px);
+		}
 	}
 
 	/* Skip-to-content link: hidden until focused, then slides into view above

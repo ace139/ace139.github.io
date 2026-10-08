@@ -2,14 +2,19 @@
 
 
 
+import { getImage } from 'astro:assets';
 import ResponsiveImage from '../components/ResponsiveImage.astro';
 import Tags from '../components/Tags.astro';
 import Layout from './Layout.astro';
 
 const { frontmatter } = Astro.props;
+
+const socialImage = frontmatter.heroImage
+  ? (await getImage({ src: frontmatter.heroImage, width: 1200, height: 630, fit: 'cover', format: 'jpeg' })).src
+  : undefined;
 ---
 
-<Layout title={frontmatter.title}>
+<Layout title={frontmatter.title} description={frontmatter.description} image={socialImage}>
   <article class="mx-auto max-w-3xl pt-20">
     <div class="mb-8">
       {

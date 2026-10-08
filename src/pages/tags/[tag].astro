@@ -26,7 +26,7 @@ const { tag } = Astro.params;
 const { items } = Astro.props;
 ---
 
-<Layout title={`Posts tagged with ${tag}`}>
+<Layout title={`Tagged “${tag}”`}>
   <div class="space-y-12">
     <section class="reveal border-b border-[var(--color-border)] pb-12">
       <h1 class="section-title">#{tag}</h1>
