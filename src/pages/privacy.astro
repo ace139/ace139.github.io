@@ -2,7 +2,10 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Privacy Policy">
+<Layout
+  title="Privacy Policy"
+  description="What this site collects (anonymous PostHog analytics), what it stores in your browser, who processes it, and how to opt out."
+>
   <header class="grid-12 gap-y-4 pb-14 pt-4 md:pb-20">
     <p class="c-label mono">Privacy</p>
     <h1 class="c-body t-title">Privacy Policy</h1>
@@ -11,35 +14,52 @@ import Layout from '../layouts/Layout.astro';
   <div class="grid-12">
     <div class="c-body max-w-[38rem] space-y-10 text-[var(--color-text-secondary)]">
       <p class="t-lead">
-        This simplified privacy policy explains how this website handles your information.
+        Short version: this site counts visits with anonymous analytics. It doesn't know who you are, and it doesn't sell anything about you.
       </p>
 
       <section>
-        <h2 class="mb-2 text-xl font-semibold text-[var(--color-text)]">Data Collection</h2>
+        <h2 class="mb-2 text-xl font-semibold text-[var(--color-text)]">What's collected</h2>
         <p>
-          This website does not collect personal information or track your browsing activity. No
-          analytics services are used, and no personal data is processed or stored.
+          The site uses <a href="https://posthog.com/" class="link" target="_blank" rel="noopener noreferrer">PostHog</a> for usage analytics. It records which pages are viewed, what gets clicked, the page that referred you, your browser and device type, and an approximate location estimated from your IP address. Each browser gets a random anonymous ID so repeat visits can be counted.
+        </p>
+        <p class="mt-4">
+          The site never asks for your name or email and never ties these events to a person. The data is not sold and not used for advertising.
         </p>
       </section>
 
       <section>
-        <h2 class="mb-2 text-xl font-semibold text-[var(--color-text)]">Cookies</h2>
+        <h2 class="mb-2 text-xl font-semibold text-[var(--color-text)]">Cookies and local storage</h2>
         <p>
-          This website uses only essential cookies to remember your preferences (like dark/light
-          mode). Some embedded third-party content (such as social media posts or external widgets)
-          might set their own cookies when you interact with them.
+          PostHog stores its anonymous ID in a first-party cookie and in your browser's local storage. Separately, your light or dark theme choice is kept in local storage under the key <code>theme</code>. That one never leaves your browser.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="mb-2 text-xl font-semibold text-[var(--color-text)]">Third parties</h2>
+        <p>
+          PostHog acts as a processor for the analytics data, using its US cloud. Its own policy is at
+          <a href="https://posthog.com/privacy" class="link" target="_blank" rel="noopener noreferrer">posthog.com/privacy</a>.
+          If you subscribe to the newsletter, that happens on Substack, which handles your email under
+          <a href="https://substack.com/privacy" class="link" target="_blank" rel="noopener noreferrer">its own privacy policy</a>.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="mb-2 text-xl font-semibold text-[var(--color-text)]">Opting out</h2>
+        <p>
+          Block cookies or JavaScript for this site, or use a content blocker, and the analytics won't run. The site does not honour Do Not Track, so a blocker is the reliable route.
         </p>
       </section>
 
       <section>
         <h2 class="mb-2 text-xl font-semibold text-[var(--color-text)]">Contact</h2>
         <p>
-          If you have any questions about this privacy policy, you can contact me at
+          Questions about any of this? Write to
           <a href="mailto:heysoumyo@gmail.com" class="link">heysoumyo@gmail.com</a>.
         </p>
       </section>
 
-      <p class="mono">Last updated: February 2025</p>
+      <p class="mono">Last updated: 9 October 2026</p>
     </div>
   </div>
 </Layout>
