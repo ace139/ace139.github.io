@@ -32,6 +32,12 @@ const visibleTags = limit ? tags.slice(0, limit) : tags;
 		line-height: 1.5;
 	}
 
+	/* Flex items drop the whitespace Astro leaves between the link and the
+	   comma, so the comma sits right after the word. */
+	.topics li {
+		display: inline-flex;
+	}
+
 	.topics li:not(:last-child)::after {
 		content: ",";
 		color: var(--color-text-muted);

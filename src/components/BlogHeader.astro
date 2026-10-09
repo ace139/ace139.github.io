@@ -13,71 +13,70 @@ const { title, subtitle, date, tags = [], readingTime } = Astro.props;
 const isoDate = date.toISOString().slice(0, 10);
 ---
 
-<header class="post-head">
-  <!-- Meta row: three cells on the grid, labelled like a spec sheet -->
-  <dl class="post-meta grid-12">
-    <div class="post-meta-cell post-meta-date">
+<header class="post-head grid-12">
+  <!-- Meta in the label column, title from column 4: the same grammar as
+       every other page. Phones: one compact line above the title. -->
+  <dl class="c-label post-meta">
+    <div class="post-meta-item">
       <dt class="mono">Published</dt>
       <dd class="mono post-meta-value"><time datetime={date.toISOString()}>{isoDate}</time></dd>
     </div>
     {readingTime && (
-      <div class="post-meta-cell post-meta-read">
+      <div class="post-meta-item">
         <dt class="mono">Reading time</dt>
         <dd class="mono post-meta-value">{readingTime} min</dd>
       </div>
     )}
     {tags.length > 0 && (
-      <div class="post-meta-cell post-meta-topics">
+      <div class="post-meta-item post-meta-topics">
         <dt class="mono">Topics</dt>
         <dd class="post-meta-value"><Tags tags={tags} /></dd>
       </div>
     )}
   </dl>
 
-  <div class="grid-12 post-title-row">
-    <h1 class="c-body post-title">{title}</h1>
-    {subtitle && <p class="c-body t-lead post-subtitle">{subtitle}</p>}
+  <div class="c-body post-heading">
+    <h1 class="post-title">{title}</h1>
+    {subtitle && <p class="t-lead post-subtitle">{subtitle}</p>}
   </div>
 </header>
 
 <style>
   .post-head {
+    row-gap: 1.25rem;
+    padding-top: clamp(1.5rem, 4vw, 3.5rem);
     padding-bottom: clamp(2.5rem, 5vw, 4rem);
   }
 
+  /* Phones: label + value pairs on one wrapping line. */
   .post-meta {
-    row-gap: 1.25rem;
-    padding-block: 1rem;
-    border-top: 1px solid var(--color-rule-strong);
-    border-bottom: 1px solid var(--color-rule);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
   }
 
-  .post-meta-cell {
-    display: grid;
-    gap: 0.25rem;
+  .post-meta-item {
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
   }
 
   .post-meta-value {
     color: var(--color-text);
   }
 
+  /* Wide: stacked marginalia beside the title, top-aligned with it. */
   @media (min-width: 48rem) {
-    .post-meta-date {
-      grid-column: 1 / span 3;
+    .post-meta {
+      flex-direction: column;
+      gap: 1rem;
+      padding-top: 0.6rem;
     }
 
-    .post-meta-read {
-      grid-column: 4 / span 3;
+    .post-meta-item {
+      flex-direction: column;
+      gap: 0.125rem;
     }
-
-    .post-meta-topics {
-      grid-column: 7 / -1;
-    }
-  }
-
-  .post-title-row {
-    padding-top: clamp(2.5rem, 5vw, 4.5rem);
-    row-gap: 1.5rem;
   }
 
   .post-title {
@@ -90,5 +89,6 @@ const isoDate = date.toISOString().slice(0, 10);
 
   .post-subtitle {
     max-width: 40rem;
+    margin-top: 1.25rem;
   }
 </style>
