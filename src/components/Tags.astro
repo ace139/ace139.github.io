@@ -27,7 +27,7 @@ const visibleTags = limit ? tags.slice(0, limit) : tags;
 		display: flex;
 		flex-wrap: wrap;
 		column-gap: 0.5rem;
-		row-gap: 0.125rem;
+		row-gap: 0;
 		font-size: 0.875rem;
 		line-height: 1.5;
 	}
@@ -36,6 +36,8 @@ const visibleTags = limit ? tags.slice(0, limit) : tags;
 	   comma, so the comma sits right after the word. */
 	.topics li {
 		display: inline-flex;
+		min-height: 24px;
+		align-items: center;
 	}
 
 	.topics li:not(:last-child)::after {
@@ -44,6 +46,9 @@ const visibleTags = limit ? tags.slice(0, limit) : tags;
 	}
 
 	.topics a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 24px;
 		text-decoration: underline;
 		text-decoration-thickness: 1px;
 		text-decoration-color: var(--color-rule-strong);
