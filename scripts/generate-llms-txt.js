@@ -117,35 +117,6 @@ function getProjects() {
 	return projects;
 }
 
-// Extract About content from about.astro
-function getAboutContent() {
-	const aboutPath = path.join(__dirname, "../src/pages/about.astro");
-	let aboutText =
-		"I'm a Senior Product Manager working on AI and data products."; // fallback
-
-	try {
-		const content = fs.readFileSync(aboutPath, "utf-8");
-
-		// Look for the first main paragraph after the h1 heading in the Origin section
-		const originMatch = content.match(
-			/<h1[^>]*>A systems thinker[^<]*<\/h1>\s*<p[^>]*>([\s\S]*?)<\/p>/,
-		);
-		if (originMatch) {
-			// Clean HTML and get text
-			aboutText = originMatch[1]
-				.replace(/<[^>]+>/g, "") // Remove HTML tags
-				.replace(/\s+/g, " ") // Normalize whitespace
-				.trim();
-		}
-	} catch (_error) {
-		console.warn(
-			"Could not read About content from about.astro, using fallback",
-		);
-	}
-
-	return aboutText;
-}
-
 // Generate llms.txt
 function generateLLMsTxt() {
 	// Read site URL from astro.config.mjs
@@ -164,12 +135,12 @@ function generateLLMsTxt() {
 	}
 
 	const siteName = "Soumyo Dey";
+	// Keep in sync with the default description in src/layouts/Layout.astro
 	const tagline =
-		"Tech, AI & data products, and the stories picked up along the way";
+		"Soumyo Dey builds products across AI, data, and systems, and writes about what holds up in production.";
 
 	const blogPosts = getBlogPosts();
 	const projects = getProjects();
-	const aboutContent = getAboutContent();
 
 	let content = `# ${siteName}
 
@@ -177,38 +148,36 @@ function generateLLMsTxt() {
 
 ## About
 
-${aboutContent}
+Soumyo Dey is a builder and systems thinker with a decade across AI, data, systems, and product. He is Founder & CEO of Oogway Labs (https://oogwaylabs.com/), an AI consulting and engineering firm. Previously he was Co-founder & CTO of Cornet Health (voice-first AI for clinicians), and earlier built the Connected Platforms and Data & AI capabilities at Ather Energy, powering 500,000+ EVs across India.
+
+Every page on this site is also available as Markdown: send \`Accept: text/markdown\`.
 
 ## Site Structure
 
-- Home: ${siteUrl}/
-- Blog: ${siteUrl}/blog
-- About: ${siteUrl}/about
-- Projects: ${siteUrl}/projects
-- Resume: ${siteUrl}/resume
+- [Home](${siteUrl}/)
+- [Writing](${siteUrl}/blog)
+- [Work](${siteUrl}/projects)
+- [About](${siteUrl}/about)
+- [RSS feed](${siteUrl}/rss.xml)
 
-## Recent Blog Posts\n\n`;
+## Writing\n\n`;
 
 	blogPosts.forEach((post) => {
-		content += `- [${post.title}](${siteUrl}${post.url})\n`;
-		if (post.description) {
-			content += `  ${post.description}\n`;
-		}
+		content += `- [${post.title}](${siteUrl}${post.url})`;
+		content += post.description ? `: ${post.description}\n` : "\n";
 	});
 
-	content += `\n## Projects\n\n`;
-
-	projects.forEach((project) => {
-		content += `- [${project.title}](${siteUrl}${project.url})\n`;
-		if (project.description) {
-			content += `  ${project.description}\n`;
+	if (projects.length > 0) {
+		content += `\n## Projects\n\n`;
+		for (const project of projects) {
+			content += `- [${project.title}](${siteUrl}${project.url})`;
+			content += project.description ? `: ${project.description}\n` : "\n";
 		}
-	});
+	}
 
 	content += `\n## Newsletter
 
-Subscribe to "Stochastic Musings" - Notes on product intuition, engineering systems, and signals from the AI landscape.
-- https://stochasticmusings.substack.com/
+- [Stochastic Musings](https://stochasticmusings.substack.com/): notes on product intuition, engineering systems, and signals from the AI landscape.
 
 ## Contact
 
@@ -216,10 +185,6 @@ Subscribe to "Stochastic Musings" - Notes on product intuition, engineering syst
 - X/Twitter: https://x.com/soumyo
 - LinkedIn: https://linkedin.com/in/soumyo-dey
 - GitHub: https://github.com/ace139
-
----
-
-This site is built with Astro, optimized for performance and accessibility. Last updated: ${new Date().toISOString().split("T")[0]}
 `;
 
 	return content;

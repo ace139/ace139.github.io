@@ -29,7 +29,23 @@ const STRIP_SELECTORS = [
 	"svg",
 	"button",
 	".hero-content-mobile",
+	// Navigation chrome inside <main>: article table of contents, decorative
+	// aria-hidden elements (reading-progress bar, arrows), skip links.
+	".post-toc",
+	"[aria-hidden='true']",
+	".reading-progress",
+	".skip-link",
 ];
+
+const SITE_ORIGIN = "https://soumyo.com";
+
+/** Resolve a root-relative URL against the site origin; leave others alone. */
+function absolutize(value) {
+	if (value.startsWith("/") && !value.startsWith("//")) {
+		return `${SITE_ORIGIN}${value}`;
+	}
+	return value;
+}
 
 /** Recursively collect every .html file under a directory. */
 function collectHtmlFiles(dir) {
@@ -74,10 +90,32 @@ function htmlToMarkdown(html) {
 		return null;
 	}
 
+	// Blog articles: lift the Published/Topics meta into frontmatter, then drop
+	// the <dl> so it is not duplicated in the body.
+	let published = "";
+	let tags = [];
+	const meta = main.querySelector("dl.post-meta");
+	if (meta) {
+		published =
+			meta.querySelector("time")?.getAttribute("datetime")?.slice(0, 10) ?? "";
+		tags = meta
+			.querySelectorAll(".post-meta-topics a")
+			.map((a) => a.text.trim().replace(/^#/, ""))
+			.filter(Boolean);
+		meta.remove();
+	}
+
 	for (const selector of STRIP_SELECTORS) {
 		for (const el of main.querySelectorAll(selector)) {
 			el.remove();
 		}
+	}
+
+	for (const a of main.querySelectorAll("a[href]")) {
+		a.setAttribute("href", absolutize(a.getAttribute("href")));
+	}
+	for (const img of main.querySelectorAll("img[src]")) {
+		img.setAttribute("src", absolutize(img.getAttribute("src")));
 	}
 
 	const body = NodeHtmlMarkdown.translate(main.innerHTML).trim();
@@ -94,6 +132,13 @@ function htmlToMarkdown(html) {
 	}
 	if (url) {
 		frontmatter.push(`url: ${yaml(url)}`);
+	}
+	if (published) {
+		frontmatter.push(`published: ${yaml(published)}`);
+		if (tags.length > 0) {
+			frontmatter.push("tags:", ...tags.map((t) => `  - ${yaml(t)}`));
+		}
+		frontmatter.push(`author: ${yaml("Soumyo Dey")}`);
 	}
 	frontmatter.push("---", "");
 

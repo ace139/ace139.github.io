@@ -86,7 +86,7 @@ Content uses Astro's Content Layer API with glob loaders:
 - `scripts/sync-public-env.js` - Copies `.env.public` → `.env` (runs pre-dev/start/build)
 - `scripts/generate-llms-txt.js` - Generates `public/llms.txt` (runs pre-build)
 - `scripts/generate-markdown.js` - Generates a `*.html.md` sibling for every built page (runs post-build)
-- `scripts/generate-headers.js` - Creates `dist/_headers` for caching + security/Link headers (runs post-build)
+- `scripts/generate-headers.js` - Creates `dist/_headers` for caching + security/Link headers (runs post-build). Cloudflare Pages merges headers from every matching rule, so each path must match exactly one `Cache-Control` rule (none in the global `/*` block)
 
 ### Markdown for Agents (content negotiation)
 
