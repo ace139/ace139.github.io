@@ -34,13 +34,6 @@ const {
   socialEmbed = false,
 } = Astro.props;
 
-// Generate optimized image for preloading on homepage
-const preloadImage = Astro.url.pathname === '/' ? await getImage({
-  src: avatar,
-  width: 128,
-  format: 'webp'
-}) : null;
-
 const siteName = 'Soumyo Dey';
 const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -181,17 +174,6 @@ const navLinks = [
         color: #0a0a0b;
       }
     </style>
-
-    <!-- Preload profile image on homepage -->
-    {preloadImage && (
-      <link
-        rel="preload"
-        fetchpriority="high"
-        as="image"
-        type="image/webp"
-        href={preloadImage.src}
-      />
-    )}
 
     <ScriptOptimizer analytics={analytics} substack={substack} socialEmbed={socialEmbed} />
     <PostHog />

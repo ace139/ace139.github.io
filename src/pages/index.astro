@@ -3,7 +3,8 @@ import { Picture } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import PostIndex from '../components/PostIndex.astro';
 import { socials } from '../config/socials';
-import avatar from '../images/avatar.jpg';
+// Tight black-and-white crop of avatar.jpg, made to sit in the monochrome grid.
+import avatar from '../images/avatar-portrait.jpg';
 import Layout from '../layouts/Layout.astro';
 import { isPublished, sortByDateDesc, toIndexItem } from '../utils/content';
 
@@ -226,18 +227,36 @@ const record = [
     row-gap: 2rem;
   }
 
+  /* Phones: portrait and tagline side by side above the name. Wide: the
+     portrait heads the label column, top-aligned with the name. */
   .hero-id {
-    display: grid;
+    display: flex;
     gap: 1rem;
-    align-content: start;
-    max-width: 14rem;
+    align-items: center;
+  }
+
+  @media (min-width: 48rem) {
+    .hero-id {
+      display: grid;
+      align-content: start;
+      max-width: 14rem;
+      padding-top: 0.35rem;
+    }
   }
 
   .hero-avatar {
-    width: 5rem;
-    height: 5rem;
+    flex: none;
+    width: 4rem;
+    height: 4rem;
     overflow: hidden;
     border: 1px solid var(--color-rule-strong);
+  }
+
+  @media (min-width: 48rem) {
+    .hero-avatar {
+      width: 5rem;
+      height: 5rem;
+    }
   }
 
   .latest {
