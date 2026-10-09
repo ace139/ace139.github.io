@@ -45,17 +45,11 @@ const record = [
   },
 ];
 
-const columns = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'));
 ---
 
 <Layout title="Soumyo Dey">
   <!-- Hero: the name at full width, then everything starts on column 4 -->
   <section class="hero" aria-label="Introduction">
-    <!-- The grid, shown: twelve columns, ruled -->
-    <div class="ruler grid-12" aria-hidden="true">
-      {columns.map((n) => <span class="mono">{n}</span>)}
-    </div>
-
     <h1 class="t-display hero-name">Soumyo Dey<span class="hero-stop" aria-hidden="true"></span></h1>
 
     <div class="grid-12 hero-intro">
@@ -215,33 +209,8 @@ const columns = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '
 
 <style>
   .hero {
-    padding-top: 1.5rem;
+    padding-top: clamp(1.5rem, 4vw, 4rem);
     padding-bottom: clamp(3rem, 6vw, 5.5rem);
-  }
-
-  /* Decorative column ruler: the 12-column grid the page is built on */
-  .ruler {
-    display: none;
-  }
-
-  @media (min-width: 48rem) {
-    .ruler {
-      display: grid;
-      margin-bottom: 2.5rem;
-    }
-
-    .ruler span {
-      padding-top: 0.5rem;
-      border-top: 1px solid var(--color-rule-strong);
-      user-select: none;
-    }
-
-    /* Content begins on column 4: mark it. */
-    .ruler span:nth-child(4) {
-      border-top: 2px solid var(--color-accent);
-      margin-top: -1px;
-      color: var(--color-text);
-    }
   }
 
   .hero-name {

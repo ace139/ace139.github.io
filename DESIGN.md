@@ -77,14 +77,13 @@ components:
 
 ## 1. Overview
 
-A strict, rational system that reads like a well-made engineering spec. Structure is the decoration: hairline rules, a visible 12-column grid, mono section numbers, and a very large display size against small text. Confident and precise; the wit comes from layout (a column ruler that marks where content begins, a solid red full stop after the name), never from ornament. There are no gradients, glows, shadows, blurs, or rounded corners.
+A strict, rational system that reads like a well-made engineering spec. Structure is the decoration: hairline rules, a visible 12-column grid, mono section numbers, and a very large display size against small text. Confident and precise; the wit comes from layout (everything aligning on column 4, a solid red full stop after the name), never from ornament. There are no gradients, glows, shadows, blurs, or rounded corners.
 
 ## 2. Grid
 
 - **12 columns** from 768px (`.grid-12`, 1.5rem gutter, max width 88rem); a single column below.
 - **Labels in columns 1-3** (`.c-label`), **content starting on column 4** (`.c-body`), on every page. Index rows, the track record, article meta, and footers all obey this.
 - **Bands** (`.band`) are separated by hairline rules. Section labels are mono, sentence case, numbered by CSS counter (`01 — Writing`, `.sec-num`). Never tracked uppercase eyebrows.
-- Home hero shows the grid: a decorative 01-12 ruler with column 4 marked in the accent.
 
 ## 3. Colors
 
