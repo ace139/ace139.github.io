@@ -144,6 +144,24 @@ const isActive = (href: string) =>
     gap: 0.5rem;
   }
 
+  .nav-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--color-rule-strong);
+    border-radius: 0;
+    color: var(--color-text);
+    cursor: pointer;
+  }
+
+  .nav-btn:hover {
+    background: var(--color-text);
+    border-color: var(--color-text);
+    color: var(--color-bg);
+  }
+
   /* Phones: wordmark left, controls right. Grid from 768px. */
   @media (max-width: 47.99rem) {
     .nav-grid {
@@ -168,24 +186,6 @@ const isActive = (href: string) =>
     .nav-menu-btn {
       display: none;
     }
-  }
-
-  .nav-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    border: 1px solid var(--color-rule-strong);
-    border-radius: 0;
-    color: var(--color-text);
-    cursor: pointer;
-  }
-
-  .nav-btn:hover {
-    background: var(--color-text);
-    border-color: var(--color-text);
-    color: var(--color-bg);
   }
 
   #mobile-menu {
