@@ -23,6 +23,7 @@ Every page on this site is also available as Markdown: send `Accept: text/markdo
 - [Beyond the Vacuum](https://soumyo.com/blog/beyond-the-vacuum): Exploring how original ideas emerge not from isolation, but from the rich interplay of diverse knowledge and experiences
 - [Facts, Hypotheses, and the Art of Writing PRDs](https://soumyo.com/blog/facts-hypotheses-and-the-art-of-writing-prds): Every sentence in a PRD should either be a Fact or a Hypothesis. Avoid making Statements at all costs.
 - [The Secret to MCP Servers That LLMs Love Using](https://soumyo.com/blog/the-secret-to-mcp-servers-that-llms-love-using): LLMs don't use APIs the way developers do. Why most MCP servers frustrate agents, and how product thinking builds tools they actually use well.
+- [Why We Stayed on Luna 5.6](https://soumyo.com/blog/why-we-stayed-on-luna-5-6): The newer, cheaper model lost on our real-traffic evals. How we pick the model behind Hawkeye, our Slack PM agent, and the setting that beat switching.
 
 ## Newsletter
 

@@ -592,4 +592,155 @@ main {
 		margin-block: 2rem;
 		border: 1px solid var(--color-rule);
 	}
+
+	/* Inline SVG diagrams and charts in posts. Every colour comes from the
+	   theme tokens, so figures follow dark/light with no per-theme copies. */
+	.prose figure.diagram {
+		margin-block: 2rem;
+		padding: 1rem;
+		overflow-x: auto;
+		border: 1px solid var(--color-rule);
+		background: var(--color-surface);
+	}
+
+	.prose figure.diagram svg {
+		display: block;
+		width: 100%;
+		min-width: 360px;
+		max-width: none;
+		margin: 0;
+	}
+
+	.prose figure.chart svg {
+		min-width: 540px;
+	}
+
+	.prose figure.diagram figcaption,
+	.prose .table-note {
+		margin-top: 0.75rem;
+		font-family: var(--font-sans);
+		font-size: 0.875rem;
+		color: var(--color-text-muted);
+	}
+
+	.prose figure.diagram .bx {
+		fill: var(--color-bg);
+		stroke: var(--color-rule-strong);
+		stroke-width: 1.2;
+	}
+
+	.prose figure.diagram .bx-a {
+		fill: var(--color-bg);
+		stroke: var(--color-accent);
+		stroke-width: 1.6;
+	}
+
+	.prose figure.diagram .dash {
+		stroke-dasharray: 4 3;
+	}
+
+	.prose figure.diagram .t {
+		fill: var(--color-text);
+		font: 600 13px var(--font-sans);
+	}
+
+	.prose figure.diagram .s,
+	.prose figure.diagram .lbl {
+		fill: var(--color-text-muted);
+		font: 10.5px var(--font-mono);
+	}
+
+	.prose figure.diagram .h {
+		fill: var(--color-accent);
+		font: 600 11px var(--font-mono);
+	}
+
+	.prose figure.diagram .ln {
+		fill: none;
+		stroke: var(--color-rule-strong);
+		stroke-width: 1.4;
+	}
+
+	.prose figure.diagram .ln-a {
+		fill: none;
+		stroke: var(--color-accent);
+		stroke-width: 1.6;
+	}
+
+	.prose figure.diagram .head {
+		fill: var(--color-rule-strong);
+	}
+
+	.prose figure.diagram .head-a {
+		fill: var(--color-accent);
+	}
+
+	.prose figure.diagram .rule {
+		stroke: var(--color-rule);
+		stroke-width: 1;
+	}
+
+	/* Two-series chart: the accent marks the model we kept, the neutral
+	   text colour marks the comparison. Hollow points mean fewer runs. */
+	.prose figure.chart .series-a,
+	.prose figure.chart .series-b {
+		fill: none;
+		stroke-width: 2;
+		stroke-linejoin: round;
+		opacity: 0.55;
+	}
+
+	.prose figure.chart .series-a {
+		stroke: var(--color-accent);
+	}
+
+	.prose figure.chart .series-b {
+		stroke: var(--color-text-secondary);
+	}
+
+	.prose figure.chart .pt-a,
+	.prose figure.chart .pt-b {
+		stroke: var(--color-surface);
+		stroke-width: 2;
+	}
+
+	.prose figure.chart .pt-a {
+		fill: var(--color-accent);
+	}
+
+	.prose figure.chart .pt-b {
+		fill: var(--color-text-secondary);
+	}
+
+	.prose figure.chart .pt-a.open {
+		fill: var(--color-surface);
+		stroke: var(--color-accent);
+	}
+
+	.prose figure.chart .pt-b.open {
+		fill: var(--color-surface);
+		stroke: var(--color-text-secondary);
+	}
+
+	.prose figure.chart .key {
+		white-space: nowrap;
+	}
+
+	.prose figure.chart .key::before {
+		content: "";
+		display: inline-block;
+		width: 0.625rem;
+		height: 0.625rem;
+		margin-right: 0.375rem;
+		border-radius: 50%;
+		vertical-align: baseline;
+	}
+
+	.prose figure.chart .key-a::before {
+		background: var(--color-accent);
+	}
+
+	.prose figure.chart .key-b::before {
+		background: var(--color-text-secondary);
+	}
 }
