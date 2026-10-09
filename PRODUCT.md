@@ -19,9 +19,9 @@ A personal brand home and long-form publishing surface for **Soumyo Dey**, a bui
 
 It exists to establish him as a credible operator and thinker **in his own right**, not as a billboard for any one company. The site reflects the breadth of his work and interests, which extend beyond his current role.
 
-Soumyo is currently Founder & CEO of [Oogway Labs](https://oogwaylabs.com/) (an AI-native consulting and engineering firm). That is a present position, surfaced where it's relevant (the About page, the résumé, the writing), but **not** the homepage headline or the site's purpose. The writing is the proof: evidence-led pieces on building things that work. Success looks like a reader finishing a post convinced he knows the systems deeply, then following, subscribing, or reaching out.
+Soumyo is currently Founder of [Oogway Labs](https://oogwaylabs.com/) (an AI-native consulting and engineering firm). That is a present position, surfaced where it's relevant (the About page, the writing), but **not** the homepage headline or the site's purpose. The writing is the proof: evidence-led pieces on building things that work. Success looks like a reader finishing a post convinced he knows the systems deeply, then following, subscribing, or reaching out.
 
-(The earlier Cornet Health / dentist-burnout content belongs to a closed chapter and is being retired.)
+(The earlier Cornet Health / dentist-burnout content belongs to a closed chapter and is being retired. The clinical voice AI work is presented as Oogway Labs work; Cornet is not named on the site. There is no résumé page: he isn't job hunting.)
 
 ## Brand Personality
 

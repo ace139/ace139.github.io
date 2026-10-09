@@ -148,7 +148,7 @@ function generateLLMsTxt() {
 
 ## About
 
-Soumyo Dey is a builder and systems thinker with a decade across AI, data, systems, and product. He is Founder & CEO of Oogway Labs (https://oogwaylabs.com/), an AI consulting and engineering firm. Previously he was Co-founder & CTO of Cornet Health (voice-first AI for clinicians), and earlier built the Connected Platforms and Data & AI capabilities at Ather Energy, powering 500,000+ EVs across India.
+Soumyo Dey is a builder and systems thinker with a decade across AI, data, systems, and product. He is Founder of Oogway Labs (https://oogwaylabs.com/), an AI consulting and engineering firm whose work includes voice-first AI for clinicians. Previously he led the Connected Vehicle Platform and Data & AI products at Ather Energy through its growth from 25,000 to 600,000+ EVs on the road, and before that co-founded Krayen, a data-driven CRM that reached a successful exit.
 
 Every page on this site is also available as Markdown: send \`Accept: text/markdown\`.
 
