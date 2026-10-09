@@ -1,119 +1,66 @@
 @import "tailwindcss";
-@import "./content-surfaces.css";
 
 /* ==========================================================================
-   EDITORIAL NOIR DESIGN SYSTEM
-   A sophisticated dark-mode-first aesthetic with editorial typography
-   and cinematic lighting
+   GRID + NOTEBOOK
+   Swiss structure, notebook voice. A rational 12-column grid with hairline
+   rules and mono labels (columns 1-3), carrying a calm serif for headings and
+   reading (column 4 onward), with sidenotes in the right margin of articles.
+   Near-monochrome with one signal accent.
    ========================================================================== */
 
 @theme {
-	/* Typography */
-	/* Families (and size-adjusted fallbacks) are defined by Astro's Fonts API
-	   in astro.config.mjs and exposed as these CSS variables. */
-	--font-display: var(--font-playfair);
+	/* Families (and size-adjusted fallbacks) come from Astro's Fonts API in
+	   astro.config.mjs. Newsreader sets headings and reading; Plus Jakarta Sans
+	   is UI only; metadata uses the system monospace stack (no download). */
 	--font-sans: var(--font-jakarta);
-	--font-serif: var(--font-roboto-slab);
+	--font-serif: var(--font-newsreader);
+	--font-display: var(--font-newsreader);
+	--font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 
-	/* Fluid Type Scale */
-	--text-hero: clamp(3rem, 8vw + 1rem, 6rem);
-	--text-display: clamp(2rem, 5vw + 1rem, 5rem);
-	--text-h1: clamp(1.75rem, 3vw + 1rem, 3rem);
-	--text-h2: clamp(1.5rem, 2vw + 0.5rem, 2.25rem);
-	--text-h3: clamp(1.25rem, 1.5vw + 0.5rem, 1.5rem);
-	--text-body: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
-	--text-small: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+	/* Type scale: a headline-sized name, not a poster */
+	--text-display: clamp(2.75rem, 1.9rem + 3.6vw, 4.75rem);
+	--text-title: clamp(2.25rem, 1.7rem + 2.4vw, 3.5rem);
+	--text-heading: clamp(1.625rem, 1.35rem + 1.2vw, 2.25rem);
+	--text-lead: clamp(1.25rem, 1.15rem + 0.45vw, 1.4375rem);
+	--text-prose: clamp(1.1875rem, 1.13rem + 0.25vw, 1.25rem);
+	--text-body: 1rem;
+	--text-small: 0.875rem;
+	--text-label: 0.8125rem;
 
-	/* Motion: easing scale (signature ease-out curves, no bounce/elastic) */
-	--ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
-	--ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
-	--ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-	--ease-signature: cubic-bezier(0.2, 0.8, 0.2, 1);
+	/* Dark theme (default) */
+	--color-bg: #0a0a0b;
+	--color-surface: #141416;
+	--color-row-hover: #19191c;
+	--color-text: #f3f3f1;
+	--color-text-secondary: #b6b6b9;
+	--color-text-muted: #8f8f94;
+	--color-rule: #2c2c30;
+	--color-rule-strong: #70707a;
+	--color-accent: #ff5a47;
+	--color-accent-ink: #0a0a0b;
+	--color-code-bg: #101012;
 
-	/* Motion: durations */
-	--duration-fast: 150ms;
-	--duration-base: 300ms;
-	--duration-reveal: 700ms;
+	/* Motion: short, linear-ish, no transforms */
+	--duration-fast: 120ms;
+}
 
-	/* ========================================================================
-     DARK MODE COLORS (Default - Editorial Noir)
-     ======================================================================== */
-
-	/* Backgrounds - Deep blacks with subtle blue undertones */
-	--color-bg-void: #030408;
-	--color-bg-dark: #0a0d14;
-	--color-bg-elevated-dark: #12161f;
-	--color-surface-dark: #1a1f2b;
-
-	/* Text - Cool whites and grays */
-	--color-text-dark: #f0f2f7;
-	--color-text-secondary-dark: #a0a8b8;
-	--color-muted-dark: #7e8b9c;
-
-	/* Borders */
-	--color-border-dark: #252a38;
-
-	/* Accent: Rose/Coral (Primary) */
-	--color-accent: #f43f5e;
-	--color-accent-glow: #fb7185;
-	--color-accent-deep: #e11d48;
-
-	/* Secondary: Warm Amber */
-	--color-coral: #f59e0b;
-	--color-coral-glow: #fbbf24;
-
-	/* ========================================================================
-     LIGHT MODE COLORS
-     ======================================================================== */
-
-	/* Backgrounds */
-	--color-bg-light: #fafbfc;
-	--color-bg-elevated-light: #ffffff;
-	--color-surface-light: #f3f4f6;
-
-	/* Text */
-	--color-text-light: #111827;
-	--color-text-secondary-light: #4b5563;
-	--color-muted-light: #6b7280;
-
-	/* Borders */
-	--color-border-light: #e5e7eb;
-
-	/* Primary (adjusted for light mode contrast) */
-	--color-primary-light: #e11d48;
-	--color-primary-light-hover: #be123c;
-
-	/* ========================================================================
-     SEMANTIC TOKENS (auto-switch with theme)
-     These tokens are used in components and automatically adapt to the theme
-     ======================================================================== */
-
-	/* Backgrounds */
-	--color-bg: var(--color-bg-dark);
-	--color-bg-elevated: var(--color-bg-elevated-dark);
-	--color-surface: var(--color-surface-dark);
-
-	/* Text */
-	--color-text: var(--color-text-dark);
-	--color-text-secondary: var(--color-text-secondary-dark);
-	--color-text-muted: #7e8b9c;
-	/* Unified muted tone; clears WCAG AA (≥4.5:1) on base, elevated, and surface backgrounds */
-
-	/* Borders */
-	--color-border: var(--color-border-dark);
-
-	/* Brand colors */
-	--color-primary: var(--color-accent);
-	--color-primary-hover: var(--color-accent-glow);
-	--color-secondary: var(--color-coral);
-
-	/* Backwards compatibility aliases */
-	--color-primary-dark: var(--color-accent);
-	--color-primary-dark-hover: var(--color-accent-glow);
+/* Light theme */
+.light {
+	--color-bg: #f7f7f5;
+	--color-surface: #ececea;
+	--color-row-hover: #efefed;
+	--color-text: #0a0a0b;
+	--color-text-secondary: #404045;
+	--color-text-muted: #66666b;
+	--color-rule: #d4d4d0;
+	--color-rule-strong: #8a8a8e;
+	--color-accent: #c8200e;
+	--color-accent-ink: #ffffff;
+	--color-code-bg: #ffffff;
 }
 
 /* ==========================================================================
-   BASE STYLES
+   BASE
    ========================================================================== */
 
 :root {
@@ -124,35 +71,20 @@ html {
 	font-family: var(--font-sans);
 	scroll-behavior: smooth;
 	font-feature-settings:
-		"liga" 1,
+		"ss01" 0,
 		"calt" 1;
+	text-size-adjust: 100%;
 }
 
-/* Dark mode is default */
 body {
-	background: var(--color-bg-dark);
-	color: var(--color-text-dark);
+	background: var(--color-bg);
+	color: var(--color-text);
+	line-height: 1.55;
 }
 
-/* Light mode override */
-.light body {
-	background: var(--color-bg-light);
-	color: var(--color-text-light);
-}
-
-/* Light mode semantic token overrides */
-.light {
-	--color-bg: var(--color-bg-light);
-	--color-bg-elevated: var(--color-bg-elevated-light);
-	--color-surface: var(--color-surface-light);
-	--color-text: var(--color-text-light);
-	--color-text-secondary: var(--color-text-secondary-light);
-	--color-text-muted: var(--color-muted-light);
-	--color-border: var(--color-border-light);
-	--color-primary: var(--color-primary-light);
-	--color-primary-hover: var(--color-primary-light-hover);
-	--color-primary-dark: var(--color-primary-light);
-	--color-primary-dark-hover: var(--color-primary-light-hover);
+/* Section numbering: counters give "01 —", "02 —" without touching copy */
+main {
+	counter-reset: sec;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -160,7 +92,6 @@ body {
 		scroll-behavior: auto;
 	}
 
-	/* Disable all transforms for reduced motion users */
 	*,
 	*::before,
 	*::after {
@@ -171,53 +102,7 @@ body {
 		/* biome-ignore lint/complexity/noImportantStyles: reduced-motion override must beat any transition rule regardless of specificity (a11y requirement) */
 		transition-duration: 0.01ms !important;
 	}
-
-	/* Force every reveal-based element visible, regardless of the motion-ok
-	   gate. This is the safety net that guarantees content is never stranded
-	   blank for reduced-motion users. */
-	.reveal,
-	.fade-up {
-		/* biome-ignore lint/complexity/noImportantStyles: must beat the motion-ok initial-state rules to keep content visible (a11y requirement) */
-		opacity: 1 !important;
-		/* biome-ignore lint/complexity/noImportantStyles: must beat the motion-ok initial-state rules to keep content visible (a11y requirement) */
-		transform: none !important;
-	}
 }
-
-/* Decorative ambient light: isolate its paint so it can't invalidate other
-   layers, and drop it entirely for users who ask for less transparency.
-   Plain radial gradients (no blur filter) paint once and stay put. */
-[data-ambient] {
-	contain: layout style paint;
-}
-
-.ambient-light {
-	background:
-		radial-gradient(
-			50rem 50rem at 40% -25%,
-			rgb(244 63 94 / 0.06),
-			transparent 70%
-		),
-		radial-gradient(
-			38rem 38rem at 100% 110%,
-			rgb(245 158 11 / 0.03),
-			transparent 70%
-		);
-}
-
-@media (prefers-reduced-transparency: reduce) {
-	[data-ambient] {
-		display: none;
-	}
-}
-
-/* Custom variant for dark mode (default) and light mode */
-@custom-variant dark (&:where(:not(.light), :not(.light) *));
-@custom-variant light (&:where(.light, .light *));
-
-/* ==========================================================================
-   BASE TYPOGRAPHY
-   ========================================================================== */
 
 @layer base {
 	h1,
@@ -226,341 +111,395 @@ body {
 	h4,
 	h5,
 	h6 {
-		font-family: var(--font-sans);
-		font-weight: 600;
-		letter-spacing: -0.02em;
-		text-wrap: balance;
-		line-height: 1.1;
-	}
-
-	/* Display headings use Playfair */
-	.display-heading {
 		font-family: var(--font-display);
-		font-weight: 400;
-		letter-spacing: -0.03em;
+		font-weight: 500;
+		letter-spacing: -0.015em;
+		text-wrap: balance;
+		line-height: 1.12;
 	}
 
 	p {
-		line-height: 1.7;
+		line-height: 1.6;
 	}
 
 	a {
-		color: var(--color-accent);
-		transition:
-			color 200ms ease,
-			opacity 200ms ease;
-	}
-
-	a:hover {
-		color: var(--color-accent-glow);
-	}
-
-	.light a {
-		color: var(--color-primary-light);
-	}
-
-	.light a:hover {
-		color: var(--color-primary-light-hover);
-	}
-
-	/* Selection */
-	::selection {
-		background: rgba(244, 63, 94, 0.3);
-		color: var(--color-text-dark);
-	}
-
-	.light ::selection {
-		background: rgba(225, 29, 72, 0.2);
-		color: var(--color-text-light);
-	}
-}
-
-/* ==========================================================================
-   UTILITIES
-   ========================================================================== */
-
-@layer utilities {
-	/* Gradient utilities */
-	.gradient-hero {
-		background: linear-gradient(135deg, #e11d48 0%, #f43f5e 50%, #f59e0b 100%);
-	}
-
-	.gradient-glow {
-		background: radial-gradient(
-			ellipse at center,
-			rgba(244, 63, 94, 0.15) 0%,
-			transparent 70%
-		);
-	}
-
-	.gradient-card {
-		background: linear-gradient(
-			180deg,
-			rgba(244, 63, 94, 0.05) 0%,
-			transparent 100%
-		);
-	}
-
-	/* Light mode gradient variants */
-	.light .gradient-hero {
-		background: linear-gradient(135deg, #be123c 0%, #e11d48 50%, #f59e0b 100%);
-	}
-
-	.light .gradient-glow {
-		background: radial-gradient(
-			ellipse at center,
-			rgba(225, 29, 72, 0.08) 0%,
-			transparent 70%
-		);
-	}
-
-	.light .gradient-card {
-		background: linear-gradient(
-			180deg,
-			rgba(225, 29, 72, 0.03) 0%,
-			transparent 100%
-		);
-	}
-
-	/* Glow effects */
-	.glow-accent {
-		box-shadow:
-			0 0 40px rgba(244, 63, 94, 0.3),
-			0 0 80px rgba(244, 63, 94, 0.15);
-	}
-
-	.glow-accent-soft {
-		box-shadow: 0 0 60px rgba(244, 63, 94, 0.1);
-	}
-
-	/* Glass panel with blur */
-	.glass-panel {
-		background: rgba(18, 22, 31, 0.8);
-		backdrop-filter: blur(20px);
-		-webkit-backdrop-filter: blur(20px);
-		border: 1px solid rgba(255, 255, 255, 0.05);
-	}
-
-	.light .glass-panel {
-		background: rgba(255, 255, 255, 0.8);
-		border-color: rgba(0, 0, 0, 0.05);
-	}
-
-	/* Shadows */
-	.shadow-soft {
-		box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-	}
-
-	.shadow-card {
-		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
-	}
-
-	.shadow-button {
-		box-shadow: 0 15px 30px rgba(244, 63, 94, 0.25);
-	}
-
-	.light .shadow-soft {
-		box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
-	}
-
-	.light .shadow-card {
-		box-shadow: 0 12px 40px rgba(15, 23, 42, 0.06);
-	}
-
-	/* Animated link underline */
-	.link-underline {
-		position: relative;
+		color: inherit;
 		text-decoration: none;
 	}
 
-	.link-underline::after {
-		content: "";
-		position: absolute;
+	::selection {
+		background: var(--color-accent);
+		color: var(--color-accent-ink);
+	}
+
+	:focus-visible {
+		outline: 2px solid var(--color-accent);
+		outline-offset: 3px;
+		border-radius: 0;
+	}
+
+	/* Hairline scrollbar to match the rules (Firefox + Chromium) */
+	html {
+		scrollbar-width: thin;
+		scrollbar-color: var(--color-rule-strong) var(--color-bg);
+	}
+}
+
+/* Hover/colour changes only, no transforms. Gated on html.motion-ok (set
+   pre-paint, never for reduced motion). */
+.motion-ok :where(a, button) {
+	transition:
+		color var(--duration-fast) linear,
+		background-color var(--duration-fast) linear,
+		border-color var(--duration-fast) linear,
+		text-decoration-color var(--duration-fast) linear,
+		text-underline-offset var(--duration-fast) linear;
+}
+
+/* ==========================================================================
+   GRID
+   One column on phones; an explicit 12-column grid from 768px. Labels span
+   columns 1-3, content starts on column 4.
+   ========================================================================== */
+
+@layer components {
+	.wrap {
 		width: 100%;
-		height: 2px;
-		bottom: -2px;
-		left: 0;
-		background: currentColor;
-		transform: scaleX(0);
-		transform-origin: bottom right;
-		transition: transform 0.3s ease-out;
+		max-width: 88rem;
+		margin-inline: auto;
+		padding-inline: 1rem;
 	}
 
-	.link-underline:hover::after {
-		transform: scaleX(1);
-		transform-origin: bottom left;
-	}
-
-	/* Scroll reveal.
-	   Visible by default. The hidden initial state applies ONLY when motion is
-	   allowed (html.motion-ok, set pre-paint by an inline script and never for
-	   reduced motion), so content is never stranded blank without JS. */
-	.motion-ok .reveal {
-		opacity: 0;
-		transform: translateY(24px);
-		transition:
-			opacity var(--duration-reveal) var(--ease-out-quint)
-			var(--reveal-delay, 0ms),
-			transform var(--duration-reveal) var(--ease-out-quint)
-			var(--reveal-delay, 0ms);
-	}
-
-	.motion-ok .reveal.reveal-visible {
-		opacity: 1;
-		transform: translateY(0);
-	}
-
-	/* Load-in for above-the-fold content: pure CSS, no JS. Stagger with
-	   style="--fade-delay: 120ms". */
-	.motion-ok .fade-up {
-		animation: fade-up 800ms var(--ease-out-quint) var(--fade-delay, 0ms) both;
-	}
-
-	@keyframes fade-up {
-		from {
-			opacity: 0;
-			transform: translateY(24px);
+	@media (min-width: 40rem) {
+		.wrap {
+			padding-inline: 1.5rem;
 		}
 	}
 
-	/* Skip-to-content link: hidden until focused, then slides into view above
-	   all overlays so keyboard users can jump past the fixed nav. */
+	@media (min-width: 64rem) {
+		.wrap {
+			padding-inline: 2rem;
+		}
+	}
+
+	.grid-12 {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		column-gap: 1.5rem;
+	}
+
+	@media (min-width: 48rem) {
+		.grid-12 {
+			grid-template-columns: repeat(12, minmax(0, 1fr));
+		}
+
+		.c-label {
+			grid-column: 1 / span 3;
+		}
+
+		.c-body {
+			grid-column: 4 / -1;
+		}
+
+		.c-full {
+			grid-column: 1 / -1;
+		}
+	}
+
+	/* A hairline-ruled band of the page */
+	.band {
+		border-top: 1px solid var(--color-rule);
+		padding-block: clamp(2.5rem, 5vw, 4.5rem);
+	}
+
+	/* ====================================================================
+     TYPE
+     ==================================================================== */
+
+	.t-display {
+		font-family: var(--font-display);
+		font-size: var(--text-display);
+		font-weight: 400;
+		letter-spacing: -0.025em;
+		line-height: 1;
+	}
+
+	.t-title {
+		font-family: var(--font-display);
+		font-size: var(--text-title);
+		font-weight: 400;
+		letter-spacing: -0.02em;
+		line-height: 1.05;
+	}
+
+	.t-heading {
+		font-family: var(--font-display);
+		font-size: var(--text-heading);
+		font-weight: 500;
+		letter-spacing: -0.015em;
+		line-height: 1.12;
+	}
+
+	.t-lead {
+		font-family: var(--font-serif);
+		font-size: var(--text-lead);
+		line-height: 1.45;
+		color: var(--color-text-secondary);
+	}
+
+	/* Mono metadata: dates, reading time, labels, section numbers */
+	.mono {
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		font-variant-numeric: tabular-nums;
+		letter-spacing: 0;
+		line-height: 1.5;
+		color: var(--color-text-muted);
+	}
+
+	/* "01 — Writing": sentence case, mono, never tracked uppercase */
+	.sec-num::before {
+		counter-increment: sec;
+		content: counter(sec, decimal-leading-zero) " — ";
+	}
+
+	/* ====================================================================
+     LINKS AND BUTTONS
+     Primary action = solid rectangle. Secondary = underlined text link.
+     ==================================================================== */
+
+	.link {
+		color: var(--color-text);
+		text-decoration: underline;
+		text-decoration-thickness: 1px;
+		text-decoration-color: var(--color-rule-strong);
+		text-underline-offset: 0.28em;
+	}
+
+	.link:hover {
+		color: var(--color-accent);
+		text-decoration-color: var(--color-accent);
+		text-underline-offset: 0.4em;
+	}
+
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.75rem;
+		min-height: 3rem;
+		padding: 0.75rem 1.25rem;
+		border-radius: 0;
+		font-size: 0.9375rem;
+		font-weight: 600;
+		letter-spacing: -0.01em;
+		cursor: pointer;
+	}
+
+	.btn-primary {
+		background: var(--color-accent);
+		color: var(--color-accent-ink);
+	}
+
+	.btn-primary:hover {
+		background: var(--color-text);
+		color: var(--color-bg);
+	}
+
 	.skip-link {
 		position: fixed;
 		top: 0;
 		left: 0;
 		z-index: 200;
-		margin: 0.75rem;
-		padding: 0.625rem 1.125rem;
-		border-radius: 9999px;
+		padding: 0.75rem 1rem;
 		background: var(--color-accent);
-		color: #fff;
+		color: var(--color-accent-ink);
 		font-size: 0.875rem;
 		font-weight: 600;
-		text-decoration: none;
-		transform: translateY(-150%);
-		transition: transform var(--duration-fast, 150ms) var(--ease-out-quint);
+		transform: translateY(-110%);
 	}
 
 	.skip-link:focus {
 		transform: translateY(0);
-		outline: 2px solid #fff;
-		outline-offset: 2px;
+		outline: 2px solid var(--color-text);
+		outline-offset: 0;
 	}
 
-	.light .skip-link {
-		background: var(--color-primary-light);
+	/* ====================================================================
+     READING PROGRESS: a solid 2px rule that fills with scroll position
+     ==================================================================== */
+
+	.reading-progress {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 2px;
+		background: var(--color-accent);
+		/* Above the nav (z-50); scaled via transform off the layout path. */
+		z-index: 90;
+		transform: scaleX(0);
+		transform-origin: left;
+		will-change: transform;
 	}
 
-	/* Section spacing */
-	.section-spacing {
-		padding-top: clamp(4rem, 10vw, 8rem);
-		padding-bottom: clamp(4rem, 10vw, 8rem);
-	}
-
-	/* Prose max width for readability */
-	.prose-width {
-		max-width: 65ch;
-	}
-}
-
-/* ==========================================================================
-   ANIMATIONS
-   ========================================================================== */
-
-@keyframes fadeIn {
-	from {
-		opacity: 0;
-		transform: translateY(20px);
-	}
-
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
-@keyframes pulse-glow {
-	0%,
-	100% {
-		opacity: 0.6;
-	}
-
-	50% {
-		opacity: 1;
-	}
-}
-
-@keyframes float {
-	0%,
-	100% {
-		transform: translateY(0);
-	}
-
-	50% {
-		transform: translateY(-10px);
-	}
-}
-
-/* ==========================================================================
-   COMPONENTS
-   ========================================================================== */
-
-@layer components {
-	/* ========================================================================
-     PROSE STYLES (for blog content)
-     ======================================================================== */
+	/* ====================================================================
+     ARTICLE PROSE
+     Newsreader at 19-20px, line-height 1.6, a ~65ch measure. Headings in the
+     same serif; mono section numbers and hairlines keep the grid's voice.
+     ==================================================================== */
 
 	.prose {
-		color: var(--color-text-secondary-dark);
 		font-family: var(--font-serif);
-		font-size: var(--text-body);
-		line-height: 1.8;
+		font-size: var(--text-prose);
+		line-height: 1.6;
+		color: var(--color-text);
+		text-wrap: pretty;
+		max-width: 65ch;
+		counter-reset: h2;
 	}
 
-	.light .prose {
-		color: var(--color-text-secondary-light);
+	.prose > * + * {
+		margin-top: 1.25em;
 	}
 
+	.prose h1,
+	.prose h2,
+	.prose h3,
+	.prose h4 {
+		font-family: var(--font-display);
+		color: var(--color-text);
+		line-height: 1.15;
+		text-wrap: balance;
+		/* Clear the fixed nav when jumping from the table of contents. */
+		scroll-margin-top: 6rem;
+	}
+
+	/* Numbered sections: hairline rule, mono index, then the heading */
 	.prose h2 {
-		font-family: var(--font-sans);
-		font-size: var(--text-h2);
-		font-weight: 600;
-		color: var(--color-text-dark);
-		margin-top: 2.5rem;
-		margin-bottom: 1rem;
-		letter-spacing: -0.02em;
+		counter-increment: h2;
+		margin-top: 3.25em;
+		padding-top: 0.9rem;
+		border-top: 1px solid var(--color-rule-strong);
+		font-size: clamp(1.625rem, 1.4rem + 0.9vw, 2.125rem);
+		font-weight: 500;
+		letter-spacing: -0.015em;
 	}
 
-	.light .prose h2 {
-		color: var(--color-text-light);
+	.prose h2::before {
+		display: block;
+		margin-bottom: 0.75rem;
+		content: counter(h2, decimal-leading-zero);
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		font-weight: 400;
+		letter-spacing: 0;
+		color: var(--color-text-muted);
+	}
+
+	.prose h1 + *,
+	.prose h2 + *,
+	.prose h3 + *,
+	.prose h4 + * {
+		margin-top: 0.9em;
 	}
 
 	.prose h3 {
-		font-family: var(--font-sans);
-		font-size: var(--text-h3);
+		margin-top: 2.25em;
+		font-size: clamp(1.3125rem, 1.25rem + 0.3vw, 1.5rem);
+		font-weight: 500;
+		font-style: italic;
+		letter-spacing: -0.01em;
+	}
+
+	.prose h4 {
+		margin-top: 2em;
+		font-size: 1.125rem;
 		font-weight: 600;
-		color: var(--color-text-dark);
-		margin-top: 2rem;
-		margin-bottom: 0.75rem;
 	}
 
-	.light .prose h3 {
-		color: var(--color-text-light);
+	.prose a {
+		color: var(--color-accent);
+		text-decoration: underline;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.2em;
 	}
 
-	.prose p {
-		margin-bottom: 1.5rem;
+	.prose a:hover {
+		color: var(--color-text);
+		text-decoration-color: var(--color-accent);
+		text-decoration-thickness: 2px;
+		text-underline-offset: 0.3em;
+	}
+
+	.prose strong {
+		font-weight: 600;
+	}
+
+	.prose em {
+		font-style: italic;
+	}
+
+	/* Blockquotes and pull quotes: italic serif between hairlines. */
+	.prose blockquote,
+	.prose .pull-quote {
+		margin-block: 2.25rem;
+		padding-block: 1.25rem;
+		border-block: 1px solid var(--color-rule-strong);
+		font-size: clamp(1.3125rem, 1.25rem + 0.3vw, 1.5rem);
+		font-style: italic;
+		line-height: 1.4;
+		hanging-punctuation: first;
+	}
+
+	.prose blockquote p {
+		margin: 0;
+	}
+
+	.prose blockquote p + p {
+		margin-top: 0.75em;
+	}
+
+	/* Sidenotes: margin notes for asides. Write them in markdown as raw HTML,
+	   just before the paragraph they annotate:
+
+	     <aside class="sidenote">A short remark, set in the margin.</aside>
+
+	   From 80rem the note floats into the empty columns to the right of the
+	   65ch measure, level with the next paragraph. Below that it drops into
+	   the text as a small note with a hairline rule. Keep them short. */
+	.prose .sidenote {
+		display: block;
+		margin-block: 1.5rem;
+		padding-left: 0.875rem;
+		border-left: 1px solid var(--color-rule-strong);
+		font-family: var(--font-sans);
+		font-size: var(--text-label);
+		line-height: 1.5;
+		color: var(--color-text-muted);
+		text-wrap: pretty;
+	}
+
+	.prose .sidenote a {
+		color: inherit;
+	}
+
+	@media (min-width: 80rem) {
+		.prose .sidenote {
+			float: right;
+			clear: right;
+			width: 14rem;
+			margin: 0.35rem -17rem 1rem 0;
+		}
 	}
 
 	.prose ul,
 	.prose ol {
-		margin-bottom: 1.5rem;
 		padding-left: 1.5rem;
 	}
 
 	.prose ul {
-		list-style-type: disc;
+		list-style-type: square;
 	}
 
 	.prose ol {
@@ -568,602 +507,240 @@ body {
 	}
 
 	.prose li {
-		margin-bottom: 0.5rem;
+		margin-top: 0.5em;
+		padding-left: 0.25rem;
+	}
+
+	.prose li::marker {
+		color: var(--color-text-muted);
+		font-family: var(--font-mono);
+		font-size: 0.85em;
 	}
 
 	.prose code {
-		background: var(--color-surface-dark);
-		padding: 0.125rem 0.375rem;
-		border-radius: 0.375rem;
-		font-size: 0.875em;
-	}
-
-	.light .prose code {
-		background: var(--color-surface-light);
+		padding: 0.1em 0.35em;
+		border-radius: 2px;
+		background: var(--color-surface);
+		font-family: var(--font-mono);
+		font-size: 0.85em;
 	}
 
 	.prose pre {
-		background: var(--color-bg-elevated-dark);
-		border: 1px solid var(--color-border-dark);
-		border-radius: 1rem;
-		padding: 1.5rem;
+		padding: 1rem 1.25rem;
+		border: 1px solid var(--color-rule-strong);
+		border-radius: 2px;
+		background: var(--color-code-bg);
+		font-family: var(--font-mono);
+		font-size: 0.875rem;
+		line-height: 1.6;
 		overflow-x: auto;
-		margin-bottom: 1.5rem;
-	}
-
-	.light .prose pre {
-		background: var(--color-surface-light);
-		border-color: var(--color-border-light);
 	}
 
 	.prose pre code {
-		background: transparent;
 		padding: 0;
-		font-size: 0.875rem;
+		background: transparent;
+		font-size: inherit;
 	}
 
-	.prose a {
-		color: var(--color-accent);
-		text-decoration: underline;
-		text-underline-offset: 3px;
+	/* Shiki ships both themes inline; follow ours. Dark theme reads the
+	   --shiki-dark custom properties, light keeps the inline colours. */
+	html:not(.light) .prose .astro-code,
+	html:not(.light) .prose .astro-code span {
+		color: var(--shiki-dark);
 	}
 
-	.prose a:hover {
-		color: var(--color-accent-glow);
+	.prose table {
+		display: block;
+		max-width: 100%;
+		overflow-x: auto;
+		border-collapse: collapse;
+		font-family: var(--font-sans);
+		font-size: 0.9375rem;
+		font-variant-numeric: tabular-nums;
 	}
 
-	.light .prose a {
-		color: var(--color-primary-light);
+	.prose th,
+	.prose td {
+		padding: 0.625rem 1rem 0.625rem 0;
+		border-bottom: 1px solid var(--color-rule);
+		text-align: left;
+		vertical-align: top;
+	}
+
+	.prose th {
+		border-bottom-color: var(--color-rule-strong);
+		font-weight: 650;
 	}
 
 	.prose img,
-	.prose iframe {
-		border-radius: 1rem;
-		margin: 2rem 0;
+	.prose svg {
+		max-width: 100%;
+		height: auto;
+		margin-block: 2rem;
+	}
+
+	.prose hr {
+		margin-block: 3rem;
+		border: none;
+		border-top: 1px solid var(--color-rule);
 	}
 
 	.prose iframe {
 		width: 100%;
 		max-width: 100%;
 		aspect-ratio: 16 / 9;
+		margin-block: 2rem;
+		border: 1px solid var(--color-rule);
 	}
 
-	.prose blockquote {
-		border-left: 3px solid var(--color-accent);
-		padding-left: 1.5rem;
-		margin: 2rem 0;
-		font-style: italic;
-		color: var(--color-text-secondary-dark);
+	/* Inline SVG diagrams and charts in posts. Every colour comes from the
+	   theme tokens, so figures follow dark/light with no per-theme copies. */
+	.prose figure.diagram {
+		margin-block: 2rem;
+		padding: 1rem;
+		overflow-x: auto;
+		border: 1px solid var(--color-rule);
+		background: var(--color-surface);
 	}
 
-	.light .prose blockquote {
-		color: var(--color-text-secondary-light);
+	.prose figure.diagram svg {
+		display: block;
+		width: 100%;
+		min-width: 360px;
+		max-width: none;
+		margin: 0;
 	}
 
-	/* Pull quote for emphasis */
-	.prose .pull-quote {
-		font-family: var(--font-display);
-		font-size: var(--text-h3);
-		font-weight: 400;
-		text-align: center;
-		padding: 2rem 0;
-		margin: 2rem 0;
-		border-top: 1px solid var(--color-border-dark);
-		border-bottom: 1px solid var(--color-border-dark);
-		color: var(--color-text-dark);
+	.prose figure.chart svg {
+		min-width: 540px;
 	}
 
-	.light .prose .pull-quote {
-		border-color: var(--color-border-light);
-		color: var(--color-text-light);
-	}
-
-	/* ========================================================================
-     BUTTON SYSTEM
-     ======================================================================== */
-
-	.btn {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		gap: 0.5rem;
-		border-radius: 9999px;
-		padding: 0.875rem 1.75rem;
-		font-size: 0.9375rem;
-		font-weight: 600;
-		transition: all 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
-		cursor: pointer;
-	}
-
-	.btn-primary {
-		background: var(--color-accent);
-		color: white;
-		box-shadow: 0 15px 30px rgba(244, 63, 94, 0.25);
-	}
-
-	.btn-primary:hover {
-		transform: translateY(-3px) scale(1.02);
-		box-shadow: 0 20px 40px rgba(244, 63, 94, 0.35);
-		background: var(--color-accent-glow);
-	}
-
-	.light .btn-primary {
-		background: var(--color-primary-light);
-	}
-
-	.light .btn-primary:hover {
-		background: var(--color-primary-light-hover);
-	}
-
-	.btn-secondary {
-		background: transparent;
-		border: 1px solid var(--color-border-dark);
-		color: var(--color-text-dark);
-	}
-
-	.btn-secondary:hover {
-		border-color: var(--color-accent);
-		color: var(--color-accent);
-		background: rgba(244, 63, 94, 0.1);
-	}
-
-	.light .btn-secondary {
-		border-color: var(--color-border-light);
-		color: var(--color-text-light);
-	}
-
-	.light .btn-secondary:hover {
-		border-color: var(--color-primary-light);
-		color: var(--color-primary-light);
-		background: rgba(225, 29, 72, 0.1);
-	}
-
-	.btn-ghost {
-		background: transparent;
-		color: var(--color-muted-dark);
-		padding: 0.5rem 1rem;
-	}
-
-	.btn-ghost:hover {
-		color: var(--color-accent);
-	}
-
-	.light .btn-ghost {
-		color: var(--color-muted-light);
-	}
-
-	.light .btn-ghost:hover {
-		color: var(--color-primary-light);
-	}
-
-	/* ========================================================================
-     CARD SYSTEM
-     ======================================================================== */
-
-	.card {
-		background: var(--color-bg-elevated-dark);
-		border: 1px solid var(--color-border-dark);
-		border-radius: 1.5rem;
-		padding: 2rem;
-		transition: all 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
-	}
-
-	.light .card {
-		background: var(--color-bg-elevated-light);
-		border-color: var(--color-border-light);
-	}
-
-	.card-hover {
-		background: var(--color-bg-elevated-dark);
-		border: 1px solid var(--color-border-dark);
-		border-radius: 1.5rem;
-		padding: 2rem;
-		transition: all 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
-	}
-
-	.card-hover:hover {
-		transform: translateY(-8px);
-		border-color: rgba(244, 63, 94, 0.3);
-		box-shadow:
-			0 20px 60px rgba(0, 0, 0, 0.3),
-			0 0 40px rgba(244, 63, 94, 0.1);
-	}
-
-	.light .card-hover {
-		background: var(--color-bg-elevated-light);
-		border-color: var(--color-border-light);
-	}
-
-	.light .card-hover:hover {
-		border-color: rgba(225, 29, 72, 0.3);
-		box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
-	}
-
-	.card-gradient {
-		background: linear-gradient(
-			180deg,
-			rgba(244, 63, 94, 0.05) 0%,
-			var(--color-bg-elevated-dark) 100%
-		);
-		border: 1px solid var(--color-border-dark);
-		border-radius: 1.5rem;
-		padding: 2rem;
-	}
-
-	.light .card-gradient {
-		background: linear-gradient(
-			180deg,
-			rgba(225, 29, 72, 0.03) 0%,
-			var(--color-bg-elevated-light) 100%
-		);
-		border-color: var(--color-border-light);
-	}
-
-	/* ========================================================================
-     PILL / TAG SYSTEM
-     ======================================================================== */
-
-	.pill {
-		display: inline-flex;
-		align-items: center;
-		border-radius: 9999px;
-		border: 1px solid var(--color-border-dark);
-		padding: 0.25rem 0.75rem;
-		font-size: 0.8125rem;
-		color: var(--color-muted-dark);
-		transition: all 200ms;
-	}
-
-	.light .pill {
-		border-color: var(--color-border-light);
-		color: var(--color-muted-light);
-	}
-
-	.pill-scrim {
-		background: rgba(0, 0, 0, 0.55);
-		backdrop-filter: blur(6px);
-		-webkit-backdrop-filter: blur(6px);
-		border-color: rgba(255, 255, 255, 0.15);
-		color: rgba(240, 242, 247, 0.95);
-	}
-
-	.light .pill-scrim {
-		background: rgba(255, 255, 255, 0.82);
-		border-color: rgba(0, 0, 0, 0.08);
-		color: var(--color-text-light);
-	}
-
-	.pill-interactive {
-		display: inline-flex;
-		align-items: center;
-		border-radius: 9999px;
-		border: 1px solid var(--color-border-dark);
-		padding: 0.25rem 0.75rem;
-		font-size: 0.8125rem;
-		color: var(--color-muted-dark);
-		transition: all 200ms;
-		cursor: pointer;
-	}
-
-	.pill-interactive:hover {
-		border-color: var(--color-accent);
-		color: var(--color-accent);
-		background: rgba(244, 63, 94, 0.1);
-	}
-
-	.light .pill-interactive {
-		border-color: var(--color-border-light);
-		color: var(--color-muted-light);
-	}
-
-	.light .pill-interactive:hover {
-		border-color: var(--color-primary-light);
-		color: var(--color-primary-light);
-		background: rgba(225, 29, 72, 0.1);
-	}
-
-	.pill-active {
-		background: var(--color-accent);
-		border-color: var(--color-accent);
-		color: white;
-	}
-
-	.light .pill-active {
-		background: var(--color-primary-light);
-		border-color: var(--color-primary-light);
-	}
-
-	/* ========================================================================
-     LINK SYSTEM
-     ======================================================================== */
-
-	.link-primary {
-		color: var(--color-accent);
-		transition: color 200ms;
-	}
-
-	.link-primary:hover {
-		color: var(--color-accent-glow);
-	}
-
-	.light .link-primary {
-		color: var(--color-primary-light);
-	}
-
-	.light .link-primary:hover {
-		color: var(--color-primary-light-hover);
-	}
-
-	/* Secondary text link: quiet until hovered, with a visible underline so
-	   it still reads as a link (not a label). */
-	.link-quiet {
-		color: var(--color-text-secondary);
-		font-size: 0.9375rem;
-		font-weight: 500;
-		text-decoration: underline;
-		text-decoration-color: color-mix(
-			in srgb,
-			var(--color-text-secondary) 35%,
-			transparent
-		);
-		text-underline-offset: 4px;
-		transition:
-			color var(--duration-fast) ease,
-			text-decoration-color var(--duration-fast) ease;
-	}
-
-	.link-quiet:hover {
-		color: var(--color-text);
-		text-decoration-color: var(--color-primary);
-	}
-
-	.link-muted {
-		color: var(--color-muted-dark);
-		transition: color 200ms;
-	}
-
-	.link-muted:hover {
-		color: var(--color-accent);
-	}
-
-	.light .link-muted {
-		color: var(--color-muted-light);
-	}
-
-	.light .link-muted:hover {
-		color: var(--color-primary-light);
-	}
-
-	/* ========================================================================
-     SECTION HEADERS
-     ======================================================================== */
-
-	.section-header {
-		margin-bottom: 3rem;
-	}
-
-	.section-title {
-		font-family: var(--font-sans);
-		font-size: var(--text-h1);
-		font-weight: 600;
-		color: var(--color-text-dark);
-		letter-spacing: -0.02em;
-	}
-
-	.light .section-title {
-		color: var(--color-text-light);
-	}
-
-	.section-description {
-		color: var(--color-text-secondary-dark);
-		font-size: var(--text-body);
+	.prose figure.diagram figcaption,
+	.prose .table-note {
 		margin-top: 0.75rem;
-		max-width: 40ch;
+		font-family: var(--font-sans);
+		font-size: 0.875rem;
+		color: var(--color-text-muted);
 	}
 
-	.light .section-description {
-		color: var(--color-text-secondary-light);
+	.prose figure.diagram .bx {
+		fill: var(--color-bg);
+		stroke: var(--color-rule-strong);
+		stroke-width: 1.2;
 	}
 
-	/* ========================================================================
-     READING PROGRESS BAR
-     ======================================================================== */
-
-	.reading-progress {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 3px;
-		background: linear-gradient(
-			90deg,
-			var(--color-accent) 0%,
-			var(--color-coral) 100%
-		);
-		/* Above the nav (z-50/60); below the decorative noise overlay (z-100). */
-		z-index: 90;
-		/* Scaled on scroll via transform (off the layout path), not width. */
-		transform: scaleX(0);
-		transform-origin: left;
-		will-change: transform;
+	.prose figure.diagram .bx-a {
+		fill: var(--color-bg);
+		stroke: var(--color-accent);
+		stroke-width: 1.6;
 	}
 
-	/* ========================================================================
-     FORM ELEMENTS
-     ======================================================================== */
-
-	.input {
-		width: 100%;
-		background: var(--color-surface-dark);
-		border: 1px solid var(--color-border-dark);
-		border-radius: 0.75rem;
-		padding: 0.875rem 1rem;
-		font-size: 1rem;
-		color: var(--color-text-dark);
-		transition: all 200ms;
+	.prose figure.diagram .dash {
+		stroke-dasharray: 4 3;
 	}
 
-	.input:focus {
-		outline: none;
-		border-color: var(--color-accent);
-		box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.15);
+	.prose figure.diagram .t {
+		fill: var(--color-text);
+		font: 600 13px var(--font-sans);
 	}
 
-	.input::placeholder {
-		color: var(--color-muted-dark);
+	.prose figure.diagram .s,
+	.prose figure.diagram .lbl {
+		fill: var(--color-text-muted);
+		font: 10.5px var(--font-mono);
 	}
 
-	.light .input {
-		background: var(--color-bg-elevated-light);
-		border-color: var(--color-border-light);
-		color: var(--color-text-light);
+	.prose figure.diagram .h {
+		fill: var(--color-accent);
+		font: 600 11px var(--font-mono);
 	}
 
-	.light .input:focus {
-		border-color: var(--color-primary-light);
-		box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.1);
+	.prose figure.diagram .ln {
+		fill: none;
+		stroke: var(--color-rule-strong);
+		stroke-width: 1.4;
 	}
 
-	.light .input::placeholder {
-		color: var(--color-muted-light);
+	.prose figure.diagram .ln-a {
+		fill: none;
+		stroke: var(--color-accent);
+		stroke-width: 1.6;
 	}
-}
 
-/* ==========================================================================
-   CUSTOM SCROLLBAR
-   A modern, minimal scrollbar that complements the Editorial Noir aesthetic
-   ========================================================================== */
+	.prose figure.diagram .head {
+		fill: var(--color-rule-strong);
+	}
 
-/* Webkit browsers (Chrome, Safari, Edge) - Dark mode (default) */
-html:not(.light) ::-webkit-scrollbar,
-html:not(.light)::-webkit-scrollbar {
-	width: 10px;
-	height: 10px;
-}
+	.prose figure.diagram .head-a {
+		fill: var(--color-accent);
+	}
 
-html:not(.light) ::-webkit-scrollbar-track,
-html:not(.light)::-webkit-scrollbar-track {
-	background: var(--color-bg-elevated-dark);
-	border-radius: 8px;
-}
+	.prose figure.diagram .rule {
+		stroke: var(--color-rule);
+		stroke-width: 1;
+	}
 
-html:not(.light) ::-webkit-scrollbar-thumb,
-html:not(.light)::-webkit-scrollbar-thumb {
-	background: linear-gradient(
-		180deg,
-		var(--color-accent) 0%,
-		var(--color-accent-deep) 100%
-	);
-	border-radius: 8px;
-	border: 2px solid var(--color-bg-elevated-dark);
-}
+	/* Two-series chart: the accent marks the model we kept, the neutral
+	   text colour marks the comparison. Hollow points mean fewer runs. */
+	.prose figure.chart .series-a,
+	.prose figure.chart .series-b {
+		fill: none;
+		stroke-width: 2;
+		stroke-linejoin: round;
+		opacity: 0.55;
+	}
 
-html:not(.light) ::-webkit-scrollbar-thumb:hover,
-html:not(.light)::-webkit-scrollbar-thumb:hover {
-	background: linear-gradient(
-		180deg,
-		var(--color-accent-glow) 0%,
-		var(--color-accent) 100%
-	);
-}
+	.prose figure.chart .series-a {
+		stroke: var(--color-accent);
+	}
 
-html:not(.light) ::-webkit-scrollbar-thumb:active,
-html:not(.light)::-webkit-scrollbar-thumb:active {
-	background: var(--color-accent-deep);
-}
+	.prose figure.chart .series-b {
+		stroke: var(--color-text-secondary);
+	}
 
-html:not(.light) ::-webkit-scrollbar-corner,
-html:not(.light)::-webkit-scrollbar-corner {
-	background: var(--color-bg-elevated-dark);
-}
+	.prose figure.chart .pt-a,
+	.prose figure.chart .pt-b {
+		stroke: var(--color-surface);
+		stroke-width: 2;
+	}
 
-/* Light mode scrollbar */
-html.light ::-webkit-scrollbar,
-html.light::-webkit-scrollbar {
-	width: 10px;
-	height: 10px;
-}
+	.prose figure.chart .pt-a {
+		fill: var(--color-accent);
+	}
 
-html.light ::-webkit-scrollbar-track,
-html.light::-webkit-scrollbar-track {
-	background: #e5e7eb;
-	border-radius: 8px;
-}
+	.prose figure.chart .pt-b {
+		fill: var(--color-text-secondary);
+	}
 
-html.light ::-webkit-scrollbar-thumb,
-html.light::-webkit-scrollbar-thumb {
-	background: linear-gradient(
-		180deg,
-		var(--color-primary-light) 0%,
-		var(--color-primary-light-hover) 100%
-	);
-	border-radius: 8px;
-	border: 2px solid #e5e7eb;
-}
+	.prose figure.chart .pt-a.open {
+		fill: var(--color-surface);
+		stroke: var(--color-accent);
+	}
 
-html.light ::-webkit-scrollbar-thumb:hover,
-html.light::-webkit-scrollbar-thumb:hover {
-	background: linear-gradient(
-		180deg,
-		var(--color-primary-light-hover) 0%,
-		#9f1239 100%
-	);
-}
+	.prose figure.chart .pt-b.open {
+		fill: var(--color-surface);
+		stroke: var(--color-text-secondary);
+	}
 
-html.light ::-webkit-scrollbar-thumb:active,
-html.light::-webkit-scrollbar-thumb:active {
-	background: #9f1239;
-}
+	.prose figure.chart .key {
+		white-space: nowrap;
+	}
 
-html.light ::-webkit-scrollbar-corner,
-html.light::-webkit-scrollbar-corner {
-	background: #e5e7eb;
-}
+	.prose figure.chart .key::before {
+		content: "";
+		display: inline-block;
+		width: 0.625rem;
+		height: 0.625rem;
+		margin-right: 0.375rem;
+		border-radius: 50%;
+		vertical-align: baseline;
+	}
 
-/* Firefox - Dark mode */
-html:not(.light) {
-	scrollbar-width: thin;
-	scrollbar-color: var(--color-accent) var(--color-bg-elevated-dark);
-}
+	.prose figure.chart .key-a::before {
+		background: var(--color-accent);
+	}
 
-/* Firefox - Light mode */
-html.light {
-	scrollbar-width: thin;
-	scrollbar-color: var(--color-primary-light) #e5e7eb;
-}
-
-/* Horizontal scrollbar for code blocks - Dark mode */
-html:not(.light) pre::-webkit-scrollbar,
-html:not(.light) .overflow-x-auto::-webkit-scrollbar {
-	height: 6px;
-}
-
-html:not(.light) pre::-webkit-scrollbar-thumb,
-html:not(.light) .overflow-x-auto::-webkit-scrollbar-thumb {
-	background: var(--color-accent);
-	border-radius: 4px;
-}
-
-html:not(.light) pre::-webkit-scrollbar-track,
-html:not(.light) .overflow-x-auto::-webkit-scrollbar-track {
-	background: var(--color-surface-dark);
-	border-radius: 4px;
-}
-
-/* Horizontal scrollbar for code blocks - Light mode */
-html.light pre::-webkit-scrollbar,
-html.light .overflow-x-auto::-webkit-scrollbar {
-	height: 6px;
-}
-
-html.light pre::-webkit-scrollbar-track,
-html.light .overflow-x-auto::-webkit-scrollbar-track {
-	background: #d1d5db;
-	border-radius: 4px;
-}
-
-html.light pre::-webkit-scrollbar-thumb,
-html.light .overflow-x-auto::-webkit-scrollbar-thumb {
-	background: var(--color-primary-light);
-	border-radius: 4px;
+	.prose figure.chart .key-b::before {
+		background: var(--color-text-secondary);
+	}
 }

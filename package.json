@@ -23,9 +23,8 @@
 	"dependencies": {
 		"@astrojs/markdown-remark": "^7.3.2",
 		"@astrojs/rss": "^4.0.19",
-		"@fontsource-variable/playfair-display": "^5.3.0",
+		"@fontsource-variable/newsreader": "^5.3.0",
 		"@fontsource-variable/plus-jakarta-sans": "^5.3.0",
-		"@fontsource-variable/roboto-slab": "^5.3.0",
 		"astro": "^7.3.8",
 		"date-fns": "^4.1.0",
 		"rehype-mermaid": "^3.0.0"

@@ -1,36 +1,37 @@
 ---
-
 import { getCollection } from 'astro:content';
-import ContentCardStacked from '../components/ContentCardStacked.astro';
+import PostIndex from '../components/PostIndex.astro';
 import Layout from '../layouts/Layout.astro';
-import { isPublished, sortByDateDesc, toStackedProjectProps } from '../utils/content';
+import { isPublished, sortByDateDesc, toIndexItem } from '../utils/content';
 
 const projects = (await getCollection('projects', isPublished)).sort(sortByDateDesc);
 ---
 
 <Layout title="Work" description="Things Soumyo Dey has built, with notes on what worked and what broke.">
-  <div class="space-y-12">
-    <section class="fade-up">
-      <h1 class="section-title">Selected Work</h1>
-      <p class="section-description mt-4 max-w-2xl text-lg">
+  <header class="grid-12 gap-y-4 pb-14 pt-4 md:pb-20">
+    <p class="c-label mono sec-num">Work</p>
+    <div class="c-body">
+      <h1 class="t-title">Selected Work</h1>
+      <p class="t-lead mt-6 max-w-[36rem]">
         Experiments, shipping stories, and products that bend AI, strategy, and delightful UI into something useful.
       </p>
-    </section>
+    </div>
+  </header>
 
-    {
-      projects.length > 0 ? (
-        <div class="grid gap-8 md:grid-cols-2" data-animate-stagger>
-          {projects.map((project) => (
-            <ContentCardStacked {...toStackedProjectProps(project)} animate />
-          ))}
-        </div>
-      ) : (
-        <p class="max-w-2xl text-lg text-[var(--color-text-secondary)]">
-          Project write-ups are in progress. For now, the{' '}
-          <a class="link-primary" href="/blog">writing</a>
-          {' '}covers what I've been building.
-        </p>
-      )
-    }
-  </div>
+  {
+    projects.length > 0 ? (
+      <PostIndex
+        items={projects.map(toIndexItem)}
+        headers={['Date', 'Project', 'Topics', 'Type']}
+        showDescription
+        topicLimit={4}
+      />
+    ) : (
+      <p class="c-body max-w-2xl text-lg text-[var(--color-text-secondary)]">
+        Project write-ups are in progress. For now, the{' '}
+        <a class="link" href="/blog">writing</a>
+        {' '}covers what I've been building.
+      </p>
+    )
+  }
 </Layout>

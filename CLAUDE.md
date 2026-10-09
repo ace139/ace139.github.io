@@ -11,7 +11,7 @@ Strategic design context lives in [`PRODUCT.md`](PRODUCT.md) (read it before UI 
 - **Personality**: authoritative, direct, and quietly funny (*grounded, direct, wry*). Execution over hype, claims grounded in shipped work; a practitioner sharing understanding, never selling.
 - **Anti-references**: AI-agency/consultancy hype (the headline one), generic SaaS landing, AI-slop/templated looks (no per-section tracked eyebrows, no cream-paper default), corporate/clinical sterility, loud hype marketing.
 
-> Note: the earlier Cornet Health / dentist-burnout content (6 draft posts + `content-strategy/`) is a closed chapter being retired. The About page now lists Oogway Labs as current with Cornet as past; the résumé still needs updating.
+> Note: the earlier Cornet Health / dentist-burnout content (6 draft posts + `content-strategy/`) is a closed chapter being retired. The About page now lists Oogway Labs as current with Cornet as past; the résumé page is hidden (`src/pages/_resume.astro`; the underscore keeps Astro from building it) until its role descriptions are filled in. Rename it to `resume.astro` to publish it again.
 - **Accessibility**: WCAG 2.2 AA across both dark (default) and light themes; reduced-motion alternatives for all load/scroll animation.
 
 When DESIGN.md is generated (via `/impeccable document`), it captures the visual system (palette, type, components).
@@ -86,7 +86,7 @@ Content uses Astro's Content Layer API with glob loaders:
 - `scripts/sync-public-env.js` - Copies `.env.public` → `.env` (runs pre-dev/start/build)
 - `scripts/generate-llms-txt.js` - Generates `public/llms.txt` (runs pre-build)
 - `scripts/generate-markdown.js` - Generates a `*.html.md` sibling for every built page (runs post-build)
-- `scripts/generate-headers.js` - Creates `dist/_headers` for caching + security/Link headers (runs post-build)
+- `scripts/generate-headers.js` - Creates `dist/_headers` for caching + security/Link headers (runs post-build). Cloudflare Pages merges headers from every matching rule, so each path must match exactly one `Cache-Control` rule (none in the global `/*` block)
 
 ### Markdown for Agents (content negotiation)
 
@@ -105,6 +105,6 @@ Requests with `Accept: text/markdown` receive a Markdown version of the page; br
 ### Fonts
 
 Configured with Astro's Fonts API in `astro.config.mjs` (`fonts`), using the local provider pointed at the Latin variable files from `@fontsource-variable/*`. Astro emits the `@font-face` rules, preload links, and size-adjusted fallback faces; `<Font>` in Layout.astro exposes them as CSS variables that `globals.css` maps into the theme:
-- Playfair Display → `--font-playfair` → `--font-display` (display headings)
-- Plus Jakarta Sans → `--font-jakarta` → `--font-sans` (UI and headings)
-- Roboto Slab → `--font-roboto-slab` → `--font-serif` (article body)
+- Newsreader (weight axis, normal + italic) → `--font-newsreader` → `--font-display` and `--font-serif` (name, headings, article body)
+- Plus Jakarta Sans → `--font-jakarta` → `--font-sans` (UI only)
+- Metadata uses the system monospace stack (`--font-mono`), no download

@@ -67,7 +67,8 @@ const headersContent = `# Font files - specific file first, then directory
 /*.ico
   Cache-Control: public, max-age=2592000
 
-# HTML pages - no cache for fresh content
+# HTML pages - always revalidate. The Markdown siblings (*.html.md) are also
+# matched by this rule, so they must not get a second Cache-Control rule.
 # Vary: Accept so caches distinguish HTML from the text/markdown agent variant
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
@@ -77,7 +78,41 @@ const headersContent = `# Font files - specific file first, then directory
   Cache-Control: public, max-age=0, must-revalidate
   Vary: Accept
 
-# Global rules (security headers + default cache)
+# Extensionless page routes (e.g. /about, /blog/post) - Cloudflare serves
+# these from the matching .html file
+/about
+  Cache-Control: public, max-age=0, must-revalidate
+  Vary: Accept
+/blog
+  Cache-Control: public, max-age=0, must-revalidate
+  Vary: Accept
+/blog/*
+  Cache-Control: public, max-age=0, must-revalidate
+  Vary: Accept
+/projects
+  Cache-Control: public, max-age=0, must-revalidate
+  Vary: Accept
+/projects/*
+  Cache-Control: public, max-age=0, must-revalidate
+  Vary: Accept
+/privacy
+  Cache-Control: public, max-age=0, must-revalidate
+  Vary: Accept
+/tags
+  Cache-Control: public, max-age=0, must-revalidate
+  Vary: Accept
+/tags/*
+  Cache-Control: public, max-age=0, must-revalidate
+  Vary: Accept
+
+# Text and feed files - 1 hour
+/*.txt
+  Cache-Control: public, max-age=3600
+/*.xml
+  Cache-Control: public, max-age=3600
+
+# Global rules (security headers only; Cache-Control is set per path above
+# because Cloudflare Pages merges headers from every matching rule)
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
@@ -86,8 +121,7 @@ const headersContent = `# Font files - specific file first, then directory
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://us.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://us.i.posthog.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
   Strict-Transport-Security: max-age=31536000; includeSubDomains
-  Link: </llms.txt>; rel="describedby"; type="text/markdown", </sitemap-index.xml>; rel="sitemap"; type="application/xml"
-  Cache-Control: public, max-age=3600
+  Link: </llms.txt>; rel="describedby"; type="text/markdown", </sitemap-index.xml>; rel="sitemap"; type="application/xml", </rss.xml>; rel="alternate"; type="application/rss+xml"
 `;
 
 // Write the _headers file to the dist directory

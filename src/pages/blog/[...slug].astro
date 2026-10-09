@@ -4,7 +4,7 @@
 
 import { getCollection, render } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
-import { isPublished, sortByDateDesc } from '../../utils/content';
+import { isPublished, readingMinutes, sortByDateDesc } from '../../utils/content';
 
 export async function getStaticPaths() {
   const posts = (await getCollection('blog', isPublished)).sort(sortByDateDesc);
@@ -25,11 +25,9 @@ export async function getStaticPaths() {
 const { post, newer, older } = Astro.props;
 const { Content, headings } = await render(post);
 
-// ~230 words per minute for considered, technical reading.
-const wordCount = (post.body ?? '').split(/\s+/).filter(Boolean).length;
 const frontmatter = {
   ...post.data,
-  readingTime: Math.max(1, Math.round(wordCount / 230)),
+  readingTime: readingMinutes(post.body),
 };
 ---
 

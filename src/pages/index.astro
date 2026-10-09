@@ -1,14 +1,12 @@
 ---
-
-
-
 import { Picture } from 'astro:assets';
 import { getCollection } from 'astro:content';
-import ContentBentoGrid from '../components/ContentBentoGrid.astro';
+import PostIndex from '../components/PostIndex.astro';
 import { socials } from '../config/socials';
-import avatar from '../images/avatar.jpg';
+// Tight black-and-white crop of avatar.jpg, made to sit in the monochrome grid.
+import avatar from '../images/avatar-portrait.jpg';
 import Layout from '../layouts/Layout.astro';
-import { formatCardDate, isPublished, sortByDateDesc, toBentoItem } from '../utils/content';
+import { isPublished, sortByDateDesc, toIndexItem } from '../utils/content';
 
 const allPosts = (await getCollection('blog', isPublished)).sort(sortByDateDesc);
 const [latestPost, ...olderPosts] = allPosts;
@@ -16,6 +14,8 @@ const morePosts = olderPosts.slice(0, 3);
 
 const allProjects = (await getCollection('projects', isPublished).catch(() => [])).sort(sortByDateDesc);
 const featuredProjects = allProjects.slice(0, 3);
+
+const isoDate = (date: string) => new Date(date).toISOString().slice(0, 10);
 
 // The track record, newest first. Each line is a claim the work can back up.
 const record = [
@@ -45,18 +45,19 @@ const record = [
     what: 'Data platforms that made operational decisions faster and a little less argumentative.',
   },
 ];
+
 ---
 
 <Layout title="Soumyo Dey">
-  <!-- Hero: who, in one breath, then straight to the work -->
-  <section class="hero grid gap-14 pt-10 pb-20 sm:pt-16 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:items-end lg:gap-16 lg:pt-24 lg:pb-28">
-    <div>
-      <div class="fade-up mb-8 flex items-center gap-4">
-        <div class="h-14 w-14 shrink-0 overflow-hidden rounded-full border border-[var(--color-border)]">
+  <!-- Hero: identity in the label column, name and intro from column 4 -->
+  <section class="hero" aria-label="Introduction">
+    <div class="grid-12 hero-intro">
+      <div class="c-label hero-id">
+        <div class="hero-avatar">
           <Picture
             src={avatar}
-            widths={[56, 112]}
-            sizes="56px"
+            widths={[80, 160]}
+            sizes="80px"
             formats={['avif', 'webp', 'jpeg']}
             alt=""
             loading="eager"
@@ -64,149 +65,141 @@ const record = [
             class="h-full w-full object-cover"
           />
         </div>
-        <p class="text-sm text-[var(--color-text-secondary)]">
-          Builder, systems thinker, occasional essayist
-        </p>
+        <p class="mono">Builder, systems thinker, occasional essayist</p>
       </div>
 
-      <h1 class="fade-up display-heading text-hero text-[var(--color-text)]" style="--fade-delay: 80ms; line-height: 0.95;">
-        Soumyo Dey
-      </h1>
+      <div class="c-body">
+        <h1 class="t-display hero-name">Soumyo Dey<span class="hero-stop" aria-hidden="true">.</span></h1>
+        <p class="t-lead mt-6 max-w-[40rem] text-[var(--color-text)]">
+          A decade of building systems that have to work outside the demo: connected
+          platforms for half a million electric scooters, voice AI in clinics, data
+          platforms for retail. I write about what held up, and what broke at 3am.
+        </p>
 
-      <p class="fade-up mt-8 max-w-[38rem] text-pretty text-lg leading-relaxed text-[var(--color-text-secondary)] sm:text-xl" style="--fade-delay: 160ms;">
-        A decade of building systems that have to work outside the demo: connected
-        platforms for half a million electric scooters, voice AI in clinics, data
-        platforms for retail. I write about what held up, and what broke at 3am.
-      </p>
+        <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+          <a href="/blog" class="btn btn-primary" data-astro-prefetch>
+            Read the writing
+            <span aria-hidden="true">→</span>
+          </a>
+          <a
+            href="https://stochasticmusings.substack.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="link"
+          >
+            Get new essays by email
+          </a>
+        </div>
 
-      <div class="fade-up mt-10 flex flex-wrap items-center gap-x-8 gap-y-4" style="--fade-delay: 240ms;">
-        <a href="/blog" class="btn btn-primary group" data-astro-prefetch>
-          Read the writing
-          <svg class="h-4 w-4 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-          </svg>
-        </a>
-        <a href="/about" class="link-quiet" data-astro-prefetch>More about me</a>
-        <ul class="flex items-center gap-1" aria-label="Elsewhere">
+        <ul class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-[0.9375rem]" aria-label="Elsewhere">
           {socials.filter((s) => s.platform !== 'email').map((social) => (
             <li>
-              <a
-                href={social.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="social-pill"
-              >
-                {social.label}
-              </a>
+              <a href={social.url} target="_blank" rel="noopener noreferrer" class="link">{social.label}</a>
             </li>
           ))}
         </ul>
       </div>
     </div>
-
-    {latestPost && (
-      <a
-        href={`/blog/${latestPost.id}`}
-        class="fade-up latest-essay group block"
-        style="--fade-delay: 320ms;"
-        data-astro-prefetch
-      >
-        <p class="latest-essay-label">Latest essay · <time datetime={new Date(latestPost.data.date).toISOString()}>{formatCardDate(latestPost.data.date, 'long')}</time></p>
-        <h2 class="display-heading mt-4 text-3xl text-[var(--color-text)] text-balance transition-colors group-hover:text-[var(--color-primary)] sm:text-4xl">
-          {latestPost.data.title}
-        </h2>
-        {latestPost.data.subtitle && (
-          <p class="mt-3 text-lg text-[var(--color-text-secondary)] text-pretty">{latestPost.data.subtitle}</p>
-        )}
-        {latestPost.data.description && (
-          <p class="mt-4 line-clamp-3 text-sm leading-relaxed text-[var(--color-text-muted)]">{latestPost.data.description}</p>
-        )}
-        <span class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-primary)]">
-          Read it
-          <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-          </svg>
-        </span>
-      </a>
-    )}
   </section>
 
+  <!-- Latest essay -->
+  {latestPost && (
+    <section class="band grid-12 gap-y-4" aria-label="Latest essay">
+      <p class="c-label mono">
+        Latest essay · <time datetime={isoDate(latestPost.data.date)}>{isoDate(latestPost.data.date)}</time>
+      </p>
+      <a href={`/blog/${latestPost.id}`} class="latest c-body group" data-astro-prefetch>
+        <h2 class="t-title latest-title">{latestPost.data.title}</h2>
+        {latestPost.data.subtitle && (
+          <p class="t-lead mt-6 max-w-[40rem]">{latestPost.data.subtitle}</p>
+        )}
+        {latestPost.data.description && (
+          <p class="mt-5 max-w-[38rem] text-[var(--color-text-muted)]">{latestPost.data.description}</p>
+        )}
+        <span class="link mt-8 inline-block">Read it<span aria-hidden="true"> →</span></span>
+      </a>
+    </section>
+  )}
+
   <!-- Track record: receipts, not metrics -->
-  <section class="section-spacing border-t border-[var(--color-border)]/30" aria-labelledby="record-title">
-    <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16">
-      <div class="reveal">
-        <h2 id="record-title" class="section-title">Where the work has been</h2>
-        <p class="section-description mt-4">
+  <section class="band" aria-labelledby="record-title">
+    <div class="grid-12 gap-y-4">
+      <p class="c-label mono sec-num">Record</p>
+      <div class="c-body">
+        <h2 id="record-title" class="t-heading">Where the work has been</h2>
+        <p class="mt-4 max-w-[34rem] text-[var(--color-text-secondary)]">
           Startups and scaled platforms, mostly in places where software meets
           hardware, clinics, or warehouses, and has to behave.
         </p>
       </div>
-
-      <ol class="record reveal">
-        {record.map((item) => (
-          <li class="record-item">
-            <p class="record-when">{item.when}</p>
-            <div>
-              <h3 class="record-where">
-                {item.href ? (
-                  <a href={item.href} target="_blank" rel="noopener noreferrer">{item.where}</a>
-                ) : (
-                  item.where
-                )}
-                <span class="record-role">{item.role}</span>
-              </h3>
-              <p class="record-what">{item.what}</p>
-            </div>
-          </li>
-        ))}
-      </ol>
     </div>
+
+    <ol class="record mt-12">
+      {record.map((item) => (
+        <li class="record-row">
+          <p class="record-when mono">{item.when}</p>
+          <h3 class="record-where">
+            {item.href ? (
+              <a href={item.href} target="_blank" rel="noopener noreferrer" class="link">{item.where}</a>
+            ) : (
+              item.where
+            )}
+            <span class="record-role">{item.role}</span>
+          </h3>
+          <p class="record-what">{item.what}</p>
+        </li>
+      ))}
+    </ol>
   </section>
 
   <!-- Built work (only when there are real write-ups to show) -->
   {featuredProjects.length > 0 && (
-    <section class="section-spacing border-t border-[var(--color-border)]/30">
-      <div class="section-header reveal">
-        <h2 class="section-title">Things I've built</h2>
+    <section class="band">
+      <div class="grid-12 gap-y-4">
+        <p class="c-label mono sec-num">Work</p>
+        <h2 class="c-body t-heading">Things I've built</h2>
       </div>
-
-      <ContentBentoGrid animate items={featuredProjects.map(toBentoItem)} />
-
-      <div class="mt-12 reveal">
-        <a href="/projects" class="btn btn-secondary" data-astro-prefetch>All work</a>
+      <div class="mt-12">
+        <PostIndex items={featuredProjects.map(toIndexItem)} headers={['Date', 'Project', 'Topics', 'Type']} />
+      </div>
+      <div class="grid-12 mt-8">
+        <p class="c-body"><a href="/projects" class="link" data-astro-prefetch>All work</a></p>
       </div>
     </section>
   )}
 
   <!-- More writing -->
   {morePosts.length > 0 && (
-    <section class="section-spacing border-t border-[var(--color-border)]/30">
-      <div class="section-header reveal flex flex-wrap items-end justify-between gap-6">
-        <div>
-          <h2 class="section-title">More writing</h2>
-          <p class="section-description mt-4">
+    <section class="band">
+      <div class="grid-12 gap-y-4">
+        <p class="c-label mono sec-num">Writing</p>
+        <div class="c-body">
+          <h2 class="t-heading">More writing</h2>
+          <p class="mt-4 max-w-[34rem] text-[var(--color-text-secondary)]">
             On AI systems, product judgment, and the distance between the
             benchmark and the real thing.
           </p>
         </div>
-        <a href="/blog" class="link-quiet" data-astro-prefetch>All essays<span aria-hidden="true"> →</span></a>
       </div>
-
-      <ContentBentoGrid animate items={morePosts.map(toBentoItem)} />
+      <div class="mt-12">
+        <PostIndex items={morePosts.map(toIndexItem)} />
+      </div>
+      <div class="grid-12 mt-8">
+        <p class="c-body"><a href="/blog" class="link" data-astro-prefetch>All essays<span aria-hidden="true"> →</span></a></p>
+      </div>
     </section>
   )}
 
   <!-- Newsletter -->
-  <section id="newsletter-section" class="section-spacing border-t border-[var(--color-border)]/30">
-    <div class="reveal grid gap-8 md:grid-cols-[minmax(0,1.4fr)_auto] md:items-end">
-      <div>
-        <h2 class="display-heading text-3xl text-[var(--color-text)] sm:text-4xl">Stochastic Musings</h2>
-        <p class="mt-4 max-w-xl text-[var(--color-text-secondary)]">
-          New essays by email, sent when there's something worth saying rather
-          than on a schedule. Unsubscribe whenever; no hard feelings.
-        </p>
-      </div>
-      <div class="flex flex-wrap items-center gap-6">
+  <section id="newsletter-section" class="band grid-12 gap-y-4">
+    <p class="c-label mono sec-num">Newsletter</p>
+    <div class="c-body">
+      <h2 class="t-heading">Stochastic Musings</h2>
+      <p class="mt-4 max-w-[34rem] text-[var(--color-text-secondary)]">
+        New essays by email, sent when there's something worth saying rather
+        than on a schedule. Unsubscribe whenever; no hard feelings.
+      </p>
+      <div class="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
         <a
           href="https://stochasticmusings.substack.com/"
           target="_blank"
@@ -215,7 +208,7 @@ const record = [
         >
           Subscribe on Substack
         </a>
-        <a href="/rss.xml" class="link-quiet">or use RSS</a>
+        <a href="/rss.xml" class="link">or use RSS</a>
       </div>
     </div>
   </section>
@@ -223,118 +216,130 @@ const record = [
 
 <style>
   .hero {
-    /* The hero is a normal-flow section now; no full-viewport takeover. */
-    min-height: auto;
+    padding-top: clamp(2.5rem, 7vw, 6.5rem);
+    padding-bottom: clamp(3rem, 6vw, 5.5rem);
   }
 
-  .latest-essay {
-    position: relative;
-    padding: 2rem;
-    border: 1px solid var(--color-border);
-    border-radius: 1.5rem;
-    background: var(--color-bg-elevated);
-    text-decoration: none;
-    transition:
-      border-color var(--duration-base) var(--ease-out-quint),
-      transform var(--duration-base) var(--ease-out-quint);
-  }
-
-  .latest-essay:hover {
-    border-color: color-mix(in srgb, var(--color-primary) 45%, var(--color-border));
-  }
-
-  .latest-essay:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 4px;
-  }
-
-  .latest-essay-label {
-    font-size: 0.875rem;
-    color: var(--color-text-muted);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .social-pill {
-    display: inline-flex;
-    align-items: center;
-    min-height: 2.75rem;
-    padding: 0 0.75rem;
-    font-size: 0.875rem;
-    color: var(--color-text-muted);
-    text-decoration: underline;
-    text-decoration-color: transparent;
-    text-underline-offset: 4px;
-    transition:
-      color var(--duration-fast) ease,
-      text-decoration-color var(--duration-fast) ease;
-  }
-
-  .social-pill:hover {
+  .hero-name {
+    margin-left: -0.03em;
     color: var(--color-text);
-    text-decoration-color: var(--color-primary);
+  }
+
+  /* The one deliberate graphic moment: the full stop in the accent colour */
+  .hero-stop {
+    color: var(--color-accent);
+  }
+
+  .hero-intro {
+    row-gap: 2rem;
+  }
+
+  /* Phones: portrait and tagline side by side above the name. Wide: the
+     portrait heads the label column, top-aligned with the name. */
+  .hero-id {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  @media (min-width: 48rem) {
+    .hero-id {
+      display: grid;
+      align-content: start;
+      max-width: 14rem;
+      padding-top: 0.35rem;
+    }
+  }
+
+  .hero-avatar {
+    flex: none;
+    width: 4rem;
+    height: 4rem;
+    overflow: hidden;
+    border: 1px solid var(--color-rule-strong);
+  }
+
+  @media (min-width: 48rem) {
+    .hero-avatar {
+      width: 5rem;
+      height: 5rem;
+    }
+  }
+
+  .latest {
+    display: block;
+  }
+
+  .latest-title {
+    max-width: 17ch;
+  }
+
+  .latest:hover .latest-title {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-decoration-color: var(--color-accent);
+    text-underline-offset: 0.12em;
+  }
+
+  .latest:hover .link {
+    color: var(--color-accent);
+    text-decoration-color: var(--color-accent);
+    text-underline-offset: 0.4em;
   }
 
   .record {
-    border-top: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent);
+    border-top: 1px solid var(--color-rule-strong);
   }
 
-  .record-item {
+  .record-row {
     display: grid;
-    grid-template-columns: 7rem minmax(0, 1fr);
-    gap: 1.5rem;
-    padding: 1.75rem 0;
-    border-bottom: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent);
+    gap: 0.5rem;
+    padding-block: 1.5rem;
+    border-bottom: 1px solid var(--color-rule);
   }
 
-  @media (max-width: 30rem) {
-    .record-item {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 0.5rem;
+  @media (min-width: 48rem) {
+    .record-row {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: 1.5rem;
+    }
+
+    .record-when {
+      grid-column: 1 / span 3;
+    }
+
+    .record-where {
+      grid-column: 4 / span 5;
+    }
+
+    .record-what {
+      grid-column: 9 / -1;
     }
   }
 
   .record-when {
-    padding-top: 0.2rem;
-    font-size: 0.875rem;
-    color: var(--color-text-muted);
+    padding-top: 0.3rem;
   }
 
   .record-where {
     display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.25rem 0.75rem;
-    font-size: 1.25rem;
-    color: var(--color-text);
-  }
-
-  .record-where a {
-    color: inherit;
-    text-decoration: underline;
-    text-decoration-color: color-mix(in srgb, var(--color-primary) 40%, transparent);
-    text-underline-offset: 4px;
-  }
-
-  .record-where a:hover {
-    color: var(--color-primary);
+    flex-direction: column;
+    gap: 0.25rem;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
   }
 
   .record-role {
     font-size: 0.9375rem;
     font-weight: 500;
-    color: var(--color-text-secondary);
+    letter-spacing: 0;
+    color: var(--color-text-muted);
   }
 
   .record-what {
-    margin-top: 0.5rem;
-    max-width: 38rem;
+    padding-top: 0.2rem;
     color: var(--color-text-secondary);
   }
 </style>

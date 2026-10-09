@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Page not found"
+  description="This page does not exist. Try the writing index or head back to the homepage."
+  noindex
+>
+  <header class="grid-12 gap-y-4 pb-14 pt-4 md:pb-20">
+    <p class="c-label mono">404</p>
+    <div class="c-body">
+      <h1 class="t-title">Nothing here.</h1>
+      <p class="t-lead mt-6 max-w-[36rem]">
+        The link is wrong, or the page moved on without telling anyone. The writing is still where
+        you left it.
+      </p>
+      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+        <a class="btn btn-primary" href="/blog">Read the writing</a>
+        <a class="link" href="/">Home</a>
+        <a class="link" href="/rss.xml">RSS</a>
+      </div>
+    </div>
+  </header>
+</Layout>
