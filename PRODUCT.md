@@ -47,4 +47,4 @@ Three words: **grounded, direct, wry.**
 
 ## Accessibility & Inclusion
 
-Target **WCAG 2.2 AA**. Concretely: body text ≥4.5:1 contrast (large/bold text ≥3:1), full keyboard navigation, semantic landmark structure, and visible focus states. Both dark (default) and light themes must clear the bar. Every GSAP / scroll-driven animation needs a `prefers-reduced-motion: reduce` alternative (crossfade or instant), and content must never be gated behind a reveal that fails to fire in reduced-motion or headless contexts.
+Target **WCAG 2.2 AA**. Concretely: body text ≥4.5:1 contrast (large/bold text ≥3:1), full keyboard navigation, semantic landmark structure, and visible focus states. Both dark (default) and light themes must clear the bar. Every load-in / scroll-driven animation needs a `prefers-reduced-motion: reduce` alternative (crossfade or instant), and content must never be gated behind a reveal that fails to fire in reduced-motion or headless contexts.

@@ -1,9 +1,8 @@
 ---
-
 import { getCollection } from 'astro:content';
-import ContentBentoGrid from '../../components/ContentBentoGrid.astro';
+import PostIndex from '../../components/PostIndex.astro';
 import Layout from '../../layouts/Layout.astro';
-import { isPublished, toBentoItem } from '../../utils/content';
+import { isPublished, sortByDateDesc, toIndexItem } from '../../utils/content';
 
 export async function getStaticPaths() {
   const allPosts = await getCollection('blog', isPublished);
@@ -14,7 +13,7 @@ export async function getStaticPaths() {
   const uniqueTags = [...new Set(allContent.flatMap((item) => item.data.tags).filter(Boolean))];
 
   return uniqueTags.map((tag) => {
-    const filteredContent = allContent.filter((item) => item.data.tags?.includes(tag));
+    const filteredContent = allContent.filter((item) => item.data.tags?.includes(tag)).sort(sortByDateDesc);
     return {
       params: { tag },
       props: { items: filteredContent },
@@ -24,17 +23,24 @@ export async function getStaticPaths() {
 
 const { tag } = Astro.params;
 const { items } = Astro.props;
+
+const count = items.length;
+const description =
+  count === 1
+    ? `A single essay or project on ${tag} by Soumyo Dey: “${items[0].data.title}”.`
+    : `Essays and projects on ${tag} by Soumyo Dey: ${count} pieces, newest first, starting with “${items[0].data.title}”.`;
 ---
 
-<Layout title={`Posts tagged with ${tag}`}>
-  <div class="space-y-12">
-    <section class="reveal border-b border-[var(--color-border)] pb-12">
-      <h1 class="section-title">#{tag}</h1>
-      <p class="section-description mt-4">
+<Layout title={`Tagged “${tag}”`} description={description} noindex={items.length < 2}>
+  <header class="grid-12 gap-y-4 pb-14 pt-4 md:pb-20">
+    <p class="c-label mono">Topic</p>
+    <div class="c-body">
+      <h1 class="t-title">{tag}</h1>
+      <p class="t-lead mt-6 max-w-[36rem]">
         {items.length} {items.length === 1 ? 'item' : 'items'} tagged with this topic.
       </p>
-    </section>
+    </div>
+  </header>
 
-    <ContentBentoGrid animate items={items.map(toBentoItem)} />
-  </div>
+  <PostIndex items={items.map(toIndexItem)} headers={['Date', 'Title', 'Topics', 'Type']} />
 </Layout>

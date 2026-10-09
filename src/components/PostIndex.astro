@@ -1,0 +1,203 @@
+---
+import type { IndexItem } from "../utils/content";
+
+interface Props {
+	items: IndexItem[];
+	/** Column captions, left to right. */
+	headers?: [string, string, string, string];
+	showDescription?: boolean;
+	topicLimit?: number;
+}
+
+const {
+	items,
+	headers = ["Date", "Title", "Topics", "Read"],
+	showDescription = false,
+	topicLimit = 3,
+} = Astro.props;
+
+const isoDate = (date: string) => new Date(date).toISOString().slice(0, 10);
+---
+
+<div class="post-index">
+	<p class="post-index-head mono" aria-hidden="true">
+		<span>{headers[0]}</span>
+		<span>{headers[1]}</span>
+		<span>{headers[2]}</span>
+		<span class="post-index-end">{headers[3]}</span>
+	</p>
+	<ol>
+		{
+			items.map((item) => (
+				<li class="post-index-row">
+					<time class="post-index-date mono" datetime={isoDate(item.date)}>
+						{isoDate(item.date)}
+					</time>
+					<div class="post-index-title">
+						<h3>
+							<a href={item.href} data-astro-prefetch>{item.title}</a>
+						</h3>
+						{showDescription && item.description && (
+							<p>{item.description}</p>
+						)}
+					</div>
+					<p class="post-index-topics">
+						{item.tags?.slice(0, topicLimit).join(", ")}
+					</p>
+					<p class="post-index-end mono">{item.trailing}</p>
+				</li>
+			))
+		}
+	</ol>
+</div>
+
+<style>
+	.post-index-head {
+		display: none;
+	}
+
+	.post-index ol {
+		border-top: 1px solid var(--color-rule-strong);
+	}
+
+	.post-index-row {
+		position: relative;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		column-gap: 1rem;
+		row-gap: 0.25rem;
+		padding-block: 1.25rem;
+		border-bottom: 1px solid var(--color-rule);
+	}
+
+	.post-index-row:hover,
+	.post-index-row:focus-within {
+		background: var(--color-row-hover);
+	}
+
+	.post-index-row:focus-within {
+		outline: 2px solid var(--color-accent);
+		outline-offset: -2px;
+	}
+
+	.post-index-title {
+		grid-column: 1 / -1;
+		grid-row: 2;
+	}
+
+	.post-index-title h3 {
+		font-size: 1.4375rem;
+		font-weight: 500;
+		letter-spacing: -0.01em;
+		line-height: 1.2;
+	}
+
+	/* The whole row is the hit area. */
+	.post-index-title a::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+	}
+
+	.post-index-title a:focus-visible {
+		outline: none;
+	}
+
+	.post-index-row:hover .post-index-title a {
+		text-decoration: underline;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.25em;
+		text-decoration-color: var(--color-accent);
+	}
+
+	.post-index-title p {
+		margin-top: 0.5rem;
+		max-width: 38rem;
+		font-family: var(--font-serif);
+		font-size: 1.0625rem;
+		line-height: 1.5;
+		color: var(--color-text-secondary);
+	}
+
+	.post-index-date {
+		grid-row: 1;
+	}
+
+	.post-index-end {
+		grid-row: 1;
+		grid-column: 2;
+		text-align: right;
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		color: var(--color-text-muted);
+	}
+
+	.post-index-topics {
+		grid-column: 1 / -1;
+		grid-row: 3;
+		font-size: 0.875rem;
+		color: var(--color-text-muted);
+	}
+
+	.post-index-topics:empty {
+		display: none;
+	}
+
+	@media (min-width: 48rem) {
+		.post-index-head,
+		.post-index-row {
+			display: grid;
+			grid-template-columns: repeat(12, minmax(0, 1fr));
+			column-gap: 1.5rem;
+		}
+
+		.post-index-head {
+			padding: 0 0.75rem 0.625rem;
+			margin-inline: -0.75rem;
+		}
+
+		.post-index ol {
+			margin-inline: -0.75rem;
+		}
+
+		.post-index-head > .post-index-end {
+			padding-top: 0;
+		}
+
+		.post-index-head > :nth-child(1),
+		.post-index-date {
+			grid-column: 1 / span 3;
+			grid-row: 1;
+		}
+
+		.post-index-head > :nth-child(2),
+		.post-index-title {
+			grid-column: 4 / span 5;
+			grid-row: 1;
+		}
+
+		.post-index-head > :nth-child(3),
+		.post-index-topics {
+			grid-column: 9 / span 3;
+			grid-row: 1;
+		}
+
+		.post-index-head > .post-index-end,
+		.post-index-end {
+			grid-column: 12;
+			grid-row: 1;
+		}
+
+		.post-index-date,
+		.post-index-topics,
+		.post-index-end {
+			padding-top: 0.45rem;
+		}
+
+		.post-index-row {
+			padding-block: 1.5rem;
+			/* Row highlight bleeds into the gutters so text keeps its column. */
+			padding-inline: 0.75rem;
+		}
+	}
+</style>

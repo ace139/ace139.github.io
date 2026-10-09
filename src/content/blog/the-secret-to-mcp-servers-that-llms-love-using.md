@@ -1,7 +1,7 @@
 ---
 title: 'The Secret to MCP Servers That LLMs Love Using'
 subtitle: 'Why Product Thinking Beats Engineering Excellence in AI Tool Design'
-description: 'The Model Context Protocol revolution requires a shift from engineering to product design thinking—building experiences that transform how work gets done, not just tools that LLMs can use'
+description: "LLMs don't use APIs the way developers do. Why most MCP servers frustrate agents, and how product thinking builds tools they actually use well."
 date: '2025-06-08'
 heroImage: './the-secret-to-mcp-servers-hero.png'
 heroConfig:

@@ -1,43 +1,73 @@
 ---
-import { getImage } from 'astro:assets';
+import { Font, getImage } from 'astro:assets';
 import { ClientRouter } from 'astro:transitions';
 import Footer from '../components/Footer.astro';
 import Navigation from '../components/Navigation.astro';
 import PostHog from '../components/posthog.astro';
 import ScriptOptimizer from '../components/ScriptOptimizer.astro';
 import avatar from '../images/avatar.jpg';
-import '@fontsource/playfair-display';
-import '@fontsource/playfair-display/400-italic.css';
-import '@fontsource/playfair-display/700.css';
-import '@fontsource/roboto-slab';
-import '@fontsource/plus-jakarta-sans';
 import '../styles/globals.css';
 
 interface Props {
   title: string;
   description?: string;
+  /** Social card image (absolute or root-relative URL). */
+  image?: string;
+  /** Open Graph type: `article` adds publish date and tags. */
+  type?: 'website' | 'article';
+  publishedTime?: Date;
+  tags?: string[];
   analytics?: boolean;
   substack?: boolean;
   socialEmbed?: boolean;
+  /** Keep the page out of search results (still crawlable for links). */
+  noindex?: boolean;
 }
 
 const {
   title,
-  description = 'Tech, AI & data products, and the stories picked up along the way',
+  description = 'Soumyo Dey builds products across AI, data, and systems, and writes about what holds up in production.',
+  image,
+  type = 'website',
+  publishedTime,
+  tags = [],
   analytics = false,
   substack = false,
   socialEmbed = false,
+  noindex = false,
 } = Astro.props;
 
-// Generate optimized image for preloading on homepage
-const preloadImage = Astro.url.pathname === '/' ? await getImage({
-  src: avatar,
-  width: 128,
-  format: 'webp'
-}) : null;
+const siteName = 'Soumyo Dey';
+const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageSrc =
+  image ?? (await getImage({ src: avatar, width: 512, height: 512, format: 'jpeg' })).src;
+const ogImage = new URL(ogImageSrc, Astro.site);
+const isLargeCard = Boolean(image);
+
+const personSchema = {
+  '@type': 'Person',
+  name: siteName,
+  url: Astro.site?.href,
+  sameAs: ['https://x.com/soumyo', 'https://linkedin.com/in/soumyo-dey', 'https://github.com/ace139'],
+};
+const structuredData =
+  type === 'article'
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: title,
+        description,
+        image: ogImage.href,
+        datePublished: publishedTime?.toISOString(),
+        author: personSchema,
+        mainEntityOfPage: canonicalURL.href,
+        keywords: tags.join(', ') || undefined,
+      }
+    : { '@context': 'https://schema.org', ...personSchema };
 
 const navLinks = [
-  { href: '/blog', label: 'Blog' },
+  { href: '/blog', label: 'Writing' },
   { href: '/projects', label: 'Work' },
   { href: '/about', label: 'About' },
 ];
@@ -48,12 +78,35 @@ const navLinks = [
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#0a0d14" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#fafbfc" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0a0b" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f7f7f5" media="(prefers-color-scheme: light)" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
+    <title>{fullTitle}</title>
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="alternate" type="application/rss+xml" title="Soumyo Dey: writing" href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <!-- Social cards -->
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="en_US" />
+    {publishedTime && <meta property="article:published_time" content={publishedTime.toISOString()} />}
+    {type === 'article' && tags.map((tag) => <meta property="article:tag" content={tag} />)}
+    <meta name="twitter:card" content={isLargeCard ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:site" content="@soumyo" />
+    <meta name="twitter:creator" content="@soumyo" />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+
+    <!-- Self-hosted variable fonts with size-adjusted fallbacks (no layout shift on swap) -->
+    <Font cssVariable="--font-jakarta" preload />
+    <Font cssVariable="--font-newsreader" preload={[{ style: 'normal' }]} />
 
     <!-- Theme initialization (dark mode default, prevents FOUC) -->
     <script is:inline>
@@ -63,7 +116,7 @@ const navLinks = [
           if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
             return localStorage.getItem('theme');
           }
-          // Default to dark mode (Editorial Noir)
+          // Default to dark mode
           return 'dark';
         }
 
@@ -95,7 +148,7 @@ const navLinks = [
           typeof matchMedia === 'undefined' ||
           !matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (allowsMotion) {
-          document.documentElement.classList.add('gsap-ready');
+          document.documentElement.classList.add('motion-ok');
         }
       })();
     </script>
@@ -117,66 +170,29 @@ const navLinks = [
       }
       /* Prevent FOUC */
       html:not(.light) body {
-        background: #0a0d14;
-        color: #f0f2f7;
+        background: #0a0a0b;
+        color: #f3f3f1;
       }
       html.light body {
-        background: #fafbfc;
-        color: #111827;
+        background: #f7f7f5;
+        color: #0a0a0b;
       }
     </style>
-
-    <!-- Preload profile image on homepage -->
-    {preloadImage && (
-      <link
-        rel="preload"
-        fetchpriority="high"
-        as="image"
-        type="image/webp"
-        href={preloadImage.src}
-      />
-    )}
 
     <ScriptOptimizer analytics={analytics} substack={substack} socialEmbed={socialEmbed} />
     <PostHog />
     <ClientRouter />
   </head>
 
-  <body class="min-h-screen bg-[var(--color-bg-dark)] font-sans text-[var(--color-text-dark)] antialiased transition-colors duration-300">
+  <body class="min-h-screen bg-[var(--color-bg)] font-sans text-[var(--color-text)] antialiased">
     <!-- Skip to content (first focusable element) -->
     <a href="#main-content" class="skip-link">Skip to content</a>
-
-    <!-- Ambient glow effect -->
-    <div
-      class="pointer-events-none fixed inset-0 z-0"
-      data-ambient
-      aria-hidden="true"
-    >
-      <!-- Top glow (rose accent) -->
-      <div
-        class="absolute -top-1/2 left-1/4 h-[800px] w-[800px] rounded-full opacity-30 blur-[80px]"
-        style="background: radial-gradient(circle, rgba(244, 63, 94, 0.14) 0%, transparent 70%);"
-      ></div>
-      <!-- Bottom right glow (warm amber) -->
-      <div
-        class="absolute -bottom-1/4 right-0 h-[600px] w-[600px] rounded-full opacity-20 blur-[72px]"
-        style="background: radial-gradient(circle, rgba(245, 158, 11, 0.09) 0%, transparent 70%);"
-      ></div>
-    </div>
-
-    <!-- Noise texture overlay -->
-    <div
-      class="pointer-events-none fixed inset-0 z-[100] opacity-[0.015] mix-blend-overlay"
-      data-ambient
-      aria-hidden="true"
-      style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');"
-    ></div>
 
     <Navigation navLinks={navLinks} />
 
     <!-- Main Content -->
-    <main id="main-content" tabindex="-1" class="relative z-10 focus:outline-none">
-      <div class="mx-auto max-w-6xl px-4 pt-24 pb-16 sm:px-6 lg:px-8">
+    <main id="main-content" tabindex="-1" class="focus:outline-none">
+      <div class="wrap pt-24 pb-16">
         <slot />
       </div>
     </main>
@@ -297,146 +313,5 @@ const navLinks = [
       document.addEventListener('astro:page-load', setupThemeToggle);
     </script>
 
-    <script>
-      // GSAP and ScrollTrigger setup
-      import { animateFadeUp, animateStaggerGroup, cleanupAnimations, initGSAP, prefersReducedMotion } from '../scripts/gsap-setup';
-
-      function setupAnimations() {
-        initGSAP();
-
-        // Animate reveal elements if not using reduced motion
-        if (!prefersReducedMotion()) {
-          // Fade up animations for elements with .gsap-fade-up class
-          const fadeUpElements = document.querySelectorAll('.gsap-fade-up');
-          if (fadeUpElements.length > 0) {
-            animateFadeUp(fadeUpElements, { stagger: 0.1 });
-          }
-
-          // Stagger animations for card grids
-          const cardGrids = document.querySelectorAll('[data-animate-stagger]');
-          cardGrids.forEach((grid) => {
-            animateStaggerGroup(grid, '[data-animate-item]', { stagger: 0.15 });
-          });
-        }
-      }
-
-      // Initial load
-      setupAnimations();
-
-      // View Transitions
-      document.addEventListener('astro:page-load', () => {
-        cleanupAnimations();
-        setupAnimations();
-      });
-
-      // Cleanup on navigation
-      document.addEventListener('astro:before-swap', cleanupAnimations);
-    </script>
-
-    <script>
-      // Scroll reveal fallback for non-GSAP elements
-      function setupScrollReveal() {
-        const observerOptions = {
-          root: null,
-          rootMargin: '0px',
-          threshold: 0.1
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('reveal-visible');
-              observer.unobserve(entry.target);
-            }
-          });
-        }, observerOptions);
-
-        document.querySelectorAll('.reveal').forEach(el => {
-          observer.observe(el);
-        });
-      }
-
-      setupScrollReveal();
-      document.addEventListener('astro:page-load', setupScrollReveal);
-    </script>
   </body>
 </html>
-
-<style is:global>
-  /* Nav backdrop - dark mode default */
-  #nav-backdrop {
-    background: linear-gradient(180deg, rgba(10, 13, 20, 0.95) 0%, rgba(10, 13, 20, 0.8) 100%);
-  }
-
-  /* Light mode body overrides */
-  html.light body {
-    background: var(--color-bg-light);
-    color: var(--color-text-light);
-  }
-
-  /* Light mode nav */
-  html.light #main-nav {
-    border-color: var(--color-border-light);
-  }
-
-  html.light #nav-backdrop {
-    background: linear-gradient(180deg, rgba(250, 251, 252, 0.95) 0%, rgba(250, 251, 252, 0.8) 100%);
-  }
-
-  html.light #main-nav a {
-    color: var(--color-muted-light);
-  }
-
-  html.light #main-nav a:hover {
-    color: var(--color-text-light);
-  }
-
-  html.light #main-nav a[href="/"] {
-    color: var(--color-text-light);
-  }
-
-  html.light #main-nav a[href="/"]:hover {
-    color: var(--color-primary-light);
-  }
-
-  html.light #theme-toggle,
-  html.light #menu-toggle {
-    border-color: var(--color-border-light);
-    color: var(--color-muted-light);
-  }
-
-  html.light #theme-toggle:hover,
-  html.light #menu-toggle:hover {
-    border-color: var(--color-primary-light);
-    color: var(--color-primary-light);
-  }
-
-  /* Light mode ambient glow - more subtle */
-  html.light .pointer-events-none.fixed.inset-0.z-0 > div {
-    /* biome-ignore lint/complexity/noImportantStyles: overrides the inline opacity set on the glow element by GSAP/utility classes */
-    opacity: 0.1 !important;
-  }
-
-  /* Light mode footer */
-  html.light footer {
-    border-color: var(--color-border-light);
-  }
-
-  html.light footer p {
-    color: var(--color-text-secondary-light);
-  }
-
-  /* biome-ignore lint/style/noDescendingSpecificity: footer links are disjoint from the higher-specificity #main-nav link rules above — no real cascade conflict */
-  html.light footer a {
-    color: var(--color-text-secondary-light);
-  }
-
-  /* biome-ignore lint/style/noDescendingSpecificity: footer links are disjoint from the higher-specificity #main-nav link rules above — no real cascade conflict */
-  html.light footer a:hover {
-    color: var(--color-primary-light);
-  }
-
-  html.light footer .text-xs.uppercase {
-    color: var(--color-muted-light);
-  }
-</style>

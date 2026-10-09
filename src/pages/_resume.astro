@@ -145,78 +145,60 @@ const skills = [
 ];
 ---
 
-<Layout title="Resume | Soumyo Dey">
-  <div class="space-y-12">
-    <div class="mx-auto max-w-4xl space-y-10 px-4 sm:px-6 lg:px-8">
-      <header class="reveal rounded-[28px] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 sm:p-8 shadow-card">
-        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h1 class="text-3xl sm:text-4xl font-serif font-semibold text-[var(--color-text)]">Soumyo Dey</h1>
-            <p class="mt-2 text-[var(--color-text-muted)]">Product leader · AI strategist · Storyteller of delightful experiences</p>
-          </div>
-          <a
-            href="/SoumyoDey_Resume.pdf"
-            class="inline-flex items-center justify-center rounded-full bg-[var(--color-primary)] px-6 py-3 text-base font-semibold text-white shadow-button transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:bg-[var(--color-primary-hover)] hover:shadow-[0_20px_40px_rgba(244,63,94,0.4)]"
-            download
-          >
-            Download PDF
-          </a>
-        </div>
-      </header>
-
-      <section class="reveal space-y-6 rounded-[28px] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 sm:p-8 shadow-card">
-        <h2 class="text-2xl sm:text-3xl font-serif font-semibold text-[var(--color-text)]">Experience</h2>
-        <div class="space-y-6 sm:space-y-8">
-          {
-            experience.map((job) => (
-              <div class="relative rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-4 sm:p-6 shadow-card">
-                <div class="flex flex-col gap-2">
-                  <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-text-muted)]">{job.period}</p>
-                    <h3 class="text-lg sm:text-xl font-semibold text-[var(--color-text)]">{job.title}</h3>
-                    <p class="text-[var(--color-primary)] text-sm sm:text-base">{job.company} · {job.location}</p>
-                  </div>
-                </div>
-                <p class="mt-4 text-[var(--color-text-muted)] text-sm sm:text-base">{job.description}</p>
-                <div class="mt-4 flex flex-wrap gap-2">
-                  {job.skills.map((skill) => (
-                    <span class="rounded-full border border-[var(--color-border)] px-2 sm:px-3 py-1 text-xs sm:text-sm text-[var(--color-text-muted)]">
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))
-          }
-        </div>
-      </section>
-
-      <section class="reveal rounded-[28px] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 sm:p-8 shadow-card">
-        <h2 class="text-2xl sm:text-3xl font-serif font-semibold text-[var(--color-text)]">Education</h2>
-        <div class="mt-6 space-y-4 sm:space-y-6">
-          {
-            education.map((edu) => (
-              <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] p-4 sm:p-6">
-                <h3 class="text-lg sm:text-xl font-semibold text-[var(--color-text)]">{edu.degree}</h3>
-                <p class="text-[var(--color-text-muted)] text-sm sm:text-base">{edu.school} · {edu.period}</p>
-              </div>
-            ))
-          }
-        </div>
-      </section>
-
-      <section class="reveal rounded-[28px] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 sm:p-8 shadow-card">
-        <h2 class="text-2xl sm:text-3xl font-serif font-semibold text-[var(--color-text)]">Skills</h2>
-        <div class="mt-6 flex flex-wrap gap-2">
-          {
-            skills.map((skill) => (
-              <span class="rounded-full border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-2 sm:px-3 py-1 text-xs sm:text-sm text-[var(--color-text-muted)]">
-                {skill}
-              </span>
-            ))
-          }
-        </div>
-      </section>
+<Layout
+  title="Résumé"
+  description="Résumé of Soumyo Dey: product leadership at Ather Energy, earlier data science and startup roles, and a B.Tech in Computer Science and Engineering."
+>
+  <header class="grid-12 gap-y-4 pb-14 pt-4 md:pb-20">
+    <p class="c-label mono">Résumé</p>
+    <div class="c-body">
+      <h1 class="t-title">Soumyo Dey</h1>
+      <p class="t-lead mt-6 max-w-[36rem]">Product leader · AI strategist · Storyteller of delightful experiences</p>
     </div>
-  </div>
+  </header>
+
+  <section class="band grid-12 gap-y-6" aria-labelledby="experience-title">
+    <p class="c-label mono sec-num">Experience</p>
+    <div class="c-body">
+      <h2 id="experience-title" class="t-heading">Experience</h2>
+      <ol class="mt-10 border-t border-[var(--color-rule-strong)]">
+        {
+          experience.map((job) => (
+            <li class="border-b border-[var(--color-rule)] py-6">
+              <p class="mono">{job.period}</p>
+              <h3 class="mt-2 text-xl font-semibold">{job.title}</h3>
+              <p class="mt-1 text-[var(--color-text-secondary)]">{job.company} · {job.location}</p>
+              <p class="mt-4 text-[var(--color-text-muted)]">{job.description}</p>
+              <p class="mt-4 text-sm text-[var(--color-text-muted)]">{job.skills.join(', ')}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="band grid-12 gap-y-6" aria-labelledby="education-title">
+    <p class="c-label mono sec-num">Education</p>
+    <div class="c-body">
+      <h2 id="education-title" class="t-heading">Education</h2>
+      <ol class="mt-10 border-t border-[var(--color-rule-strong)]">
+        {
+          education.map((edu) => (
+            <li class="border-b border-[var(--color-rule)] py-6">
+              <h3 class="text-xl font-semibold">{edu.degree}</h3>
+              <p class="mt-1 text-[var(--color-text-secondary)]">{edu.school} · {edu.period}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="band grid-12 gap-y-6" aria-labelledby="skills-title">
+    <p class="c-label mono sec-num">Skills</p>
+    <div class="c-body">
+      <h2 id="skills-title" class="t-heading">Skills</h2>
+      <p class="mt-6 max-w-[38rem] text-[var(--color-text-secondary)]">{skills.join(', ')}</p>
+    </div>
+  </section>
 </Layout>

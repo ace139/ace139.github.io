@@ -1,344 +1,345 @@
 ---
-
-
-
 import { Picture } from 'astro:assets';
 import { getCollection } from 'astro:content';
-import ContentBentoGrid from '../components/ContentBentoGrid.astro';
-import avatar from '../images/avatar.jpg';
+import PostIndex from '../components/PostIndex.astro';
+import { socials } from '../config/socials';
+// Tight black-and-white crop of avatar.jpg, made to sit in the monochrome grid.
+import avatar from '../images/avatar-portrait.jpg';
 import Layout from '../layouts/Layout.astro';
-import { isPublished, sortByDateDesc, toBentoItem } from '../utils/content';
+import { isPublished, sortByDateDesc, toIndexItem } from '../utils/content';
 
-// Get latest blog posts (excluding drafts)
 const allPosts = (await getCollection('blog', isPublished)).sort(sortByDateDesc);
-const latestPosts = allPosts.slice(0, 3);
+const [latestPost, ...olderPosts] = allPosts;
+const morePosts = olderPosts.slice(0, 3);
 
-// Get projects if available (excluding drafts)
 const allProjects = (await getCollection('projects', isPublished).catch(() => [])).sort(sortByDateDesc);
 const featuredProjects = allProjects.slice(0, 3);
+
+const isoDate = (date: string) => new Date(date).toISOString().slice(0, 10);
+
+// The track record, newest first. Each line is a claim the work can back up.
+const record = [
+  {
+    when: 'Now',
+    where: 'Oogway Labs',
+    href: 'https://oogwaylabs.com/',
+    role: 'Founder & CEO',
+    what: 'An AI consulting and engineering firm. We build the systems, not the slide deck.',
+  },
+  {
+    when: 'Before',
+    where: 'Cornet Health',
+    role: 'Co-founder & CTO',
+    what: 'Voice-first AI for clinicians, where 95% transcription accuracy turned out to be the easy part.',
+  },
+  {
+    when: 'Before that',
+    where: 'Ather Energy',
+    role: 'Connected Platforms, Data & AI',
+    what: 'Took early experiments to infrastructure behind 500,000+ electric scooters on Indian roads.',
+  },
+  {
+    when: 'Earlier',
+    where: 'E-commerce, retail & supply chain',
+    role: 'Data science & product',
+    what: 'Data platforms that made operational decisions faster and a little less argumentative.',
+  },
+];
+
 ---
 
 <Layout title="Soumyo Dey">
-  <!-- Hero Section -->
-  <section class="relative -mx-4 -mt-24 min-h-screen overflow-hidden px-4 pt-24 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-    <!-- Hero background glow -->
-    <div class="pointer-events-none absolute inset-0 overflow-hidden" data-ambient aria-hidden="true">
-      <div
-        class="absolute left-1/2 top-1/4 h-[600px] w-[600px] -translate-x-1/2 rounded-full opacity-40 blur-[80px]"
-        style="background: radial-gradient(circle, rgba(244, 63, 94, 0.2) 0%, transparent 70%);"
-      ></div>
-      <div
-        class="absolute bottom-0 right-0 h-[400px] w-[400px] rounded-full opacity-30 blur-[64px]"
-        style="background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, transparent 70%);"
-      ></div>
-    </div>
-
-    <div class="relative flex min-h-[calc(100vh-6rem)] flex-col items-center justify-center py-20">
-      <!-- Avatar with glow ring -->
-      <div class="gsap-fade-up relative mb-10">
-        <div class="absolute -inset-4 rounded-full bg-gradient-to-r from-[var(--color-accent)] via-[var(--color-coral)] to-[var(--color-accent)] opacity-20 blur-2xl"></div>
-        <div class="relative h-32 w-32 overflow-hidden rounded-full border-2 border-[var(--color-border)] shadow-lg">
+  <!-- Hero: identity in the label column, name and intro from column 4 -->
+  <section class="hero" aria-label="Introduction">
+    <div class="grid-12 hero-intro">
+      <div class="c-label hero-id">
+        <div class="hero-avatar">
           <Picture
             src={avatar}
-            widths={[128, 256]}
-            sizes="128px"
+            widths={[80, 160]}
+            sizes="80px"
             formats={['avif', 'webp', 'jpeg']}
-            alt="Soumyo Dey"
+            alt=""
             loading="eager"
             fetchpriority="high"
             class="h-full w-full object-cover"
           />
         </div>
+        <p class="mono">Builder, systems thinker, occasional essayist</p>
       </div>
 
-      <!-- Hero title -->
-      <div class="mb-6 text-center">
-        <h1
-          id="hero-title"
-          class="display-heading text-hero font-bold tracking-tight text-balance text-[var(--color-text)]"
-          style="line-height: 1;"
-        >
-          <span class="gsap-fade-up inline-block">Soumyo</span>
-          <span class="gsap-fade-up inline-block">Dey</span>
-        </h1>
-      </div>
+      <div class="c-body">
+        <h1 class="t-display hero-name">Soumyo Dey<span class="hero-stop" aria-hidden="true">.</span></h1>
+        <p class="t-lead mt-6 max-w-[40rem] text-[var(--color-text)]">
+          A decade of building systems that have to work outside the demo: connected
+          platforms for half a million electric scooters, voice AI in clinics, data
+          platforms for retail. I write about what held up, and what broke at 3am.
+        </p>
 
-      <!-- Tagline -->
-      <p
-        class="gsap-fade-up mx-auto mb-12 max-w-2xl text-pretty text-center text-lg leading-relaxed text-[var(--color-text-secondary)] sm:text-xl"
-      >
-        Building products where engineering, intelligence, and the real world meet.
-        A decade of shipping things that <span class="text-[var(--color-accent)]">matter</span>, and writing about what holds up.
+        <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+          <a href="/blog" class="btn btn-primary" data-astro-prefetch>
+            Read the writing
+            <span aria-hidden="true">→</span>
+          </a>
+          <a
+            href="https://stochasticmusings.substack.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="link"
+          >
+            Get new essays by email
+          </a>
+        </div>
+
+        <ul class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-[0.9375rem]" aria-label="Elsewhere">
+          {socials.filter((s) => s.platform !== 'email').map((social) => (
+            <li>
+              <a href={social.url} target="_blank" rel="noopener noreferrer" class="link">{social.label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest essay -->
+  {latestPost && (
+    <section class="band grid-12 gap-y-4" aria-label="Latest essay">
+      <p class="c-label mono">
+        Latest essay · <time datetime={isoDate(latestPost.data.date)}>{isoDate(latestPost.data.date)}</time>
       </p>
+      <a href={`/blog/${latestPost.id}`} class="latest c-body group" data-astro-prefetch>
+        <h2 class="t-title latest-title">{latestPost.data.title}</h2>
+        {latestPost.data.subtitle && (
+          <p class="t-lead mt-6 max-w-[40rem]">{latestPost.data.subtitle}</p>
+        )}
+        {latestPost.data.description && (
+          <p class="mt-5 max-w-[38rem] text-[var(--color-text-muted)]">{latestPost.data.description}</p>
+        )}
+        <span class="link mt-8 inline-block">Read it<span aria-hidden="true"> →</span></span>
+      </a>
+    </section>
+  )}
 
-      <!-- CTAs -->
-      <div class="gsap-fade-up flex flex-col gap-4 sm:flex-row">
-        <a
-          href="/projects"
-          class="btn btn-primary group"
-          data-astro-prefetch
-        >
-          View my work
-          <svg class="h-4 w-4 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-          </svg>
-        </a>
-        <a
-          href="/blog"
-          class="btn btn-secondary"
-          data-astro-prefetch
-        >
-          Read my writing
-        </a>
-      </div>
-
-      <!-- Social Links -->
-      <div class="gsap-fade-up mt-10 flex items-center gap-4">
-        <span class="text-xs uppercase tracking-widest text-[var(--color-text-muted)]">Connect</span>
-        <div class="flex gap-3">
-          <a
-            href="https://x.com/soumyo"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-text-muted)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] hover:scale-110"
-            aria-label="Follow on X (Twitter)"
-          >
-            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-            </svg>
-          </a>
-          <a
-            href="https://linkedin.com/in/soumyo-dey"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-text-muted)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] hover:scale-110"
-            aria-label="Connect on LinkedIn"
-          >
-            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-            </svg>
-          </a>
-          <a
-            href="https://github.com/ace139"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-text-muted)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] hover:scale-110"
-            aria-label="View GitHub profile"
-          >
-            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
-            </svg>
-          </a>
-        </div>
-      </div>
-
-      <!-- Scroll indicator -->
-      <div class="gsap-fade-up absolute bottom-8 left-1/2 -translate-x-1/2">
-        <div class="flex flex-col items-center gap-2 text-[var(--color-text-muted)]">
-          <span class="text-xs uppercase tracking-widest">Scroll</span>
-          <div class="h-8 w-px animate-pulse bg-gradient-to-b from-[var(--color-muted-dark)] to-transparent"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- About Preview Section -->
-  <section class="section-spacing">
-    <div class="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
-      <!-- Text content -->
-      <div class="reveal">
-        <div class="section-header">
-          <h2 class="section-title">Building at the edge of what's possible</h2>
-        </div>
-        <div class="space-y-4 text-[var(--color-text-secondary)]">
-          <p>
-            I've spent the past decade building products that sit at the intersection of technology, data, and human insight.
-            From early-stage startups to scaled platforms, I've learned that the best products emerge from deep
-            understanding of users, systems, and the messy reality between them.
-          </p>
-          <p>
-            Currently, I'm exploring how AI is reshaping the way we work, create, and make decisions.
-            I write about product intuition, engineering systems, and signals from the AI landscape.
-          </p>
-        </div>
-        <div class="mt-8 flex flex-wrap items-center gap-6">
-          <a
-            href="/about"
-            class="group inline-flex items-center gap-2 text-sm font-medium uppercase tracking-wider text-[var(--color-accent)] transition-colors hover:text-[var(--color-accent-glow)]"
-            data-astro-prefetch
-          >
-            Learn more about me
-            <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
-          </a>
-          <div class="flex items-center gap-3">
-            <span class="text-xs uppercase tracking-widest text-[var(--color-text-muted)]">Follow</span>
-            <a
-              href="https://x.com/soumyo"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-text-muted)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-              aria-label="Follow on X"
-            >
-              <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-              </svg>
-            </a>
-            <a
-              href="https://linkedin.com/in/soumyo-dey"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-text-muted)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-              aria-label="Connect on LinkedIn"
-            >
-              <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-              </svg>
-            </a>
-            <a
-              href="https://github.com/ace139"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-text-muted)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-              aria-label="View GitHub"
-            >
-              <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- At a glance -->
-      <div class="reveal">
-        <dl class="card-gradient divide-y divide-[var(--color-border)]/60 p-8" aria-label="At a glance">
-          <div class="flex items-baseline justify-between gap-6 py-4 first:pt-0 last:pb-0">
-            <dt class="text-sm text-[var(--color-text-secondary)]">Experience</dt>
-            <dd class="text-right text-xl font-semibold text-[var(--color-text)]">10 years</dd>
-          </div>
-          <div class="flex items-baseline justify-between gap-6 py-4 first:pt-0 last:pb-0">
-            <dt class="text-sm text-[var(--color-text-secondary)]">Focus</dt>
-            <dd class="text-right text-xl font-semibold text-[var(--color-text)]">AI, ML &amp; data</dd>
-          </div>
-          <div class="flex items-baseline justify-between gap-6 py-4 first:pt-0 last:pb-0">
-            <dt class="text-sm text-[var(--color-text-secondary)]">Trajectory</dt>
-            <dd class="text-right text-xl font-semibold text-[var(--color-text)]">0&thinsp;→&thinsp;1 to scale</dd>
-          </div>
-          <div class="flex items-baseline justify-between gap-6 py-4 first:pt-0 last:pb-0">
-            <dt class="text-sm text-[var(--color-text-secondary)]">Writing</dt>
-            <dd class="text-right text-xl font-semibold text-[var(--color-text)]">Stochastic Musings</dd>
-          </div>
-        </dl>
-      </div>
-    </div>
-  </section>
-
-  <!-- Featured Work Section -->
-  {featuredProjects.length > 0 && (
-    <section class="section-spacing border-t border-[var(--color-border)]/30">
-      <div class="section-header reveal">
-        <h2 class="section-title">Things I've built</h2>
-        <p class="section-description">
-          A selection of projects that showcase my approach to product and technology.
+  <!-- Track record: receipts, not metrics -->
+  <section class="band" aria-labelledby="record-title">
+    <div class="grid-12 gap-y-4">
+      <p class="c-label mono sec-num">Record</p>
+      <div class="c-body">
+        <h2 id="record-title" class="t-heading">Where the work has been</h2>
+        <p class="mt-4 max-w-[34rem] text-[var(--color-text-secondary)]">
+          Startups and scaled platforms, mostly in places where software meets
+          hardware, clinics, or warehouses, and has to behave.
         </p>
       </div>
+    </div>
 
-      <ContentBentoGrid
-        class="mt-12"
-        animate
-        items={featuredProjects.map(toBentoItem)}
-      />
+    <ol class="record mt-12">
+      {record.map((item) => (
+        <li class="record-row">
+          <p class="record-when mono">{item.when}</p>
+          <h3 class="record-where">
+            {item.href ? (
+              <a href={item.href} target="_blank" rel="noopener noreferrer" class="link">{item.where}</a>
+            ) : (
+              item.where
+            )}
+            <span class="record-role">{item.role}</span>
+          </h3>
+          <p class="record-what">{item.what}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
 
-      <div class="mt-12 text-center reveal">
-        <a
-          href="/projects"
-          class="btn btn-secondary"
-          data-astro-prefetch
-        >
-          View all work
-        </a>
+  <!-- Built work (only when there are real write-ups to show) -->
+  {featuredProjects.length > 0 && (
+    <section class="band">
+      <div class="grid-12 gap-y-4">
+        <p class="c-label mono sec-num">Work</p>
+        <h2 class="c-body t-heading">Things I've built</h2>
+      </div>
+      <div class="mt-12">
+        <PostIndex items={featuredProjects.map(toIndexItem)} headers={['Date', 'Project', 'Topics', 'Type']} />
+      </div>
+      <div class="grid-12 mt-8">
+        <p class="c-body"><a href="/projects" class="link" data-astro-prefetch>All work</a></p>
       </div>
     </section>
   )}
 
-  <!-- Field Notes (Blog) Section -->
-  <section class="section-spacing border-t border-[var(--color-border)]/30">
-    <div class="section-header reveal">
-      <h2 class="section-title">Recent writing</h2>
-      <p class="section-description">
-        Observations, frameworks, and lessons from building products.
-      </p>
-    </div>
-
-    <ContentBentoGrid
-      class="mt-12"
-      animate
-      items={latestPosts.map(toBentoItem)}
-    />
-
-    <div class="mt-12 text-center reveal">
-      <a
-        href="/blog"
-        class="btn btn-secondary"
-        data-astro-prefetch
-      >
-        Read all posts
-      </a>
-    </div>
-  </section>
-
-  <!-- Newsletter Section -->
-  <section
-    id="newsletter-section"
-    class="section-spacing border-t border-[var(--color-border)]/30"
-  >
-    <div class="reveal mx-auto max-w-2xl text-center">
-      <div class="card-gradient relative overflow-hidden p-8 sm:p-12">
-        <!-- Gradient overlay -->
-        <div
-          class="pointer-events-none absolute inset-0 opacity-50"
-          style="background: radial-gradient(ellipse at top, rgba(244, 63, 94, 0.1) 0%, transparent 60%);"
-        ></div>
-
-        <div class="relative">
-          <h2 class="display-heading mb-4 text-3xl text-[var(--color-text)] sm:text-4xl">
-            Stochastic Musings
-          </h2>
-          <p class="mx-auto mb-8 max-w-md text-[var(--color-text-secondary)]">
-            Notes on product intuition, engineering systems, and signals from the AI landscape.
-            Exploring the messy reality of how intelligence meets execution.
+  <!-- More writing -->
+  {morePosts.length > 0 && (
+    <section class="band">
+      <div class="grid-12 gap-y-4">
+        <p class="c-label mono sec-num">Writing</p>
+        <div class="c-body">
+          <h2 class="t-heading">More writing</h2>
+          <p class="mt-4 max-w-[34rem] text-[var(--color-text-secondary)]">
+            On AI systems, product judgment, and the distance between the
+            benchmark and the real thing.
           </p>
-
-          <div class="flex flex-col items-center gap-4">
-            <a
-              href="https://stochasticmusings.substack.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn btn-primary group"
-            >
-              Subscribe for free
-              <svg class="h-4 w-4 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
-            </a>
-            <p class="text-sm text-[var(--color-text-muted)]">
-              Join the journey · No spam, ever.
-            </p>
-          </div>
         </div>
+      </div>
+      <div class="mt-12">
+        <PostIndex items={morePosts.map(toIndexItem)} />
+      </div>
+      <div class="grid-12 mt-8">
+        <p class="c-body"><a href="/blog" class="link" data-astro-prefetch>All essays<span aria-hidden="true"> →</span></a></p>
+      </div>
+    </section>
+  )}
+
+  <!-- Newsletter -->
+  <section id="newsletter-section" class="band grid-12 gap-y-4">
+    <p class="c-label mono sec-num">Newsletter</p>
+    <div class="c-body">
+      <h2 class="t-heading">Stochastic Musings</h2>
+      <p class="mt-4 max-w-[34rem] text-[var(--color-text-secondary)]">
+        New essays by email, sent when there's something worth saying rather
+        than on a schedule. Unsubscribe whenever; no hard feelings.
+      </p>
+      <div class="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
+        <a
+          href="https://stochasticmusings.substack.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-primary"
+        >
+          Subscribe on Substack
+        </a>
+        <a href="/rss.xml" class="link">or use RSS</a>
       </div>
     </div>
   </section>
 </Layout>
 
 <style>
-  /* Line clamp utility */
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+  .hero {
+    padding-top: clamp(2.5rem, 7vw, 6.5rem);
+    padding-bottom: clamp(3rem, 6vw, 5.5rem);
+  }
+
+  .hero-name {
+    margin-left: -0.03em;
+    color: var(--color-text);
+  }
+
+  /* The one deliberate graphic moment: the full stop in the accent colour */
+  .hero-stop {
+    color: var(--color-accent);
+  }
+
+  .hero-intro {
+    row-gap: 2rem;
+  }
+
+  /* Phones: portrait and tagline side by side above the name. Wide: the
+     portrait heads the label column, top-aligned with the name. */
+  .hero-id {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  @media (min-width: 48rem) {
+    .hero-id {
+      display: grid;
+      align-content: start;
+      max-width: 14rem;
+      padding-top: 0.35rem;
+    }
+  }
+
+  .hero-avatar {
+    flex: none;
+    width: 4rem;
+    height: 4rem;
     overflow: hidden;
+    border: 1px solid var(--color-rule-strong);
+  }
+
+  @media (min-width: 48rem) {
+    .hero-avatar {
+      width: 5rem;
+      height: 5rem;
+    }
+  }
+
+  .latest {
+    display: block;
+  }
+
+  .latest-title {
+    max-width: 17ch;
+  }
+
+  .latest:hover .latest-title {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-decoration-color: var(--color-accent);
+    text-underline-offset: 0.12em;
+  }
+
+  .latest:hover .link {
+    color: var(--color-accent);
+    text-decoration-color: var(--color-accent);
+    text-underline-offset: 0.4em;
+  }
+
+  .record {
+    border-top: 1px solid var(--color-rule-strong);
+  }
+
+  .record-row {
+    display: grid;
+    gap: 0.5rem;
+    padding-block: 1.5rem;
+    border-bottom: 1px solid var(--color-rule);
+  }
+
+  @media (min-width: 48rem) {
+    .record-row {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: 1.5rem;
+    }
+
+    .record-when {
+      grid-column: 1 / span 3;
+    }
+
+    .record-where {
+      grid-column: 4 / span 5;
+    }
+
+    .record-what {
+      grid-column: 9 / -1;
+    }
+  }
+
+  .record-when {
+    padding-top: 0.3rem;
+  }
+
+  .record-where {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .record-role {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    color: var(--color-text-muted);
+  }
+
+  .record-what {
+    padding-top: 0.2rem;
+    color: var(--color-text-secondary);
   }
 </style>

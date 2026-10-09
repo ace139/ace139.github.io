@@ -1,41 +1,63 @@
 ---
-
-
-
 interface Props {
 	tags: string[];
 	class?: string;
-	variant?: "default" | "scrim";
 	linked?: boolean;
-	hashPrefix?: boolean;
 	limit?: number;
 }
 
-const {
-	tags,
-	class: className = "",
-	variant = "default",
-	linked = true,
-	hashPrefix = true,
-	limit,
-} = Astro.props;
+const { tags, class: className = "", linked = true, limit } = Astro.props;
 
 const visibleTags = limit ? tags.slice(0, limit) : tags;
-const pillClass =
-	variant === "scrim" ? "pill pill-scrim text-xs" : "pill text-xs transition-all hover:-translate-y-0.5";
 ---
 
-<div class={`flex flex-wrap gap-2 ${className}`}>
+<!-- Topics are plain small text, comma-separated: no chips, no hashtags -->
+<ul class:list={["topics", className]}>
 	{
-		visibleTags.map((tag) => {
-			const label = hashPrefix ? `#${tag}` : tag;
-			return linked ? (
-				<a href={`/tags/${tag}`} class={pillClass}>
-					{label}
-				</a>
-			) : (
-				<span class={pillClass}>{label}</span>
-			);
-		})
+		visibleTags.map((tag) => (
+			<li>
+				{linked ? <a href={`/tags/${tag}`}>{tag}</a> : <span>{tag}</span>}
+			</li>
+		))
 	}
-</div>
+</ul>
+
+<style>
+	.topics {
+		display: flex;
+		flex-wrap: wrap;
+		column-gap: 0.5rem;
+		row-gap: 0;
+		font-size: 0.875rem;
+		line-height: 1.5;
+	}
+
+	/* Flex items drop the whitespace Astro leaves between the link and the
+	   comma, so the comma sits right after the word. */
+	.topics li {
+		display: inline-flex;
+		min-height: 24px;
+		align-items: center;
+	}
+
+	.topics li:not(:last-child)::after {
+		content: ",";
+		color: var(--color-text-muted);
+	}
+
+	.topics a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 24px;
+		text-decoration: underline;
+		text-decoration-thickness: 1px;
+		text-decoration-color: var(--color-rule-strong);
+		text-underline-offset: 0.25em;
+	}
+
+	.topics a:hover {
+		color: var(--color-accent);
+		text-decoration-color: var(--color-accent);
+		text-underline-offset: 0.4em;
+	}
+</style>

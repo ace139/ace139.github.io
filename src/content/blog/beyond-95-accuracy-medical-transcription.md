@@ -1,7 +1,7 @@
 ---
 title: 'Beyond 95% Accuracy'
 subtitle: "What I've Learned Building SoTA Production-Grade Medical Transcription"
-description: 'The engineering lessons from building voice agents for healthcare - where benchmarks fail, context hints unlock accuracy, and your production failures become your most valuable training data'
+description: "Whisper looked solved on benchmarks. Then doctors used it. What it took to make medical transcription hold up in noisy clinics and ORs."
 date: '2026-01-06'
 heroImage: './beyond-95-accuracy-medical-transcription-hero.png'
 heroConfig:

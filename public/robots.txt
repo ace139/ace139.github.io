@@ -1,8 +1,12 @@
 User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 Allow: /
 
-# LLM-friendly documentation
-# See https://llmstxt.org/
-llms.txt: https://soumyo.com/llms.txt
+# Content-Signal (https://contentsignals.org/):
+#   search   - building a search index and returning links/snippets: yes
+#   ai-input - using content as live input to AI answers (RAG, grounding, citations): yes
+#   ai-train - training or fine-tuning AI models: no
 
-Sitemap: https://soumyo.com/sitemap.xml
+# LLM-friendly site summary (https://llmstxt.org/): https://soumyo.com/llms.txt
+
+Sitemap: https://soumyo.com/sitemap-index.xml
