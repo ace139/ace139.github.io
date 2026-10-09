@@ -48,10 +48,8 @@ const record = [
 ---
 
 <Layout title="Soumyo Dey">
-  <!-- Hero: the name at full width, then everything starts on column 4 -->
+  <!-- Hero: identity in the label column, name and intro from column 4 -->
   <section class="hero" aria-label="Introduction">
-    <h1 class="t-display hero-name">Soumyo Dey<span class="hero-stop" aria-hidden="true"></span></h1>
-
     <div class="grid-12 hero-intro">
       <div class="c-label hero-id">
         <div class="hero-avatar">
@@ -70,7 +68,8 @@ const record = [
       </div>
 
       <div class="c-body">
-        <p class="t-lead max-w-[40rem] text-[var(--color-text)]">
+        <h1 class="t-display hero-name">Soumyo Dey<span class="hero-stop" aria-hidden="true">.</span></h1>
+        <p class="t-lead mt-6 max-w-[40rem] text-[var(--color-text)]">
           A decade of building systems that have to work outside the demo: connected
           platforms for half a million electric scooters, voice AI in clinics, data
           platforms for retail. I write about what held up, and what broke at 3am.
@@ -209,27 +208,21 @@ const record = [
 
 <style>
   .hero {
-    padding-top: clamp(1.5rem, 4vw, 4rem);
+    padding-top: clamp(2.5rem, 7vw, 6.5rem);
     padding-bottom: clamp(3rem, 6vw, 5.5rem);
   }
 
   .hero-name {
-    margin-top: 1rem;
-    margin-left: -0.04em;
+    margin-left: -0.03em;
     color: var(--color-text);
   }
 
-  /* The one deliberate graphic moment: a solid accent full stop */
+  /* The one deliberate graphic moment: the full stop in the accent colour */
   .hero-stop {
-    display: inline-block;
-    width: 0.14em;
-    height: 0.14em;
-    margin-left: 0.05em;
-    background: var(--color-accent);
+    color: var(--color-accent);
   }
 
   .hero-intro {
-    margin-top: clamp(2.5rem, 5vw, 4.5rem);
     row-gap: 2rem;
   }
 
@@ -306,8 +299,10 @@ const record = [
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
-    font-size: 1.375rem;
-    letter-spacing: -0.03em;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
   }
 
   .record-role {

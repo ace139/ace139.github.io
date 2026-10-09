@@ -105,6 +105,6 @@ Requests with `Accept: text/markdown` receive a Markdown version of the page; br
 ### Fonts
 
 Configured with Astro's Fonts API in `astro.config.mjs` (`fonts`), using the local provider pointed at the Latin variable files from `@fontsource-variable/*`. Astro emits the `@font-face` rules, preload links, and size-adjusted fallback faces; `<Font>` in Layout.astro exposes them as CSS variables that `globals.css` maps into the theme:
-- Playfair Display → `--font-playfair` → `--font-display` (display headings)
-- Plus Jakarta Sans → `--font-jakarta` → `--font-sans` (UI and headings)
-- Roboto Slab → `--font-roboto-slab` → `--font-serif` (article body)
+- Newsreader (weight axis, normal + italic) → `--font-newsreader` → `--font-display` and `--font-serif` (name, headings, article body)
+- Plus Jakarta Sans → `--font-jakarta` → `--font-sans` (UI only)
+- Metadata uses the system monospace stack (`--font-mono`), no download

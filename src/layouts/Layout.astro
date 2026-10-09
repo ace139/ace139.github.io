@@ -109,7 +109,7 @@ const navLinks = [
 
     <!-- Self-hosted variable fonts with size-adjusted fallbacks (no layout shift on swap) -->
     <Font cssVariable="--font-jakarta" preload />
-    <Font cssVariable="--font-source-serif" preload={type === 'article' ? [{ style: 'normal' }] : false} />
+    <Font cssVariable="--font-newsreader" preload={[{ style: 'normal' }]} />
 
     <!-- Theme initialization (dark mode default, prevents FOUC) -->
     <script is:inline>

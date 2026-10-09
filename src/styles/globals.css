@@ -1,24 +1,28 @@
 @import "tailwindcss";
 
 /* ==========================================================================
-   SWISS GRID: TECHNICAL PRECISION
-   A rational, International-Typographic-Style system. Near-monochrome, one
-   signal accent, hairline rules on an explicit 12-column grid. Labels live in
-   columns 1-3, content starts on column 4, on every page.
+   GRID + NOTEBOOK
+   Swiss structure, notebook voice. A rational 12-column grid with hairline
+   rules and mono labels (columns 1-3), carrying a calm serif for headings and
+   reading (column 4 onward), with sidenotes in the right margin of articles.
+   Near-monochrome with one signal accent.
    ========================================================================== */
 
 @theme {
 	/* Families (and size-adjusted fallbacks) come from Astro's Fonts API in
-	   astro.config.mjs. Metadata uses the system monospace stack: no download. */
+	   astro.config.mjs. Newsreader sets headings and reading; Plus Jakarta Sans
+	   is UI only; metadata uses the system monospace stack (no download). */
 	--font-sans: var(--font-jakarta);
-	--font-serif: var(--font-source-serif);
+	--font-serif: var(--font-newsreader);
+	--font-display: var(--font-newsreader);
 	--font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 
-	/* Type scale: very large display, small text, little in between */
-	--text-display: clamp(4.25rem, 16vw, 13rem);
-	--text-title: clamp(2.5rem, 6.5vw, 5.25rem);
-	--text-heading: clamp(1.75rem, 3.2vw, 2.75rem);
-	--text-lead: clamp(1.25rem, 1.2rem + 1vw, 1.75rem);
+	/* Type scale: a headline-sized name, not a poster */
+	--text-display: clamp(2.75rem, 1.9rem + 3.6vw, 4.75rem);
+	--text-title: clamp(2.25rem, 1.7rem + 2.4vw, 3.5rem);
+	--text-heading: clamp(1.625rem, 1.35rem + 1.2vw, 2.25rem);
+	--text-lead: clamp(1.25rem, 1.15rem + 0.45vw, 1.4375rem);
+	--text-prose: clamp(1.1875rem, 1.13rem + 0.25vw, 1.25rem);
 	--text-body: 1rem;
 	--text-small: 0.875rem;
 	--text-label: 0.8125rem;
@@ -107,11 +111,11 @@ main {
 	h4,
 	h5,
 	h6 {
-		font-family: var(--font-sans);
-		font-weight: 650;
-		letter-spacing: -0.03em;
+		font-family: var(--font-display);
+		font-weight: 500;
+		letter-spacing: -0.015em;
 		text-wrap: balance;
-		line-height: 1.08;
+		line-height: 1.12;
 	}
 
 	p {
@@ -213,30 +217,33 @@ main {
      ==================================================================== */
 
 	.t-display {
+		font-family: var(--font-display);
 		font-size: var(--text-display);
-		font-weight: 700;
-		letter-spacing: -0.065em;
-		line-height: 0.85;
+		font-weight: 400;
+		letter-spacing: -0.025em;
+		line-height: 1;
 	}
 
 	.t-title {
+		font-family: var(--font-display);
 		font-size: var(--text-title);
-		font-weight: 650;
-		letter-spacing: -0.05em;
-		line-height: 0.98;
+		font-weight: 400;
+		letter-spacing: -0.02em;
+		line-height: 1.05;
 	}
 
 	.t-heading {
+		font-family: var(--font-display);
 		font-size: var(--text-heading);
-		font-weight: 650;
-		letter-spacing: -0.035em;
-		line-height: 1.08;
+		font-weight: 500;
+		letter-spacing: -0.015em;
+		line-height: 1.12;
 	}
 
 	.t-lead {
+		font-family: var(--font-serif);
 		font-size: var(--text-lead);
-		letter-spacing: -0.015em;
-		line-height: 1.35;
+		line-height: 1.45;
 		color: var(--color-text-secondary);
 	}
 
@@ -338,24 +345,18 @@ main {
 
 	/* ====================================================================
      ARTICLE PROSE
-     Body copy is Source Serif 4: a calm text serif with sturdy details that
-     holds up at 18px, set against the sans for headings and UI.
+     Newsreader at 19-20px, line-height 1.6, a ~65ch measure. Headings in the
+     same serif; mono section numbers and hairlines keep the grid's voice.
      ==================================================================== */
 
 	.prose {
 		font-family: var(--font-serif);
-		font-size: 1.0625rem;
-		line-height: 1.7;
+		font-size: var(--text-prose);
+		line-height: 1.6;
 		color: var(--color-text);
 		text-wrap: pretty;
-		max-width: 41rem;
+		max-width: 65ch;
 		counter-reset: h2;
-	}
-
-	@media (min-width: 48rem) {
-		.prose {
-			font-size: 1.125rem;
-		}
 	}
 
 	.prose > * + * {
@@ -366,7 +367,7 @@ main {
 	.prose h2,
 	.prose h3,
 	.prose h4 {
-		font-family: var(--font-sans);
+		font-family: var(--font-display);
 		color: var(--color-text);
 		line-height: 1.15;
 		text-wrap: balance;
@@ -380,9 +381,9 @@ main {
 		margin-top: 3.25em;
 		padding-top: 0.9rem;
 		border-top: 1px solid var(--color-rule-strong);
-		font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.125rem);
-		font-weight: 650;
-		letter-spacing: -0.035em;
+		font-size: clamp(1.625rem, 1.4rem + 0.9vw, 2.125rem);
+		font-weight: 500;
+		letter-spacing: -0.015em;
 	}
 
 	.prose h2::before {
@@ -405,15 +406,16 @@ main {
 
 	.prose h3 {
 		margin-top: 2.25em;
-		font-size: 1.3125rem;
-		font-weight: 650;
-		letter-spacing: -0.025em;
+		font-size: clamp(1.3125rem, 1.25rem + 0.3vw, 1.5rem);
+		font-weight: 500;
+		font-style: italic;
+		letter-spacing: -0.01em;
 	}
 
 	.prose h4 {
 		margin-top: 2em;
-		font-size: 1.0625rem;
-		font-weight: 650;
+		font-size: 1.125rem;
+		font-weight: 600;
 	}
 
 	.prose a {
@@ -431,21 +433,64 @@ main {
 	}
 
 	.prose strong {
-		font-weight: 650;
+		font-weight: 600;
 	}
 
 	.prose em {
 		font-style: italic;
 	}
 
-	.prose blockquote {
-		border-left: 2px solid var(--color-text);
-		padding-left: 1.25rem;
+	/* Blockquotes and pull quotes: italic serif between hairlines. */
+	.prose blockquote,
+	.prose .pull-quote {
+		margin-block: 2.25rem;
+		padding-block: 1.25rem;
+		border-block: 1px solid var(--color-rule-strong);
+		font-size: clamp(1.3125rem, 1.25rem + 0.3vw, 1.5rem);
 		font-style: italic;
+		line-height: 1.4;
+		hanging-punctuation: first;
 	}
 
 	.prose blockquote p {
 		margin: 0;
+	}
+
+	.prose blockquote p + p {
+		margin-top: 0.75em;
+	}
+
+	/* Sidenotes: margin notes for asides. Write them in markdown as raw HTML,
+	   just before the paragraph they annotate:
+
+	     <aside class="sidenote">A short remark, set in the margin.</aside>
+
+	   From 80rem the note floats into the empty columns to the right of the
+	   65ch measure, level with the next paragraph. Below that it drops into
+	   the text as a small note with a hairline rule. Keep them short. */
+	.prose .sidenote {
+		display: block;
+		margin-block: 1.5rem;
+		padding-left: 0.875rem;
+		border-left: 1px solid var(--color-rule-strong);
+		font-family: var(--font-sans);
+		font-size: var(--text-label);
+		line-height: 1.5;
+		color: var(--color-text-muted);
+		text-wrap: pretty;
+	}
+
+	.prose .sidenote a {
+		color: inherit;
+	}
+
+	@media (min-width: 80rem) {
+		.prose .sidenote {
+			float: right;
+			clear: right;
+			width: 14rem;
+			margin: 0.35rem -17rem 1rem 0;
+		}
 	}
 
 	.prose ul,
