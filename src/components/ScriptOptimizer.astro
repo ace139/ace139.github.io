@@ -54,29 +54,8 @@ if (substack) {
 if (socialEmbed) {
   lowPriorityScripts.push(scripts.socialEmbed);
 }
----
 
-<Fragment>
-  <!-- Resource hints for third-party domains -->
-  {analytics && <link rel="preconnect" href="https://plausible.io" crossorigin />}
-  {substack && <link rel="preconnect" href="https://substackapi.com" crossorigin />}
-  {socialEmbed && <link rel="preconnect" href="https://platform.twitter.com" crossorigin />}
-
-  <!-- High priority scripts (none currently) -->
-  {
-    highPriorityScripts.map((script) => (
-      <script
-        src={script.src}
-        data-domain={script.dataDomain}
-        async={script.async}
-        defer={script.defer}
-      />
-    ))
-  }
-
-  <!-- Medium priority scripts - Load after initial render -->
-  <!-- Medium priority scripts - Load after initial render -->
-  <script is:inline define:vars={{ mediumPriorityScripts }}>
+const mediumLoader = `
     // Load medium priority scripts after page load
     function loadMediumPriority() {
       if (window._mediumPriorityLoaded) return;
@@ -97,7 +76,7 @@ if (socialEmbed) {
 
         mediumPriorityScriptsArray.forEach((script) => {
           // Check if script is already present
-          if (document.querySelector(`script[src="${script.src}"]`)) return;
+          if (document.querySelector(\`script[src="\${script.src}"]\`)) return;
           
           const scriptEl = document.createElement('script');
           scriptEl.src = script.src;
@@ -122,10 +101,9 @@ if (socialEmbed) {
     
     // View Transitions
     document.addEventListener('astro:page-load', loadMediumPriority);
-  </script>
+  `;
 
-  <!-- Low priority scripts - Load when user becomes inactive -->
-  <script is:inline define:vars={{ lowPriorityScripts }}>
+const lowLoader = `
     // Load low priority scripts when user becomes inactive
     (() => {
       // Define low priority scripts array
@@ -147,7 +125,7 @@ if (socialEmbed) {
 
         lowPriorityScriptsArray.forEach((script) => {
           // Check if script is already present
-          if (document.querySelector(`script[src="${script.src}"]`)) return;
+          if (document.querySelector(\`script[src="\${script.src}"]\`)) return;
 
           const scriptEl = document.createElement('script');
           scriptEl.src = script.src;
@@ -161,7 +139,7 @@ if (socialEmbed) {
       }
 
       // Check user inactivity
-      let inactivityTimer: ReturnType<typeof setTimeout>;
+      let inactivityTimer;
       function resetInactivityTimer() {
         clearTimeout(inactivityTimer);
         inactivityTimer = setTimeout(() => {
@@ -206,5 +184,33 @@ if (socialEmbed) {
         document.addEventListener('astro:page-load', observeFooter);
       }
     })();
-  </script>
+  `;
+
+// Loader bodies, rendered inline only when their script list is non-empty so
+// pages ship no dead JS. The script list is injected as JSON.
+const loaderSource = (name: string, list: ScriptConfig[], body: string) =>
+  `const ${name} = ${JSON.stringify(list).replace(/</g, '\\u003c')};\n${body}`;
+const mediumSource = loaderSource('mediumPriorityScripts', mediumPriorityScripts, mediumLoader);
+const lowSource = loaderSource('lowPriorityScripts', lowPriorityScripts, lowLoader);
+---
+
+<Fragment>
+  <!-- Resource hints for third-party domains -->
+  {analytics && <link rel="preconnect" href="https://plausible.io" crossorigin />}
+  {substack && <link rel="preconnect" href="https://substackapi.com" crossorigin />}
+  {socialEmbed && <link rel="preconnect" href="https://platform.twitter.com" crossorigin />}
+
+  {
+    highPriorityScripts.map((script) => (
+      <script
+        src={script.src}
+        data-domain={script.dataDomain}
+        async={script.async}
+        defer={script.defer}
+      />
+    ))
+  }
+
+  {mediumPriorityScripts.length > 0 && <script is:inline set:html={mediumSource} />}
+  {lowPriorityScripts.length > 0 && <script is:inline set:html={lowSource} />}
 </Fragment>
