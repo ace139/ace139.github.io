@@ -98,9 +98,6 @@ const headersContent = `# Font files - specific file first, then directory
 /privacy
   Cache-Control: public, max-age=0, must-revalidate
   Vary: Accept
-/resume
-  Cache-Control: public, max-age=0, must-revalidate
-  Vary: Accept
 /tags
   Cache-Control: public, max-age=0, must-revalidate
   Vary: Accept

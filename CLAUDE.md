@@ -11,7 +11,7 @@ Strategic design context lives in [`PRODUCT.md`](PRODUCT.md) (read it before UI 
 - **Personality**: authoritative, direct, and quietly funny (*grounded, direct, wry*). Execution over hype, claims grounded in shipped work; a practitioner sharing understanding, never selling.
 - **Anti-references**: AI-agency/consultancy hype (the headline one), generic SaaS landing, AI-slop/templated looks (no per-section tracked eyebrows, no cream-paper default), corporate/clinical sterility, loud hype marketing.
 
-> Note: the earlier Cornet Health / dentist-burnout content (6 draft posts + `content-strategy/`) is a closed chapter being retired. The About page now lists Oogway Labs as current with Cornet as past; the résumé still needs updating.
+> Note: the earlier Cornet Health / dentist-burnout content (6 draft posts + `content-strategy/`) is a closed chapter being retired. The About page now lists Oogway Labs as current with Cornet as past; the résumé page is hidden (`src/pages/_resume.astro`; the underscore keeps Astro from building it) until its role descriptions are filled in. Rename it to `resume.astro` to publish it again.
 - **Accessibility**: WCAG 2.2 AA across both dark (default) and light themes; reduced-motion alternatives for all load/scroll animation.
 
 When DESIGN.md is generated (via `/impeccable document`), it captures the visual system (palette, type, components).
