@@ -23,9 +23,15 @@ export async function getStaticPaths() {
 
 const { tag } = Astro.params;
 const { items } = Astro.props;
+
+const count = items.length;
+const description =
+  count === 1
+    ? `A single essay or project on ${tag} by Soumyo Dey: “${items[0].data.title}”.`
+    : `Essays and projects on ${tag} by Soumyo Dey: ${count} pieces, newest first, starting with “${items[0].data.title}”.`;
 ---
 
-<Layout title={`Tagged “${tag}”`}>
+<Layout title={`Tagged “${tag}”`} description={description} noindex={items.length < 2}>
   <header class="grid-12 gap-y-4 pb-14 pt-4 md:pb-20">
     <p class="c-label mono">Topic</p>
     <div class="c-body">

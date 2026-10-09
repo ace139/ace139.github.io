@@ -20,6 +20,8 @@ interface Props {
   analytics?: boolean;
   substack?: boolean;
   socialEmbed?: boolean;
+  /** Keep the page out of search results (still crawlable for links). */
+  noindex?: boolean;
 }
 
 const {
@@ -32,6 +34,7 @@ const {
   analytics = false,
   substack = false,
   socialEmbed = false,
+  noindex = false,
 } = Astro.props;
 
 const siteName = 'Soumyo Dey';
@@ -75,6 +78,7 @@ const navLinks = [
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0a0a0b" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#f7f7f5" media="(prefers-color-scheme: light)" />
