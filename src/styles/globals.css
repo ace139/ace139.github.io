@@ -712,6 +712,14 @@ main {
 		fill: var(--color-text-secondary);
 	}
 
+	.prose figure.chart .bar-a {
+		fill: var(--color-accent);
+	}
+
+	.prose figure.chart .bar-b {
+		fill: var(--color-text-secondary);
+	}
+
 	.prose figure.chart .pt-a.open {
 		fill: var(--color-surface);
 		stroke: var(--color-accent);

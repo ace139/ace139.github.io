@@ -3,7 +3,7 @@ title: 'Making Hawkeye Claude-Ready'
 subtitle: 'What it took to run our Slack agent on Claude, and why Hawkeye still runs on Luna'
 description: "Claude Haiku 5.5 couldn't run our Slack agent until we fixed one tool schema, and cost 4× until we turned on caching. Fixed, it still lost the classifier eval, and on a billed rerun it claimed work it never did."
 date: '2026-10-28'
-draft: true
+draft: false
 tags: ['ai', 'llm', 'evaluation', 'agents']
 ---
 
@@ -44,6 +44,29 @@ z.discriminatedUnion("operation", [create, update, del])
 A union serializes to a top-level `anyOf` with no `"type": "object"`. OpenAI accepted that in our setup, which does not use strict function calling (strict mode would have refused it too). Anthropic requires every tool's `input_schema` to be an object at the top level, and rejects the request otherwise.
 
 That made it worse than one broken tool. Every tool is sent on every call, so one bad schema failed every turn of every session, including turns that never touch routing rules, and no eval had ever run on Claude to notice.
+
+<figure class="diagram">
+<svg viewBox="0 0 440 276" role="img" aria-label="Before: every agent turn sends a request carrying all tools, including tool 11 as a top-level anyOf, and every provider rejects the whole request with HTTP 400. After: the model sees a flat object schema, a refinement runs the original union, and only valid input reaches the tool handler; a wrong combination is refused.">
+<defs><marker id="d-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head" d="M0 0 L10 5 L0 10 z"/></marker><marker id="d-aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head-a" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<text class="h" x="10" y="18">Before: one union breaks every request</text>
+<rect class="bx" x="10" y="40" width="124" height="46" rx="6"/><text class="t" x="72" y="60" text-anchor="middle">Any agent turn</text><text class="s" x="72" y="75" text-anchor="middle">routing or not</text>
+<rect class="bx" x="158" y="40" width="124" height="46" rx="6"/><text class="t" x="220" y="60" text-anchor="middle">Request</text><text class="s" x="220" y="75" text-anchor="middle">#11 is an anyOf</text>
+<rect class="bx dash" x="306" y="40" width="124" height="46" rx="6"/><text class="t" x="368" y="60" text-anchor="middle">HTTP 400</text><text class="s" x="368" y="75" text-anchor="middle">every provider</text>
+<line class="ln" x1="134" y1="63" x2="156" y2="63" marker-end="url(#d-ar)"/>
+<line class="ln" x1="282" y1="63" x2="304" y2="63" marker-end="url(#d-ar)"/>
+<text class="lbl" x="220" y="106" text-anchor="middle">no top-level "type": "object", so the whole request is refused</text>
+<line class="rule" x1="10" y1="124" x2="430" y2="124"/>
+<text class="h" x="10" y="150">After: the model sees an object, the code keeps the union</text>
+<rect class="bx" x="10" y="172" width="124" height="46" rx="6"/><text class="t" x="72" y="192" text-anchor="middle">Model</text><text class="s" x="72" y="207" text-anchor="middle">flat object schema</text>
+<rect class="bx-a" x="158" y="172" width="124" height="46" rx="6"/><text class="t" x="220" y="192" text-anchor="middle">superRefine</text><text class="s" x="220" y="207" text-anchor="middle">runs the old union</text>
+<rect class="bx" x="306" y="172" width="124" height="46" rx="6"/><text class="t" x="368" y="192" text-anchor="middle">Tool handler</text><text class="s" x="368" y="207" text-anchor="middle">valid input only</text>
+<line class="ln-a" x1="134" y1="195" x2="156" y2="195" marker-end="url(#d-aa)"/>
+<line class="ln" x1="282" y1="195" x2="304" y2="195" marker-end="url(#d-ar)"/>
+<path class="ln dash" d="M220 218 V244 H72 V221" marker-end="url(#d-ar)"/>
+<text class="lbl" x="146" y="262" text-anchor="middle">a wrong combination is refused</text>
+</svg>
+<figcaption>Every tool's schema rides on every call, so one invalid schema failed every turn. The fix gives the model a shape every provider accepts and keeps the strict check in code.</figcaption>
+</figure>
 
 The fix separates what the model sees from what the code enforces. The model now sees one flat object: the `operation` enum plus every field as optional, with descriptions saying which operation needs which. Validation is unchanged, because the flat schema's refinement runs the original union and copies its errors:
 
@@ -89,7 +112,7 @@ Three things stacked up against a model with half the input price:
 - **It writes more.** Haiku's answers were about twice as long for the same structured output.
 - **Nothing was cached.** OpenAI and DeepSeek cache repeated prompt prefixes automatically. Anthropic caches only when the request opts in with `cache_control`, and the classifier did not. Every message re-read a ~19,500-token prompt, most of it identical from call to call, at full input price.
 
-At Hawkeye's volume, about 460 classifier calls a month, uncached Haiku would have cost roughly a dollar a month. It matters per thousand messages, and for anyone running this at scale.
+Per 1,000 messages, the model with half the input price cost almost four times as much. The rate card had it the wrong way round.
 
 The gateway can place those cache breakpoints for you with one provider option, `gateway: { caching: "auto" }`, which now goes on every classifier call. The classifier tries Luna first and falls back to a DeepSeek model pinned to named providers, so the option is merged *under* each tier's own gateway options and the fallback's pin survives:
 
@@ -105,6 +128,23 @@ export function withGatewayCaching(providerOptions) {
 Sessions get the same option in the agent definition. eve already adds it for gateway model strings; we state it anyway so session caching does not depend on a framework default surviving an upgrade.
 
 After the change, Haiku's cached share went from 0% to 97% and its cost fell to about $0.54 per 1,000 messages, level with Luna's $0.59. (The billed rerun, which also counts cache writes, put it at $0.50.) Luna's own numbers did not move: it was already caching implicitly.
+
+<figure class="diagram chart">
+<svg viewBox="0 0 640 220" role="img" aria-label="Classifier cost per 1,000 messages. gpt-5.6-luna at low effort: $0.59. Claude Haiku 5.5 with no cache: $2.24, from 1.5 times the prompt tokens, twice the output and nothing cached. Claude Haiku 5.5 with gateway caching: $0.54.">
+<line class="rule" x1="180" x2="180" y1="10" y2="172"/><line class="rule" x1="266" x2="266" y1="10" y2="172"/><line class="rule" x1="352" x2="352" y1="10" y2="172"/><line class="rule" x1="438" x2="438" y1="10" y2="172"/><line class="rule" x1="524" x2="524" y1="10" y2="172"/><line class="rule" x1="610" x2="610" y1="10" y2="172"/>
+<line class="rule" x1="180" x2="610" y1="172" y2="172"/>
+<text class="lbl" x="180" y="190" text-anchor="middle">$0</text><text class="lbl" x="266" y="190" text-anchor="middle">$0.50</text><text class="lbl" x="352" y="190" text-anchor="middle">$1.00</text><text class="lbl" x="438" y="190" text-anchor="middle">$1.50</text><text class="lbl" x="524" y="190" text-anchor="middle">$2.00</text><text class="lbl" x="610" y="190" text-anchor="middle">$2.50</text>
+<text class="lbl" x="395" y="212" text-anchor="middle">cost per 1,000 messages</text>
+<text class="t" x="168" y="39" text-anchor="end">gpt-5.6-luna (low)</text>
+<rect class="bar-a" x="180" y="24" width="101.5" height="22"/><text class="lbl" x="289.5" y="39">$0.59</text>
+<text class="t" x="168" y="85" text-anchor="end">Haiku 5.5, no cache</text>
+<rect class="bar-b" x="180" y="70" width="385.3" height="22"/><text class="lbl" x="573.3" y="85">$2.24</text>
+<text class="lbl" x="184" y="108">1.5× prompt tokens · 2× output · 0% cached</text>
+<text class="t" x="168" y="145" text-anchor="end">Haiku 5.5, cached</text>
+<rect class="bar-b" x="180" y="130" width="92.9" height="22"/><text class="lbl" x="280.9" y="145">$0.54</text>
+</svg>
+<figcaption>The classifier's cost per 1,000 messages, 80 cases ×3, reported tokens times list price. Half the input price became nearly four times the cost, until one provider option turned caching on. <span class="key key-a">running in production</span> <span class="key key-b">compared</span>.</figcaption>
+</figure>
 
 ## The classifier: Haiku misses the dense messages
 
@@ -139,7 +179,7 @@ Session evals check two kinds of thing. Hard gates are code assertions about wha
 
 Once the schema was flat, Haiku 5.5 passed all 42 gates in all three runs, and again in a verification run after the fix shipped, the same as Luna. The judged checks did not separate them. On the one with the widest spread, Haiku scored 72%, 81% and 81% and Luna 59%, 59% and 94%; every other judged check was within a few points. Judge scores also swing on their own: in a later spot check, one judged eval on Haiku went from 12% in one run to 86–92% in the next three, with nothing changed.
 
-Cost did not separate them either. Hawkeye's usage table records the gateway's cost for every session step. Across the three runs, 18 sessions per model, Luna cost about 0.11¢ a session and Haiku 0.16¢, with Haiku reading 1.6× the input tokens. Real sessions are bigger: production ran 323 sessions for $3.16 over the last 30 days, about 1¢ each, so even a model 1.5× as expensive would add less than $2 a month.
+Cost did not separate them either. Hawkeye's usage table records the gateway's cost for every session step. Across the three runs, 18 sessions per model, Luna cost about 0.11¢ a session and Haiku 0.16¢, with Haiku reading 1.6× the input tokens. Real sessions are bigger, about 1¢ each in production, so even a model 1.5× as expensive would add about half a cent a session.
 
 On that evidence Haiku looked like a credible session model, and we were leaning against switching anyway: no measured gain, and a second provider's quirks, caching behaviour and incident histories to carry. Four clean runs are a small sample, though, and the costs so far were our own arithmetic. So we ran it again.
 
@@ -235,7 +275,7 @@ So we ran the newer `deepseek-v4.1-flash-1017` against it with the production fa
 
 The accuracy gap is small: the per-run counts overlap. The rest is not close. On 26 of 228 calls the old model thought until it hit a reasoning cap of about 4,096 tokens; those were its slowest calls, 10 to 24 seconds, and most of its repeated misses. The new one thinks about 600 tokens and answers in half the time.
 
-It costs about 2.4× as much on the pinned providers, because the cheap headline rate belongs to providers the pin excludes. We switched anyway. The fallback only runs when Luna fails: 2 of 463 classifications in the last 30 days, or 0.4%, well under a cent a month. And a fallback that sits on one overloaded provider is not much of a fallback.
+It costs about 2.4× as much on the pinned providers, because the cheap headline rate belongs to providers the pin excludes. We switched anyway. The fallback only runs when Luna fails, on about 0.4% of classifications in the last 30 days, so the higher price adds about half a cent per 1,000 messages. And a fallback that sits on one overloaded provider is not much of a fallback.
 
 One more thing turned up. Hawkeye can send the fallback straight to DeepSeek's own API if a `DEEPSEEK_API_KEY` is set; it deliberately is not. That API has no dated model ids, so the old id would have been rejected the day anyone turned the route on. It now uses `deepseek-flash`, DeepSeek's name for its latest Flash: a floating alias, the opposite of a pin, so the day that route runs it may be a model we have never evaluated. For an emergency path we accepted that over one that cannot start.
 

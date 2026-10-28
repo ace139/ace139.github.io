@@ -5,11 +5,12 @@
 import type { CollectionEntry } from "astro:content";
 
 /**
- * Filter function for published (non-draft) content
+ * Filter function for published (non-draft) content. Drafts are let through
+ * on the dev server so they can be previewed; builds always exclude them.
  */
 export const isPublished = <T extends { data: { draft?: boolean } }>({
 	data,
-}: T): boolean => data.draft !== true;
+}: T): boolean => import.meta.env.DEV || data.draft !== true;
 
 /**
  * Sort comparator for content by date (newest first)
